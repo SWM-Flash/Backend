@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - dev
+      - develop
 
 env:
   ECR_REGISTRY: ${{ secrets.AWS_DEV_ECR_REGISTRY }}
