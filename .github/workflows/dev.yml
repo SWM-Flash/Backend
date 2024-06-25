@@ -55,7 +55,7 @@ jobs:
           docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
-      - name: Create Dockerrun file
+      - name: Create Dockerrun.aws.json file
         run: |
           echo '{
             "AWSEBDockerrunVersion": "1",
