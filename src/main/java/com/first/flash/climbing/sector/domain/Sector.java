@@ -45,6 +45,14 @@ public class Sector {
             RemovalInfo.createDefault(removalDate), gymId);
     }
 
+    public String getDisplayName() {
+        return sectorName.getName();
+    }
+
+    public LocalDate getRemovalDate() {
+        return removalInfo.getRemovalDate();
+    }
+
     private static void validateRemovalDate(final LocalDate settingDate,
         final LocalDate removalDate) {
         if(removalDate.isBefore(settingDate)) {
