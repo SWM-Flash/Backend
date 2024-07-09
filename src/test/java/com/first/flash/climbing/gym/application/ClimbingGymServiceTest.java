@@ -6,17 +6,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
+import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class ClimbingGymServiceTest {
-
-    private final Long FIRST_GYM_ID = 1L;
 
     @Autowired
     ClimbingGymService climbingGymService;
@@ -28,8 +28,8 @@ class ClimbingGymServiceTest {
         ClimbingGymCreateRequestDto createDto = createDefaultGymCreateRequestDto();
 
         // when
-        climbingGymService.save(createDto);
-        ClimbingGym foundGym = climbingGymService.findClimbingGymById(FIRST_GYM_ID);
+        Long savedId = climbingGymService.save(createDto);
+        ClimbingGym foundGym = climbingGymService.findClimbingGymById(savedId);
 
         // then
         assertSoftly(softly -> {
@@ -45,8 +45,8 @@ class ClimbingGymServiceTest {
         ClimbingGymCreateRequestDto createDto = createDefaultGymCreateRequestDto();
 
         // when
-        climbingGymService.save(createDto);
-        ClimbingGym foundGym = climbingGymService.findClimbingGymById(FIRST_GYM_ID);
+        Long savedId = climbingGymService.save(createDto);
+        ClimbingGym foundGym = climbingGymService.findClimbingGymById(savedId);
 
         // then
         assertThat(foundGym).isNotNull();
@@ -58,5 +58,22 @@ class ClimbingGymServiceTest {
         // when & then
         assertThatThrownBy(() -> climbingGymService.findClimbingGymById(100L))
             .isInstanceOf(ClimbingGymNotFoundException.class);
+    }
+
+    @Test
+    @Transactional
+    void 클라이밍장_다건_검색() {
+        // given
+        ClimbingGymCreateRequestDto createDto1 = createDefaultGymCreateRequestDto();
+        ClimbingGymCreateRequestDto createDto2 = createDefaultGymCreateRequestDto();
+        climbingGymService.save(createDto1);
+        climbingGymService.save(createDto2);
+
+        // when
+        List<ClimbingGymResponseDto> gyms = climbingGymService.findAllClimbingGyms();
+
+        // then
+        assertThat(gyms).isNotEmpty();
+        assertThat(gyms.size()).isEqualTo(2);
     }
 }
