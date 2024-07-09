@@ -6,7 +6,6 @@ import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,7 @@ public class ClimbingGymService {
 
     public ClimbingGym findClimbingGymById(final Long id) {
         return climbingGymRepository.findById(id)
-            .orElseThrow(()-> new ClimbingGymNotFoundException(id));
+            .orElseThrow(() -> new ClimbingGymNotFoundException(id));
     }
 
     public List<ClimbingGymResponseDto> findAllClimbingGyms() {
