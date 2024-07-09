@@ -12,16 +12,16 @@ class ClimbingGymTest {
     private final static String DEFAULT_CLIMBING_DIFFICULTY = "빨강";
 
     @Test
-    void validateDifficultyName() {
+    void 난이도_이름_검증() {
         // given
         ClimbingGym gym = createDefaultGym();
 
         // when & them
-        assertDoesNotThrow(()->gym.getDifficultyByName(DEFAULT_CLIMBING_DIFFICULTY));
+        assertDoesNotThrow(() -> gym.getDifficultyByName(DEFAULT_CLIMBING_DIFFICULTY));
     }
 
     @Test
-    void validateDifficultyException() {
+    void 난이도_이름_검증_예외() {
         // given
         ClimbingGym gym = createDefaultGym();
 
