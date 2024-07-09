@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class RemovalInfo {
 
     private static final int FAKE_SECTOR_LIFETIME_DAYS = 30;
-ㅇ
+
     private LocalDate removalDate;
     private Boolean isFakeRemovalDate;
     private Boolean isExpired;
