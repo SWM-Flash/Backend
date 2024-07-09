@@ -18,14 +18,13 @@ public class SectorFixture {
             LocalDate.now(), gymId);
     }
 
-    public static SectorCreateRequestDto createDefaultRequestDtoExceptRemovalDate(
-        final Long gymId) {
+    public static SectorCreateRequestDto createDefaultRequestDtoExceptRemovalDate() {
         return new SectorCreateRequestDto("sector 1", "admin sector 1",
-            LocalDate.now(), null, gymId);
+            LocalDate.now(), null);
     }
 
-    public static SectorCreateRequestDto createDefaultRequestDto(final Long gymId) {
+    public static SectorCreateRequestDto createDefaultRequestDto() {
         return new SectorCreateRequestDto("sector 1", "admin sector 1",
-            LocalDate.now(), LocalDate.now().plusDays(DEFAULT_PLUS_DAYS), gymId);
+            LocalDate.now(), LocalDate.now().plusDays(DEFAULT_PLUS_DAYS));
     }
 }

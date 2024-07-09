@@ -1,5 +1,6 @@
 package com.first.flash.climbing.sector.application;
 
+import static com.first.flash.climbing.sector.fixture.SectorFixture.createDefault;
 import static com.first.flash.climbing.sector.fixture.SectorFixture.createDefaultRequestDto;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -30,10 +31,10 @@ class SectorServiceTest {
     @Test
     void 섹터_저장() {
         // given
-        SectorCreateRequestDto requestDto = createDefaultRequestDto(DEFAULT_GYM_ID);
+        SectorCreateRequestDto requestDto = createDefaultRequestDto();
 
         // when
-        Long savedId = sectorService.saveSector(requestDto);
+        Long savedId = sectorService.saveSector(DEFAULT_GYM_ID, requestDto);
         Sector foundSector = sectorService.findById(savedId);
 
         // then
@@ -43,10 +44,9 @@ class SectorServiceTest {
     @Test
     void 섹터_탈거일_수정() {
         // given
-        SectorCreateRequestDto requestDto = createDefaultRequestDto(DEFAULT_GYM_ID);
+        Long savedId = saveDefaultSector();
 
         // when
-        Long savedId = sectorService.saveSector(requestDto);
         sectorService.updateSectorRemovalDate(savedId, new SectorUpdateRemovalDateRequestDto(
             LocalDate.now().plusDays(1L)));
 
@@ -58,12 +58,16 @@ class SectorServiceTest {
     @Test
     void 탈거일_수정_예외_처리() {
         // given
-        SectorCreateRequestDto requestDto = createDefaultRequestDto(DEFAULT_GYM_ID);
-        Long savedId = sectorService.saveSector(requestDto);
+        Long savedId = saveDefaultSector();
 
         // when & then
         assertThatThrownBy(() -> sectorService.updateSectorRemovalDate(savedId,
             new SectorUpdateRemovalDateRequestDto(LocalDate.now().minusDays(1L))))
             .isInstanceOf(InvalidRemovalDateException.class);
+    }
+
+    private Long saveDefaultSector() {
+        Sector sector = createDefault(DEFAULT_GYM_ID);
+        return sectorRepository.save(sector);
     }
 }
