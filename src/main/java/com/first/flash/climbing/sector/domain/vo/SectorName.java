@@ -1,10 +1,14 @@
 package com.first.flash.climbing.sector.domain.vo;
 
 import jakarta.persistence.Embeddable;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor
+@EqualsAndHashCode
+@Getter
 public class SectorName {
     private String name;
     private String adminName;

@@ -2,10 +2,14 @@ package com.first.flash.climbing.sector.domain.vo;
 
 import jakarta.persistence.Embeddable;
 import java.time.LocalDate;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor
+@EqualsAndHashCode
+@Getter
 public class RemovalInfo {
 
     private static final int FAKE_SECTOR_LIFETIME_DAYS = 30;
