@@ -1,7 +1,6 @@
 package com.first.flash.climbing.sector.application;
 
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
-import com.first.flash.climbing.sector.application.dto.SectorResponseDto;
 import com.first.flash.climbing.sector.domain.Sector;
 import com.first.flash.climbing.sector.domain.SectorRepository;
 import com.first.flash.climbing.sector.exception.exceptions.SectorNotFoundException;
@@ -16,9 +15,9 @@ public class SectorService {
 
     private final SectorRepository sectorRepository;
 
-    public SectorResponseDto saveSector(final SectorCreateRequestDto sectorCreateRequestDto) {
+    public Long saveSector(final SectorCreateRequestDto sectorCreateRequestDto) {
         Sector newSector = sectorCreateRequestDto.toEntity();
-        return SectorResponseDto.toDto(sectorRepository.save(newSector));
+        return sectorRepository.save(newSector);
     }
 
     public Sector findById(final Long id) {
