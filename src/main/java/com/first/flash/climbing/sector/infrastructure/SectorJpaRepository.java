@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SectorJpaRepository extends JpaRepository<Sector, Long> {
 
-    Long save(final Sector sector);
+    Sector save(final Sector sector);
 
     Optional<Sector> findById(final Long id);
 }

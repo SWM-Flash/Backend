@@ -14,7 +14,7 @@ public class SectorRepositoryImpl implements SectorRepository {
 
     @Override
     public Long save(final Sector sector) {
-        return sectorJpaRepository.save(sector);
+        return sectorJpaRepository.save(sector).getId();
     }
 
     @Override
