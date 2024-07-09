@@ -19,10 +19,9 @@ public class ClimbingGymService {
     private final ClimbingGymRepository climbingGymRepository;
 
     @Transactional
-    public ClimbingGymResponseDto save(final ClimbingGymCreateRequestDto createRequestDto) {
+    public Long save(final ClimbingGymCreateRequestDto createRequestDto) {
         ClimbingGym newGym = createRequestDto.toEntity();
-        ClimbingGym savedGym = climbingGymRepository.save(newGym);
-        return ClimbingGymResponseDto.toDto(savedGym);
+        return climbingGymRepository.save(newGym);
     }
 
     public ClimbingGym findClimbingGymById(final Long id) {

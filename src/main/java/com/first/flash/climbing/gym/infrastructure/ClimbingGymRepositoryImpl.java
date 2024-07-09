@@ -14,8 +14,8 @@ public class ClimbingGymRepositoryImpl implements ClimbingGymRepository {
     private final ClimbingGymJpaRepository climbingGymJpaRepository;
 
     @Override
-    public ClimbingGym save(final ClimbingGym gym) {
-        return climbingGymJpaRepository.save(gym);
+    public Long save(final ClimbingGym gym) {
+        return climbingGymJpaRepository.save(gym).getId();
     }
 
     @Override
