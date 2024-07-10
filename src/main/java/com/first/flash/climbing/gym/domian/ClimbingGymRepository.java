@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface ClimbingGymRepository {
 
-    Long save(final ClimbingGym gym);
+    ClimbingGym save(final ClimbingGym gym);
 
     Optional<ClimbingGym> findById(final Long id);
 
