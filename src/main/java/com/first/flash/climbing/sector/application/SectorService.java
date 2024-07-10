@@ -26,10 +26,11 @@ public class SectorService {
     }
 
     @Transactional
-    public void updateSectorRemovalDate(final Long sectorId,
+    public SectorWriteDetailResponseDto updateSectorRemovalDate(final Long sectorId,
         final SectorUpdateRemovalDateRequestDto sectorUpdateRemovalDateRequestDto) {
         Sector sector = findById(sectorId);
         sector.updateRemovalDate(sectorUpdateRemovalDateRequestDto.removalDate());
+        return SectorWriteDetailResponseDto.toDto(sector);
     }
 
     public Sector findById(final Long id) {

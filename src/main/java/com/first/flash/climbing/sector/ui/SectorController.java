@@ -29,9 +29,11 @@ public class SectorController {
     }
 
     @PatchMapping("sectors/{sectorId}")
-    public ResponseEntity<Void> updateSectorRemovalDate(@PathVariable final Long sectorId,
+    public ResponseEntity<SectorWriteDetailResponseDto> updateSectorRemovalDate(
+        @PathVariable final Long sectorId,
         @RequestBody final SectorUpdateRemovalDateRequestDto sectorUpdateRemovalDateRequestDto) {
-        sectorService.updateSectorRemovalDate(sectorId, sectorUpdateRemovalDateRequestDto);
-        return ResponseEntity.noContent().build();
+        SectorWriteDetailResponseDto response = sectorService.updateSectorRemovalDate(
+            sectorId, sectorUpdateRemovalDateRequestDto);
+        return ResponseEntity.ok(response);
     }
 }
