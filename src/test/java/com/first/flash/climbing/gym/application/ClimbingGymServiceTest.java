@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
+import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
@@ -28,8 +29,8 @@ class ClimbingGymServiceTest {
         ClimbingGymCreateRequestDto createDto = createDefaultGymCreateRequestDto();
 
         // when
-        Long savedId = climbingGymService.save(createDto);
-        ClimbingGym foundGym = climbingGymService.findClimbingGymById(savedId);
+        ClimbingGymCreateResponseDto saveDto = climbingGymService.save(createDto);
+        ClimbingGym foundGym = climbingGymService.findClimbingGymById(saveDto.id());
 
         // then
         assertSoftly(softly -> {
@@ -45,8 +46,8 @@ class ClimbingGymServiceTest {
         ClimbingGymCreateRequestDto createDto = createDefaultGymCreateRequestDto();
 
         // when
-        Long savedId = climbingGymService.save(createDto);
-        ClimbingGym foundGym = climbingGymService.findClimbingGymById(savedId);
+        ClimbingGymCreateResponseDto saveDto = climbingGymService.save(createDto);
+        ClimbingGym foundGym = climbingGymService.findClimbingGymById(saveDto.id());
 
         // then
         assertThat(foundGym).isNotNull();
