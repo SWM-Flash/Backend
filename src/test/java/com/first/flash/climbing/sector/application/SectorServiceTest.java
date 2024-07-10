@@ -31,7 +31,7 @@ class SectorServiceTest {
     @Test
     void 섹터_저장() {
         // given
-        SectorCreateRequestDto requestDto = createDefaultRequestDto();
+        SectorCreateRequestDto requestDto = createDefaultRequestDto(LocalDate.now());
 
         // when
         Long savedId = sectorService.saveSector(DEFAULT_GYM_ID, requestDto);
@@ -44,30 +44,32 @@ class SectorServiceTest {
     @Test
     void 섹터_탈거일_수정() {
         // given
-        Long savedId = saveDefaultSector();
+        LocalDate settingDate = LocalDate.now();
+        Long savedId = saveDefaultSector(settingDate);
 
         // when
-        sectorService.updateSectorRemovalDate(savedId, new SectorUpdateRemovalDateRequestDto(
-            LocalDate.now().plusDays(1L)));
+        sectorService.updateSectorRemovalDate(savedId,
+            new SectorUpdateRemovalDateRequestDto(settingDate.plusDays(1L)));
 
         // then
         Sector foundSector = sectorService.findById(savedId);
-        assertThat(foundSector.getRemovalDate()).isEqualTo(LocalDate.now().plusDays(1L));
+        assertThat(foundSector.getRemovalDate()).isEqualTo(settingDate.plusDays(1L));
     }
 
     @Test
     void 탈거일_수정_예외_처리() {
         // given
-        Long savedId = saveDefaultSector();
+        LocalDate settingDate = LocalDate.now();
+        Long savedId = saveDefaultSector(settingDate);
 
         // when & then
         assertThatThrownBy(() -> sectorService.updateSectorRemovalDate(savedId,
-            new SectorUpdateRemovalDateRequestDto(LocalDate.now().minusDays(1L))))
+            new SectorUpdateRemovalDateRequestDto(settingDate.minusDays(1L))))
             .isInstanceOf(InvalidRemovalDateException.class);
     }
 
-    private Long saveDefaultSector() {
-        Sector sector = createDefault(DEFAULT_GYM_ID);
+    private Long saveDefaultSector(final LocalDate settingDate) {
+        Sector sector = createDefault(DEFAULT_GYM_ID, settingDate);
         return sectorRepository.save(sector);
     }
 }

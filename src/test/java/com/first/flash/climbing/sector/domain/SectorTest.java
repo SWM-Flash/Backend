@@ -13,34 +13,39 @@ class SectorTest {
 
     @Test
     void 탈거일_유효성_검사_예외_처리() {
+        // given
+        LocalDate settingDate = LocalDate.now();
+
         // when & then
-        assertThatThrownBy(() -> Sector.createDefault("test", "test", LocalDate.now(),
-            LocalDate.now().minusDays(1), DEFAULT_GYM_ID))
+        assertThatThrownBy(() -> Sector.createDefault("test", "test", settingDate,
+            settingDate.minusDays(1), DEFAULT_GYM_ID))
             .isInstanceOf(InvalidRemovalDateException.class);
     }
 
     @Test
     void 탈거일_업데이트() {
         // given
-        Sector sector = Sector.createExceptRemovalDate("test", "test", LocalDate.now(),
+        LocalDate settingDate = LocalDate.now();
+        Sector sector = Sector.createExceptRemovalDate("test", "test", settingDate,
             DEFAULT_GYM_ID);
 
         // when
-        sector.updateRemovalDate(LocalDate.now().plusDays(1));
+        sector.updateRemovalDate(settingDate.plusDays(1));
 
         // then
         LocalDate removalDate = sector.getRemovalDate();
-        assertThat(removalDate).isEqualTo(LocalDate.now().plusDays(1));
+        assertThat(removalDate).isEqualTo(settingDate.plusDays(1));
     }
 
     @Test
     void 탈거일_수정_예외처리() {
         // given
-        Sector sector = Sector.createExceptRemovalDate("test", "test", LocalDate.now(),
+        LocalDate settingDate = LocalDate.now();
+        Sector sector = Sector.createExceptRemovalDate("test", "test", settingDate,
             DEFAULT_GYM_ID);
 
         // when & then
-        assertThatThrownBy(() -> sector.updateRemovalDate(LocalDate.now().minusDays(1)))
+        assertThatThrownBy(() -> sector.updateRemovalDate(settingDate.minusDays(1)))
             .isInstanceOf(InvalidRemovalDateException.class);
     }
 }
