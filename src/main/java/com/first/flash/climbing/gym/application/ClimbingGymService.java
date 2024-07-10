@@ -1,6 +1,7 @@
 package com.first.flash.climbing.gym.application;
 
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
+import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
@@ -18,9 +19,9 @@ public class ClimbingGymService {
     private final ClimbingGymRepository climbingGymRepository;
 
     @Transactional
-    public Long save(final ClimbingGymCreateRequestDto createRequestDto) {
+    public ClimbingGymCreateResponseDto save(final ClimbingGymCreateRequestDto createRequestDto) {
         ClimbingGym newGym = createRequestDto.toEntity();
-        return climbingGymRepository.save(newGym);
+        return ClimbingGymCreateResponseDto.toDto(climbingGymRepository.save(newGym));
     }
 
     public ClimbingGym findClimbingGymById(final Long id) {
