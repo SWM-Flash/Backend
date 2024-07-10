@@ -13,8 +13,8 @@ public class SectorRepositoryImpl implements SectorRepository {
     private final SectorJpaRepository sectorJpaRepository;
 
     @Override
-    public Long save(final Sector sector) {
-        return sectorJpaRepository.save(sector).getId();
+    public Sector save(final Sector sector) {
+        return sectorJpaRepository.save(sector);
     }
 
     @Override

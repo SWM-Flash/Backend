@@ -2,6 +2,7 @@ package com.first.flash.climbing.sector.ui;
 
 import com.first.flash.climbing.sector.application.SectorService;
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
+import com.first.flash.climbing.sector.application.dto.SectorCreateResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class SectorController {
     private final SectorService sectorService;
 
     @PostMapping("gyms/{gymId}/sectors")
-    public ResponseEntity<Long> createSector(@PathVariable final Long gymId,
+    public ResponseEntity<SectorCreateResponseDto> createSector(@PathVariable final Long gymId,
         @RequestBody final SectorCreateRequestDto sectorCreateRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(sectorService.saveSector(gymId, sectorCreateRequestDto));
