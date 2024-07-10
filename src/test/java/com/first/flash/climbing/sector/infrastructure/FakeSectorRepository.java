@@ -12,9 +12,10 @@ public class FakeSectorRepository implements SectorRepository {
     private Long id = 0L;
 
     @Override
-    public Long save(final Sector sector) {
+    public Sector save(final Sector sector) {
         db.put(id, sector);
-        return id++;
+        return new Sector(id++, sector.getSectorName(), sector.getSettingDate(),
+            sector.getRemovalInfo(), sector.getGymId());
     }
 
     @Override
