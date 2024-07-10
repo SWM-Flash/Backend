@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
-import com.first.flash.climbing.sector.application.dto.SectorCreateResponseDto;
+import com.first.flash.climbing.sector.application.dto.SectorWriteDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import com.first.flash.climbing.sector.domain.Sector;
 import com.first.flash.climbing.sector.domain.SectorRepository;
@@ -35,7 +35,7 @@ class SectorServiceTest {
         SectorCreateRequestDto requestDto = createDefaultRequestDto(LocalDate.now());
 
         // when
-        SectorCreateResponseDto response = sectorService.saveSector(DEFAULT_GYM_ID, requestDto);
+        SectorWriteDetailResponseDto response = sectorService.saveSector(DEFAULT_GYM_ID, requestDto);
         Sector foundSector = sectorService.findById(response.id());
 
         // then

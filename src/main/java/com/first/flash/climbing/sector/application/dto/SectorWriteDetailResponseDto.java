@@ -5,11 +5,11 @@ import com.first.flash.climbing.sector.domain.vo.RemovalInfo;
 import com.first.flash.climbing.sector.domain.vo.SectorName;
 import java.time.LocalDate;
 
-public record SectorCreateResponseDto(Long id, SectorName sectorName, LocalDate settingDate,
-                                      RemovalInfo removalInfo, Long gymId) {
+public record SectorWriteDetailResponseDto(Long id, SectorName sectorName, LocalDate settingDate,
+                                           RemovalInfo removalInfo, Long gymId) {
 
-    public static SectorCreateResponseDto toDto(final Sector sector) {
-        return new SectorCreateResponseDto(sector.getId(), sector.getSectorName(),
+    public static SectorWriteDetailResponseDto toDto(final Sector sector) {
+        return new SectorWriteDetailResponseDto(sector.getId(), sector.getSectorName(),
             sector.getSettingDate(), sector.getRemovalInfo(), sector.getGymId());
     }
 }
