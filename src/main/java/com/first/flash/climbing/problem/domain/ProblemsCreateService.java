@@ -5,17 +5,23 @@ import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.problem.domain.dto.ProblemCreateRequestDto;
 import com.first.flash.climbing.sector.domain.Sector;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ProblemsCreateService {
+
+    private final UUIDGenerator uuidGenerator;
 
     private static final Boolean DEFAULT_HAS_SOLUTION = false;
 
     public Problem createProblem(final ClimbingGym climbingGym, final Sector sector,
         final ProblemCreateRequestDto createRequestDto) {
         Difficulty difficulty = climbingGym.getDifficultyByName(createRequestDto.difficulty());
-        return Problem.createDefault(UUID.randomUUID(), createRequestDto.imageUrl(),
+        UUID generatedUUID = uuidGenerator.generate();
+
+        return Problem.createDefault(generatedUUID, createRequestDto.imageUrl(),
             difficulty.getName(), difficulty.getLevel(), climbingGym.getId(), sector.getId());
     }
 
