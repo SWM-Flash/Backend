@@ -4,6 +4,7 @@ import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,5 +21,10 @@ public class SolutionService {
         final SolutionCreateRequestDto createRequestDto) {
         Solution solution = Solution.of(createRequestDto, problemId);
         return SolutionResponseDto.toDto(solutionRepository.save(solution));
+    }
+
+    public Solution findById(final Long id) {
+        return solutionRepository.findById(id)
+            .orElseThrow(() -> new SolutionNotFoundException(id));
     }
 }
