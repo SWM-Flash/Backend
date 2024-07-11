@@ -1,6 +1,7 @@
 package com.first.flash.climbing.solution.domain;
 
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
+import com.first.flash.climbing.solution.domain.vo.SolutionDetail;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,20 +21,14 @@ public class Solution {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String uploader;
-    private String review;
-    private String instagramId;
-    private String videoUrl;
+    SolutionDetail solutionDetail;
     private Long optionalWeight;
     private Long problemId;
 
-    protected Solution(String uploader, String review, String instagramId, String videoUrl,
-        long problemId) {
-        
-        this.uploader = uploader;
-        this.review = review;
-        this.instagramId = instagramId;
-        this.videoUrl = videoUrl;
+    protected Solution(final String uploader, final String review, final String instagramId,
+        final String videoUrl, final Long problemId) {
+
+        this.solutionDetail = SolutionDetail.of(uploader, review, instagramId, videoUrl);
         this.optionalWeight = DEFAULT_OPTIONAL_WEIGHT;
         this.problemId = problemId;
     }

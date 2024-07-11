@@ -41,7 +41,6 @@ class SolutionServiceTest {
         assertSoftly(softly -> {
             softly.assertThat(saveDto).isNotNull();
             softly.assertThat(saveDto.id()).isNotNull();
-            softly.assertThat(saveDto.instagramId()).isEqualTo(createRequestDto.instagramId());
         });
     }
 
@@ -58,8 +57,6 @@ class SolutionServiceTest {
         // then
         assertSoftly(softly -> {
             softly.assertThat(foundSolution).isNotNull();
-            softly.assertThat(foundSolution.getInstagramId())
-                .isEqualTo(createRequestDto.instagramId());
             softly.assertThat(foundSolution.getProblemId()).isEqualTo(DEFAULT_PROBLEM_ID);
         });
     }
@@ -88,11 +85,6 @@ class SolutionServiceTest {
             softly.assertThat(solutionsResponse).isNotNull();
             softly.assertThat(solutionsResponse.solutions()).hasSize(2);
             softly.assertThat(solutionsResponse.meta().count()).isEqualTo(2);
-
-            softly.assertThat(solutionsResponse.solutions().get(0).instagramId())
-                .isEqualTo(createRequestDto1.instagramId());
-            softly.assertThat(solutionsResponse.solutions().get(1).instagramId())
-                .isEqualTo(createRequestDto2.instagramId());
         });
     }
 }

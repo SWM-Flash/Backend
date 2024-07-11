@@ -18,8 +18,8 @@ public class FakeSolutionRepository implements SolutionRepository {
 
     @Override
     public Solution save(Solution solution) {
-        Solution savedSolution = new Solution(id++, solution.getUploader(), solution.getReview(),
-            solution.getInstagramId(), solution.getVideoUrl(), DEFAULT_OPTIONAL_WEIGHT,
+        Solution savedSolution = new Solution(id++, solution.getSolutionDetail(),
+            DEFAULT_OPTIONAL_WEIGHT,
             DEFAULT_PROBLEM_ID);
 
         db.put(savedSolution.getId(), savedSolution);
