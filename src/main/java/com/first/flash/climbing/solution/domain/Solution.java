@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Solution {
 
-    private final Long DEFAULT_OPTIONAL_WEIGHT = 0L;
+    private static final Long DEFAULT_OPTIONAL_WEIGHT = 0L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
