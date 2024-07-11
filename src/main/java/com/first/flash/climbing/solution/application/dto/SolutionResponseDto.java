@@ -1,4 +1,4 @@
-package com.first.flash.climbing.solution.domain.dto;
+package com.first.flash.climbing.solution.application.dto;
 
 import com.first.flash.climbing.solution.domain.Solution;
 
