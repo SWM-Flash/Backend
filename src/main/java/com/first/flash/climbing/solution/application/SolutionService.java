@@ -5,6 +5,7 @@ import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,5 +27,11 @@ public class SolutionService {
     public Solution findSolutionById(final Long id) {
         return solutionRepository.findById(id)
             .orElseThrow(() -> new SolutionNotFoundException(id));
+    }
+
+    public List<SolutionResponseDto> findAllSolutionsByProblemId(final Long problemId) {
+        return solutionRepository.findAllByProblemId(problemId).stream()
+            .map(SolutionResponseDto::toDto)
+            .toList();
     }
 }
