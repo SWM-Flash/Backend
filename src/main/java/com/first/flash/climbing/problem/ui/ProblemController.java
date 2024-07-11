@@ -21,7 +21,7 @@ public class ProblemController {
     public ResponseEntity<ProblemCreateResponseDto> saveProblems(
         @PathVariable("gymId") final Long gymId,
         @PathVariable("sectorId") final Long sectorId,
-        @RequestBody ProblemCreateRequestDto requestDto) {
+        @RequestBody final ProblemCreateRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(problemsSaveService.saveProblems(gymId, sectorId, requestDto));
     }
