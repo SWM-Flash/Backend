@@ -74,7 +74,9 @@ class ClimbingGymServiceTest {
         List<ClimbingGymResponseDto> gyms = climbingGymService.findAllClimbingGyms();
 
         // then
-        assertThat(gyms).isNotEmpty();
-        assertThat(gyms.size()).isEqualTo(2);
+        assertSoftly(softly -> {
+            softly.assertThat(gyms).isNotEmpty();
+            softly.assertThat(gyms.size()).isEqualTo(2);
+        });
     }
 }
