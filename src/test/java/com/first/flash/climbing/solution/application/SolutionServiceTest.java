@@ -52,7 +52,7 @@ class SolutionServiceTest {
             createRequestDto);
 
         // when
-        Solution foundSolution = solutionService.findById(saveDto.id());
+        Solution foundSolution = solutionService.findSolutionById(saveDto.id());
 
         // then
         assertSoftly(softly -> {
@@ -66,7 +66,7 @@ class SolutionServiceTest {
     @Test
     void 아이디로_해설_찾기_실패() {
         // when & then
-        assertThatThrownBy(() -> solutionService.findById(NON_EXISTENT_SOLUTION_ID))
+        assertThatThrownBy(() -> solutionService.findSolutionById(NON_EXISTENT_SOLUTION_ID))
             .isInstanceOf(SolutionNotFoundException.class);
     }
 }

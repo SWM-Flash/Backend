@@ -23,7 +23,7 @@ public class SolutionService {
         return SolutionResponseDto.toDto(solutionRepository.save(solution));
     }
 
-    public Solution findById(final Long id) {
+    public Solution findSolutionById(final Long id) {
         return solutionRepository.findById(id)
             .orElseThrow(() -> new SolutionNotFoundException(id));
     }
