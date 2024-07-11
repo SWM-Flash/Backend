@@ -2,25 +2,27 @@ package com.first.flash.climbing.problem.domain;
 
 import com.first.flash.climbing.problem.domain.vo.DifficultyInfo;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Getter
 public class Problem {
 
     private static final Long DEFAULT_OPTIONAL_WEIGHT = 0L;
     private static final Integer DEFAULT_VIEWS = 0;
+    private static final Boolean DEFAULT_IS_EXPIRED = false;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
     private String imageUrl;
     private Integer views;
     private Boolean isExpired;
@@ -29,24 +31,19 @@ public class Problem {
     private Long gymId;
     private Long sectorId;
 
-    public Problem(final String imageUrl, final Integer views, final Boolean isExpired,
-        final DifficultyInfo difficultyInfo, final Long optionalWeight, final Long gymId,
-        final Long sectorId) {
-        this.imageUrl = imageUrl;
-        this.views = views;
-        this.isExpired = isExpired;
-        this.difficultyInfo = difficultyInfo;
-        this.optionalWeight = optionalWeight;
-        this.gymId = gymId;
-        this.sectorId = sectorId;
-    }
-
-    public static Problem createDefault(final String imageUrl, final Boolean isExpired,
+    public static Problem createDefault(final UUID id, final String imageUrl,
         final String difficultyName, final Integer difficultyLevel, final Long gymId,
         final Long sectorId) {
-        return new Problem(imageUrl, DEFAULT_VIEWS, isExpired,
-            DifficultyInfo.of(difficultyName, difficultyLevel), DEFAULT_OPTIONAL_WEIGHT, gymId,
-            sectorId);
+        return Problem.builder()
+                      .id(id)
+                      .imageUrl(imageUrl)
+                      .views(DEFAULT_VIEWS)
+                      .isExpired(DEFAULT_IS_EXPIRED)
+                      .difficultyInfo(DifficultyInfo.of(difficultyName, difficultyLevel))
+                      .optionalWeight(DEFAULT_OPTIONAL_WEIGHT)
+                      .gymId(gymId)
+                      .sectorId(sectorId)
+                      .build();
     }
 
     public void view() {
