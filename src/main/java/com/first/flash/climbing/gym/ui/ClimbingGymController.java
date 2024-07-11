@@ -37,7 +37,7 @@ public class ClimbingGymController {
     }
 
     @GetMapping("/{gymId}")
-    public ClimbingGym getGymDetails(@PathVariable Long gymId) {
+    public ClimbingGym getGymDetails(@PathVariable final Long gymId) {
         return climbingGymService.findClimbingGymById(gymId);
     }
 }
