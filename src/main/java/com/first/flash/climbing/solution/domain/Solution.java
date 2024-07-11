@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Solution {
 
+    private final Long DEFAULT_OPTIONAL_WEIGHT = 0L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,7 +31,7 @@ public class Solution {
         this.review = review;
         this.instagramId = instagramId;
         this.videoUrl = videoUrl;
-        this.optionalWeight = 0L;
+        this.optionalWeight = DEFAULT_OPTIONAL_WEIGHT;
         this.problemId = problemId;
     }
 
