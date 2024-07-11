@@ -1,9 +1,10 @@
 package com.first.flash.climbing.solution.application;
 
+import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
-import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,11 @@ public class SolutionService {
             .orElseThrow(() -> new SolutionNotFoundException(id));
     }
 
-    public List<SolutionResponseDto> findAllSolutionsByProblemId(final Long problemId) {
-        return solutionRepository.findAllByProblemId(problemId).stream()
+    public SolutionsResponseDto findAllSolutionsByProblemId(final Long problemId) {
+        List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId)
+            .stream()
             .map(SolutionResponseDto::toDto)
             .toList();
+        return new SolutionsResponseDto(solutions, new SolutionsResponseDto.Meta(solutions.size()));
     }
 }

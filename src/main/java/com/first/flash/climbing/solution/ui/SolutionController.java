@@ -1,9 +1,9 @@
 package com.first.flash.climbing.solution.ui;
 
 import com.first.flash.climbing.solution.application.SolutionService;
+import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
-import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,8 @@ public class SolutionController {
     private final SolutionService solutionService;
 
     @GetMapping("problems/{problemId}/solutions")
-    public ResponseEntity<List<SolutionResponseDto>> getSolutions(@PathVariable Long problemId) {
-        List<SolutionResponseDto> response = solutionService.findAllSolutionsByProblemId(
+    public ResponseEntity<SolutionsResponseDto> getSolutions(@PathVariable Long problemId) {
+        SolutionsResponseDto response = solutionService.findAllSolutionsByProblemId(
             problemId);
         return ResponseEntity.ok(response);
     }
