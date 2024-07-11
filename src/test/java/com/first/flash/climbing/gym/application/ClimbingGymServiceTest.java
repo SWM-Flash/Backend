@@ -18,8 +18,8 @@ import org.junit.jupiter.api.Test;
 
 class ClimbingGymServiceTest {
 
-    ClimbingGymRepository climbingGymRepository;
-    ClimbingGymService climbingGymService;
+    private ClimbingGymRepository climbingGymRepository;
+    private ClimbingGymService climbingGymService;
 
     @BeforeEach
     void init() {
