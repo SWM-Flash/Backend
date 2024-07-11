@@ -4,10 +4,11 @@ import static com.first.flash.climbing.solution.fixture.SolutionFixture.createDe
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
-import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.climbing.solution.infrastructure.FakeSolutionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,5 +69,30 @@ class SolutionServiceTest {
         // when & then
         assertThatThrownBy(() -> solutionService.findSolutionById(NON_EXISTENT_SOLUTION_ID))
             .isInstanceOf(SolutionNotFoundException.class);
+    }
+
+    @Test
+    void 문제_ID로_해설_목록_찾기() {
+        // given
+        SolutionCreateRequestDto createRequestDto1 = createDefaultRequestDto();
+        SolutionCreateRequestDto createRequestDto2 = createDefaultRequestDto();
+        solutionService.saveSolution(DEFAULT_PROBLEM_ID, createRequestDto1);
+        solutionService.saveSolution(DEFAULT_PROBLEM_ID, createRequestDto2);
+
+        // when
+        SolutionsResponseDto solutionsResponse = solutionService.findAllSolutionsByProblemId(
+            DEFAULT_PROBLEM_ID);
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(solutionsResponse).isNotNull();
+            softly.assertThat(solutionsResponse.solutions()).hasSize(2);
+            softly.assertThat(solutionsResponse.meta().count()).isEqualTo(2);
+
+            softly.assertThat(solutionsResponse.solutions().get(0).instagramId())
+                .isEqualTo(createRequestDto1.instagramId());
+            softly.assertThat(solutionsResponse.solutions().get(1).instagramId())
+                .isEqualTo(createRequestDto2.instagramId());
+        });
     }
 }
