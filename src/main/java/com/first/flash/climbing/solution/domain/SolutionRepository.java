@@ -9,5 +9,5 @@ public interface SolutionRepository {
 
     Optional<Solution> findById(final Long id);
 
-    List<Solution> findAll();
+    List<Solution> findAllByProblemId(final Long problemId);
 }

@@ -2,7 +2,6 @@ package com.first.flash.climbing.solution.infrastructure;
 
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,9 @@ public class FakeSolutionRepository implements SolutionRepository {
     }
 
     @Override
-    public List<Solution> findAll() {
-        return new ArrayList<>(db.values());
+    public List<Solution> findAllByProblemId(Long problemId) {
+        return db.values().stream()
+            .filter(solution -> solution.getProblemId().equals(problemId))
+            .toList();
     }
 }

@@ -11,5 +11,5 @@ public interface SolutionJpaRepository extends JpaRepository<Solution, Long> {
 
     Optional<Solution> findById(final long id);
 
-    List<Solution> findAll();
+    List<Solution> findByProblemId(Long problemId);
 }

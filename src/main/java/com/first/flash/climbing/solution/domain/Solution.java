@@ -24,8 +24,8 @@ public class Solution {
     private String review;
     private String instagramId;
     private String videoUrl;
-    private long optionalWeight;
-    private long problemId;
+    private Long optionalWeight;
+    private Long problemId;
 
     protected Solution(String uploader, String review, String instagramId, String videoUrl,
         long problemId) {

@@ -24,7 +24,7 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public List<Solution> findAll() {
-        return solutionJpaRepository.findAll();
+    public List<Solution> findAllByProblemId(Long problemId) {
+        return solutionJpaRepository.findByProblemId(problemId);
     }
 }
