@@ -9,21 +9,25 @@ import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.domian.ClimbingGym;
+import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
-import jakarta.transaction.Transactional;
+import com.first.flash.climbing.gym.infrastructure.FakeClimbingGymRepository;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
 class ClimbingGymServiceTest {
 
-    @Autowired
+    ClimbingGymRepository climbingGymRepository;
     ClimbingGymService climbingGymService;
 
+    @BeforeEach
+    void init() {
+        climbingGymRepository = new FakeClimbingGymRepository();
+        climbingGymService = new ClimbingGymService(climbingGymRepository);
+    }
+
     @Test
-    @Transactional
     void 클라이밍장_저장() {
         // given
         ClimbingGymCreateRequestDto createDto = createDefaultGymCreateRequestDto();
@@ -40,7 +44,6 @@ class ClimbingGymServiceTest {
     }
 
     @Test
-    @Transactional
     void 클라이밍장_단건_검색() {
         // given
         ClimbingGymCreateRequestDto createDto = createDefaultGymCreateRequestDto();
@@ -54,7 +57,6 @@ class ClimbingGymServiceTest {
     }
 
     @Test
-    @Transactional
     void 클라이밍장_단건_검색_예외() {
         // when & then
         assertThatThrownBy(() -> climbingGymService.findClimbingGymById(100L))
@@ -62,7 +64,6 @@ class ClimbingGymServiceTest {
     }
 
     @Test
-    @Transactional
     void 클라이밍장_다건_검색() {
         // given
         ClimbingGymCreateRequestDto createDto1 = createDefaultGymCreateRequestDto();
