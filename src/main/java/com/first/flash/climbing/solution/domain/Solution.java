@@ -29,6 +29,7 @@ public class Solution {
 
     protected Solution(String uploader, String review, String instagramId, String videoUrl,
         long problemId) {
+        
         this.uploader = uploader;
         this.review = review;
         this.instagramId = instagramId;
@@ -37,7 +38,9 @@ public class Solution {
         this.problemId = problemId;
     }
 
-    public static Solution of(SolutionCreateRequestDto createRequestDto, long problemId) {
+    public static Solution of(final SolutionCreateRequestDto createRequestDto,
+        final Long problemId) {
+
         return new Solution(createRequestDto.uploader(), createRequestDto.review(),
             createRequestDto.instagramId(), createRequestDto.videoUrl(), problemId);
     }

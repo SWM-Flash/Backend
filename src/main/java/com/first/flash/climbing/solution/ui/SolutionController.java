@@ -22,15 +22,17 @@ public class SolutionController {
     private final SolutionService solutionService;
 
     @GetMapping("problems/{problemId}/solutions")
-    public ResponseEntity<SolutionsResponseDto> getSolutions(@PathVariable Long problemId) {
+    public ResponseEntity<SolutionsResponseDto> getSolutions(@PathVariable final Long problemId) {
         SolutionsResponseDto response = solutionService.findAllSolutionsByProblemId(
             problemId);
+
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("problems/{problemId}/solutions")
     public ResponseEntity<SolutionResponseDto> createSolution(@PathVariable final Long problemId,
         @RequestBody final SolutionCreateRequestDto solutionCreateRequestDto) {
+
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(solutionService.saveSolution(problemId, solutionCreateRequestDto));
     }

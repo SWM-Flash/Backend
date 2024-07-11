@@ -9,7 +9,7 @@ public interface SolutionJpaRepository extends JpaRepository<Solution, Long> {
 
     Solution save(final Solution solution);
 
-    Optional<Solution> findById(final long id);
+    Optional<Solution> findById(final Long id);
 
-    List<Solution> findByProblemId(Long problemId);
+    List<Solution> findByProblemId(final Long problemId);
 }
