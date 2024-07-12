@@ -6,7 +6,6 @@ import com.first.flash.climbing.problem.application.dto.ProblemCreateResponseDto
 import com.first.flash.climbing.problem.application.dto.ProblemsResponse;
 import com.first.flash.climbing.problem.domain.dto.ProblemCreateRequestDto;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,13 +36,13 @@ public class ProblemController {
 
     @GetMapping("/problems")
     public ResponseEntity<ProblemsResponse> findAllProblems(
-        @RequestParam(name = "last-id", required = false) final UUID lastId,
-        @RequestParam(required = false) final String sort,
+        @RequestParam(name = "cursor", required = false) final String cursor,
+        @RequestParam(defaultValue = "id", required = false) final String sort,
         @RequestParam(defaultValue = DEFAULT_SIZE, required = false) final int size,
         @RequestParam(required = false) final List<String> difficulty,
         @RequestParam(required = false) final List<String> sector,
         @RequestParam(name = "has-solution", required = false) final Boolean hasSolution) {
         return ResponseEntity.ok(
-            problemReadService.findAll(lastId, sort, size, difficulty, sector, hasSolution));
+            problemReadService.findAll(cursor, sort, size, difficulty, sector, hasSolution));
     }
 }

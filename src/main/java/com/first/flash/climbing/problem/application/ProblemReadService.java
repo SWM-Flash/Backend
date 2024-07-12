@@ -3,8 +3,8 @@ package com.first.flash.climbing.problem.application;
 import com.first.flash.climbing.problem.application.dto.ProblemsResponse;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
+import com.first.flash.climbing.problem.infrastructure.dto.Cursor;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +14,32 @@ public class ProblemReadService {
 
     private final ProblemRepository problemRepository;
 
-    public ProblemsResponse findAll(final UUID lastId, final String sort, final Integer size,
+    public ProblemsResponse findAll(final String cursor, final String sort, final Integer size,
         final List<String> difficulty, final List<String> sector, final Boolean hasSolution) {
+        Cursor prevCursor = Cursor.decode(cursor);
+        List<QueryProblem> queryProblems = problemRepository.findAll(prevCursor, sort, size,
+            difficulty, sector, hasSolution);
+        String nextCursor = getNextCursor(sort, size, queryProblems);
+        return ProblemsResponse.of(queryProblems, nextCursor);
+    }
 
-        List<QueryProblem> queryProblems = problemRepository.findAll(lastId, sort, size, difficulty,
-            sector, hasSolution);
-        return ProblemsResponse.of(queryProblems);
+    private static String getNextCursor(final String sort, final Integer size,
+        final List<QueryProblem> queryProblems) {
+        if (queryProblems.size() != size) {
+            return null;
+        }
+        QueryProblem lastProblem = queryProblems.get(size - 1);
+        return new Cursor(sort, getLastSortValue(lastProblem, sort),
+            lastProblem.getId()).encode();
+    }
+
+    private static String getLastSortValue(final QueryProblem lastProblem, final String sort) {
+        if (sort.equals("views")) {
+            return lastProblem.getId().toString();
+        }
+        if (sort.equals("difficulty")) {
+            return lastProblem.getDifficultyLevel().toString();
+        }
+        return lastProblem.getViews().toString();
     }
 }
