@@ -28,7 +28,8 @@ public class SolutionController {
 
     @Operation(summary = "해설 영상 조회", description = "특정 문제에 대한 해설 영상 조회")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "성공적으로 해설 영상을 조회함")
+        @ApiResponse(responseCode = "200", description = "성공적으로 해설 영상을 조회함"),
+        @ApiResponse(responseCode = "404", description = "해설을 찾을 수 없음")
     })
     @GetMapping("problems/{problemId}/solutions")
     public ResponseEntity<SolutionsResponseDto> getSolutions(@PathVariable final Long problemId) {

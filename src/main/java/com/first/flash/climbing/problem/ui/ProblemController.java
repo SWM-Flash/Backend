@@ -25,6 +25,7 @@ public class ProblemController {
     @Operation(summary = "문제 업로드", description = "특정 섹터에 문제 업로드")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "성공적으로 문제를 업로드함"),
+        @ApiResponse(responseCode = "404", description = "난이도를 찾을 수 없음")
     })
     @PostMapping("/gyms/{gymId}/sectors/{sectorId}/problems")
     public ResponseEntity<ProblemCreateResponseDto> saveProblems(
