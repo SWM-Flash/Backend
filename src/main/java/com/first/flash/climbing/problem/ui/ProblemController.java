@@ -37,12 +37,12 @@ public class ProblemController {
     @GetMapping("/problems")
     public ResponseEntity<ProblemsResponse> findAllProblems(
         @RequestParam(name = "cursor", required = false) final String cursor,
-        @RequestParam(defaultValue = "id", required = false) final String sort,
+        @RequestParam(defaultValue = "sortBy", required = false) final String sortBy,
         @RequestParam(defaultValue = DEFAULT_SIZE, required = false) final int size,
         @RequestParam(required = false) final List<String> difficulty,
         @RequestParam(required = false) final List<String> sector,
         @RequestParam(name = "has-solution", required = false) final Boolean hasSolution) {
         return ResponseEntity.ok(
-            problemReadService.findAll(cursor, sort, size, difficulty, sector, hasSolution));
+            problemReadService.findAll(cursor, sortBy, size, difficulty, sector, hasSolution));
     }
 }
