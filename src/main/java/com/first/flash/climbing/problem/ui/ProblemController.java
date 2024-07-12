@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProblemController {
 
     private final static String DEFAULT_SIZE = "2";
+    private final static String DEFAULT_SORT_BY = "view";
 
     private final ProblemsSaveService problemsSaveService;
     private final ProblemReadService problemReadService;
@@ -37,7 +38,7 @@ public class ProblemController {
     @GetMapping("/problems")
     public ResponseEntity<ProblemsResponse> findAllProblems(
         @RequestParam(name = "cursor", required = false) final String cursor,
-        @RequestParam(defaultValue = "sortBy", required = false) final String sortBy,
+        @RequestParam(defaultValue = DEFAULT_SORT_BY, required = false) final String sortBy,
         @RequestParam(defaultValue = DEFAULT_SIZE, required = false) final int size,
         @RequestParam(required = false) final List<String> difficulty,
         @RequestParam(required = false) final List<String> sector,
