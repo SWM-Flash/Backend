@@ -2,6 +2,8 @@ package com.first.flash.climbing.problem.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -15,6 +17,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
+@Table(
+    indexes = {
+        @Index(name = "idx_is_expired_views_gym_id", columnList = "isExpired, views, gymId"),
+        @Index(name = "idx_is_expired_difficulty_gym_id", columnList = "isExpired, difficultyName, gymId")
+    }
+)
 public class QueryProblem {
 
     private static final Boolean DEFAULT_HAS_SOLUTION = false;
