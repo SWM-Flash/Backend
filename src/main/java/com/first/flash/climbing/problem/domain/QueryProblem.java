@@ -20,7 +20,8 @@ import lombok.NoArgsConstructor;
 @Table(
     indexes = {
         @Index(name = "idx_is_expired_views_gym_id", columnList = "isExpired, views, gymId"),
-        @Index(name = "idx_is_expired_difficulty_gym_id", columnList = "isExpired, difficultyName, gymId")
+        @Index(name = "idx_is_expired_difficulty_gym_id",
+            columnList = "isExpired, difficultyLevel, gymId")
     }
 )
 public class QueryProblem {
