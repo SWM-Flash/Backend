@@ -1,5 +1,6 @@
 package com.first.flash.climbing.problem.domain;
 
+import com.first.flash.climbing.problem.infrastructure.dto.Cursor;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,6 +11,6 @@ public interface ProblemRepository {
 
     Optional<Problem> findById(final UUID id);
 
-    List<QueryProblem> findAll(final UUID lastId, final String sort, final int size,
+    List<QueryProblem> findAll(final Cursor preCursor, final String sort, final int size,
         final List<String> difficulty, final List<String> sector, final Boolean hasSolution);
 }
