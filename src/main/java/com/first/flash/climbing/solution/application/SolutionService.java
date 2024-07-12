@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.application;
 
+import com.first.flash.climbing.solution.application.dto.SolutionMetaResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
@@ -35,6 +36,6 @@ public class SolutionService {
             .stream()
             .map(SolutionResponseDto::toDto)
             .toList();
-        return new SolutionsResponseDto(solutions, new SolutionsResponseDto.Meta(solutions.size()));
+        return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
     }
 }
