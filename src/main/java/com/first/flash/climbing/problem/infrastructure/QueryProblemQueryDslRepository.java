@@ -1,9 +1,11 @@
 package com.first.flash.climbing.problem.infrastructure;
 
 import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem;
+import static com.first.flash.climbing.problem.infrastructure.dto.SortBy.DIFFICULTY;
 
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.infrastructure.dto.Cursor;
+import com.first.flash.climbing.problem.infrastructure.dto.SortBy;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,14 +21,13 @@ public class QueryProblemQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<QueryProblem> findAll(final Cursor prevCursor, final String sort, final int size,
+    public List<QueryProblem> findAll(final Cursor prevCursor, final SortBy sortBy, final int size,
         final List<String> difficulty, final List<String> sector, final Boolean hasSolution) {
         return queryFactory
             .selectFrom(queryProblem)
-            .where(notExpired(), cursorCondition(prevCursor), inSector(sector),
-                inDifficulty(difficulty), hasSolution(hasSolution))
-            .orderBy(sortItem(sort))
-            .orderBy(queryProblem.id.desc())
+            .where(notExpired(), cursorCondition(prevCursor), inSectors(sector),
+                inDifficulties(difficulty), hasSolution(hasSolution))
+            .orderBy(sortItem(sortBy))
             .limit(size)
             .fetch();
     }
@@ -35,49 +36,44 @@ public class QueryProblemQueryDslRepository {
         if (Objects.isNull(prevCursor) || Objects.isNull(prevCursor.cursorValue())) {
             return null;
         }
-
-        String sortBy = prevCursor.sortBy();
+        SortBy sortBy = prevCursor.sortBy();
         String cursorValue = prevCursor.cursorValue();
         UUID cursorId = prevCursor.lastId();
+        return getExpressionBySortColumn(sortBy, cursorValue, cursorId);
+    }
 
-        switch (sortBy) {
-            case "views":
-                return queryProblem.views.lt(Integer.parseInt(cursorValue))
-                                         .or(queryProblem.views.eq(Integer.parseInt(cursorValue))
-                                                               .and(queryProblem.id.lt(cursorId)));
-            case "difficulty":
-                return queryProblem.difficultyLevel.lt(Integer.parseInt(cursorValue))
-                                                   .or(queryProblem.difficultyLevel.eq(
-                                                       Integer.parseInt(cursorValue)).and(
-                                                       queryProblem.id.lt(cursorId)));
-            default:
-                return queryProblem.id.lt(cursorId);
+    private BooleanExpression getExpressionBySortColumn(
+        SortBy sortBy, String cursorValue, UUID cursorId) {
+        if (sortBy.equals(DIFFICULTY)) {
+            return queryProblem.difficultyLevel.gt(Integer.parseInt(cursorValue))
+                                               .or(queryProblem.difficultyLevel
+                                                   .eq(Integer.parseInt(cursorValue))
+                                                   .and(queryProblem.id.lt(cursorId)));
         }
+        return queryProblem.views.lt(Integer.parseInt(cursorValue))
+                                 .or(queryProblem.views.eq(Integer.parseInt(cursorValue))
+                                                       .and(queryProblem.id.lt(cursorId)));
     }
 
     private BooleanExpression notExpired() {
         return queryProblem.isExpired.isFalse();
     }
 
-    private OrderSpecifier<?> sortItem(final String sort) {
-        switch (sort) {
-            case "views":
-                return queryProblem.views.desc();
-            case "difficulty":
-                return queryProblem.difficultyLevel.desc();
-            default:
-                return queryProblem.id.desc();
+    private OrderSpecifier<?> sortItem(final SortBy sortBy) {
+        if (sortBy.equals(DIFFICULTY)) {
+            return queryProblem.difficultyLevel.asc();
         }
+        return queryProblem.views.desc();
     }
 
-    private BooleanExpression inSector(final List<String> sector) {
+    private BooleanExpression inSectors(final List<String> sector) {
         if (Objects.isNull(sector)) {
             return null;
         }
         return queryProblem.sectorName.in(sector);
     }
 
-    private BooleanExpression inDifficulty(final List<String> difficulty) {
+    private BooleanExpression inDifficulties(final List<String> difficulty) {
         if (Objects.isNull(difficulty)) {
             return null;
         }
