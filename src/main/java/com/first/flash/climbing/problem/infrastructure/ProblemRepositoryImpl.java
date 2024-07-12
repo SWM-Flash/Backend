@@ -4,6 +4,7 @@ import com.first.flash.climbing.problem.domain.Problem;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.infrastructure.dto.Cursor;
+import com.first.flash.climbing.problem.infrastructure.dto.SortBy;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,9 +29,9 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     }
 
     @Override
-    public List<QueryProblem> findAll(final Cursor prevCursor, final String sort, final int size,
+    public List<QueryProblem> findAll(final Cursor prevCursor, final SortBy sortBy, final int size,
         final List<String> difficulty, final List<String> sector, final Boolean hasSolution) {
-        return queryProblemQueryDslRepository.findAll(prevCursor, sort, size, difficulty,
+        return queryProblemQueryDslRepository.findAll(prevCursor, sortBy, size, difficulty,
             sector, hasSolution);
     }
 }

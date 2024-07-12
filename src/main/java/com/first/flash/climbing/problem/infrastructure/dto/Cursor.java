@@ -4,7 +4,7 @@ import java.util.Base64;
 import java.util.Objects;
 import java.util.UUID;
 
-public record Cursor(String sortBy, String cursorValue, UUID lastId) {
+public record Cursor(SortBy sortBy, String cursorValue, UUID lastId) {
 
     private static final String DEFAULT_SEPARATOR = ":";
     private static final int SORT_BY_INDEX = 0;
@@ -26,7 +26,7 @@ public record Cursor(String sortBy, String cursorValue, UUID lastId) {
         String decoded = new String(Base64.getDecoder()
                                           .decode(encoded));
         String[] parts = decoded.split(DEFAULT_SEPARATOR);
-        return new Cursor(parts[SORT_BY_INDEX], parts[CURSOR_VALUE_INDEX],
+        return new Cursor(SortBy.from(parts[SORT_BY_INDEX]), parts[CURSOR_VALUE_INDEX],
             UUID.fromString(parts[LAST_ID_INDEX]));
     }
 }
