@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProblemsCreateService {
 
-    private final UUIDGenerator uuidGenerator;
-
     private static final Boolean DEFAULT_HAS_SOLUTION = false;
+
+    private final UUIDGenerator uuidGenerator;
 
     public Problem createProblem(final ClimbingGym climbingGym, final Sector sector,
         final ProblemCreateRequestDto createRequestDto) {
