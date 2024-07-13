@@ -34,6 +34,7 @@ public class QueryProblem {
     private Integer views;
     private Boolean isExpired;
     private Boolean hasSolution;
+    private Boolean isFakeRemovalDate;
     private String difficultyName;
     private Integer difficultyLevel;
     private Long optionalWeight;
@@ -43,4 +44,8 @@ public class QueryProblem {
     private String sectorName;
     private LocalDate settingDate;
     private LocalDate removalDate;
+
+    public boolean isExpired() {
+        return isExpired;
+    }
 }

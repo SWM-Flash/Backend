@@ -33,6 +33,7 @@ public class ProblemsCreateService {
                            .views(problem.getViews())
                            .isExpired(problem.getIsExpired())
                            .hasSolution(DEFAULT_HAS_SOLUTION)
+                           .isFakeRemovalDate(sector.getRemovalInfo().getIsFakeRemovalDate())
                            .difficultyName(problem.getDifficultyInfo().getDifficultyName())
                            .difficultyLevel(problem.getDifficultyInfo().getLevel())
                            .optionalWeight(problem.getOptionalWeight())
