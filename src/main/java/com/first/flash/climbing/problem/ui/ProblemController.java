@@ -3,10 +3,6 @@ package com.first.flash.climbing.problem.ui;
 import com.first.flash.climbing.problem.application.ProblemsSaveService;
 import com.first.flash.climbing.problem.application.dto.ProblemCreateResponseDto;
 import com.first.flash.climbing.problem.domain.dto.ProblemCreateRequestDto;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "problems", description = "문제 관리 API")
 @RestController
 @RequiredArgsConstructor
 public class ProblemController {
 
     private final ProblemsSaveService problemsSaveService;
 
-    @Operation(summary = "문제 업로드", description = "특정 섹터에 문제 업로드")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "성공적으로 문제를 업로드함"),
-        @ApiResponse(responseCode = "404", description = "난이도를 찾을 수 없음")
-    })
     @PostMapping("/gyms/{gymId}/sectors/{sectorId}/problems")
     public ResponseEntity<ProblemCreateResponseDto> saveProblems(
         @PathVariable("gymId") final Long gymId,
