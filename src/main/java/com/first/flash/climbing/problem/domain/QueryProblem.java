@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(
     indexes = {
-        @Index(name = "idx_is_expired_views_gym_id", columnList = "isExpired, views, gymId"),
-        @Index(name = "idx_is_expired_difficulty_gym_id",
-            columnList = "isExpired, difficultyLevel, gymId")
+        @Index(name = "idx_is_expired_views_id", columnList = "isExpired, views, id"),
+        @Index(name = "idx_is_expired_difficulty_id",
+            columnList = "isExpired, difficultyLevel, id")
     }
 )
 public class QueryProblem {
