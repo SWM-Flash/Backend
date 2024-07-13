@@ -3,7 +3,7 @@ package com.first.flash.climbing.problem.ui;
 import com.first.flash.climbing.problem.application.ProblemReadService;
 import com.first.flash.climbing.problem.application.ProblemsSaveService;
 import com.first.flash.climbing.problem.application.dto.ProblemCreateResponseDto;
-import com.first.flash.climbing.problem.application.dto.ProblemsResponse;
+import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.dto.ProblemCreateRequestDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class ProblemController {
     }
 
     @GetMapping("/gyms/{gymId}/problems")
-    public ResponseEntity<ProblemsResponse> findAllProblems(
+    public ResponseEntity<ProblemsResponseDto> findAllProblems(
         @PathVariable final Long gymId,
         @RequestParam(name = "cursor", required = false) final String cursor,
         @RequestParam(defaultValue = DEFAULT_SORT_BY, required = false) final String sortBy,

@@ -2,7 +2,7 @@ package com.first.flash.climbing.problem.application;
 
 import static com.first.flash.climbing.problem.infrastructure.dto.SortBy.DIFFICULTY;
 
-import com.first.flash.climbing.problem.application.dto.ProblemsResponse;
+import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.infrastructure.dto.Cursor;
@@ -17,7 +17,7 @@ public class ProblemReadService {
 
     private final ProblemRepository problemRepository;
 
-    public ProblemsResponse findAll(final Long gymId, final String cursor,
+    public ProblemsResponseDto findAll(final Long gymId, final String cursor,
         final String sortByRequest, final Integer size,
         final List<String> difficulty, final List<String> sector, final Boolean hasSolution) {
         Cursor prevCursor = Cursor.decode(cursor);
@@ -26,7 +26,7 @@ public class ProblemReadService {
         List<QueryProblem> queryProblems = problemRepository.findAll(prevCursor, sortBy, size,
             gymId, difficulty, sector, hasSolution);
         String nextCursor = getNextCursor(sortBy, size, queryProblems);
-        return ProblemsResponse.of(queryProblems, nextCursor);
+        return ProblemsResponseDto.of(queryProblems, nextCursor);
     }
 
     private String getNextCursor(final SortBy sortBy, final Integer size,
