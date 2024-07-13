@@ -1,7 +1,7 @@
 package com.first.flash.climbing.problem.domain;
 
-import com.first.flash.climbing.problem.infrastructure.dto.Cursor;
-import com.first.flash.climbing.problem.infrastructure.dto.SortBy;
+import com.first.flash.climbing.problem.infrastructure.paging.Cursor;
+import com.first.flash.climbing.problem.infrastructure.paging.SortBy;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

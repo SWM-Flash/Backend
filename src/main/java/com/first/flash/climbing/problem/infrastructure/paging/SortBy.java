@@ -1,4 +1,4 @@
-package com.first.flash.climbing.problem.infrastructure.dto;
+package com.first.flash.climbing.problem.infrastructure.paging;
 
 public enum SortBy {
 

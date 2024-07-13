@@ -1,4 +1,4 @@
-package com.first.flash.climbing.problem.infrastructure.dto;
+package com.first.flash.climbing.problem.infrastructure.paging;
 
 import java.util.Base64;
 import java.util.Objects;

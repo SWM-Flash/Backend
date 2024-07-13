@@ -1,12 +1,12 @@
 package com.first.flash.climbing.problem.application;
 
-import static com.first.flash.climbing.problem.infrastructure.dto.SortBy.DIFFICULTY;
+import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.DIFFICULTY;
 
 import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
-import com.first.flash.climbing.problem.infrastructure.dto.Cursor;
-import com.first.flash.climbing.problem.infrastructure.dto.SortBy;
+import com.first.flash.climbing.problem.infrastructure.paging.Cursor;
+import com.first.flash.climbing.problem.infrastructure.paging.SortBy;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

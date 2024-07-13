@@ -1,13 +1,12 @@
 package com.first.flash.climbing.problem.infrastructure;
 
 import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem;
-import static com.first.flash.climbing.problem.infrastructure.dto.SortBy.DIFFICULTY;
+import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.DIFFICULTY;
 
 import com.first.flash.climbing.problem.domain.QueryProblem;
-import com.first.flash.climbing.problem.infrastructure.dto.Cursor;
-import com.first.flash.climbing.problem.infrastructure.dto.SortBy;
+import com.first.flash.climbing.problem.infrastructure.paging.Cursor;
+import com.first.flash.climbing.problem.infrastructure.paging.SortBy;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
