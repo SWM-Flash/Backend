@@ -3,9 +3,11 @@ package com.first.flash.climbing.problem.ui;
 import com.first.flash.climbing.problem.application.ProblemReadService;
 import com.first.flash.climbing.problem.application.ProblemsSaveService;
 import com.first.flash.climbing.problem.application.dto.ProblemCreateResponseDto;
+import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.dto.ProblemCreateRequestDto;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +49,11 @@ public class ProblemController {
         return ResponseEntity.ok(
             problemReadService.findAll(gymId, cursor, sortBy, size, difficulty, sector,
                 hasSolution));
+    }
+
+    @GetMapping("/problems/{problemId}")
+    public ResponseEntity<ProblemDetailResponseDto> findProblemById(
+        @PathVariable final UUID problemId) {
+        return ResponseEntity.ok(problemReadService.findProblemById(problemId));
     }
 }
