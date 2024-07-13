@@ -27,7 +27,7 @@ public class QueryProblemQueryDslRepository {
             .selectFrom(queryProblem)
             .where(notExpired(), cursorCondition(prevCursor), inSectors(sector),
                 inDifficulties(difficulty), hasSolution(hasSolution))
-            .orderBy(sortItem(sortBy))
+            .orderBy(sortItem(sortBy), queryProblem.id.desc())
             .limit(size)
             .fetch();
     }
@@ -43,7 +43,7 @@ public class QueryProblemQueryDslRepository {
     }
 
     private BooleanExpression getExpressionBySortColumn(
-        SortBy sortBy, String cursorValue, UUID cursorId) {
+        final SortBy sortBy, final String cursorValue, final UUID cursorId) {
         if (sortBy.equals(DIFFICULTY)) {
             return queryProblem.difficultyLevel.gt(Integer.parseInt(cursorValue))
                                                .or(queryProblem.difficultyLevel
