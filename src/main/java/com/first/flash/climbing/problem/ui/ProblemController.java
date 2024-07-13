@@ -35,8 +35,9 @@ public class ProblemController {
                              .body(problemsSaveService.saveProblems(gymId, sectorId, requestDto));
     }
 
-    @GetMapping("/problems")
+    @GetMapping("/gyms/{gymId}/problems")
     public ResponseEntity<ProblemsResponse> findAllProblems(
+        @PathVariable final Long gymId,
         @RequestParam(name = "cursor", required = false) final String cursor,
         @RequestParam(defaultValue = DEFAULT_SORT_BY, required = false) final String sortBy,
         @RequestParam(defaultValue = DEFAULT_SIZE, required = false) final int size,
@@ -44,6 +45,7 @@ public class ProblemController {
         @RequestParam(required = false) final List<String> sector,
         @RequestParam(name = "has-solution", required = false) final Boolean hasSolution) {
         return ResponseEntity.ok(
-            problemReadService.findAll(cursor, sortBy, size, difficulty, sector, hasSolution));
+            problemReadService.findAll(gymId, cursor, sortBy, size, difficulty, sector,
+                hasSolution));
     }
 }

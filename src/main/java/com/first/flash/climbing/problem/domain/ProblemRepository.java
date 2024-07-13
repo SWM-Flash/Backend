@@ -13,5 +13,5 @@ public interface ProblemRepository {
     Optional<Problem> findById(final UUID id);
 
     List<QueryProblem> findAll(final Cursor preCursor, final SortBy sortBy, final int size,
-        final List<String> difficulty, final List<String> sector, final Boolean hasSolution);
+        final Long gymId, final List<String> difficulty, final List<String> sector, final Boolean hasSolution);
 }

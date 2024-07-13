@@ -7,6 +7,7 @@ import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.infrastructure.dto.Cursor;
 import com.first.flash.climbing.problem.infrastructure.dto.SortBy;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -22,14 +23,19 @@ public class QueryProblemQueryDslRepository {
     private final JPAQueryFactory queryFactory;
 
     public List<QueryProblem> findAll(final Cursor prevCursor, final SortBy sortBy, final int size,
-        final List<String> difficulty, final List<String> sector, final Boolean hasSolution) {
+        final Long gymId, final List<String> difficulty, final List<String> sector,
+        final Boolean hasSolution) {
         return queryFactory
             .selectFrom(queryProblem)
-            .where(notExpired(), cursorCondition(prevCursor), inSectors(sector),
+            .where(notExpired(), cursorCondition(prevCursor), inGym(gymId), inSectors(sector),
                 inDifficulties(difficulty), hasSolution(hasSolution))
             .orderBy(sortItem(sortBy), queryProblem.id.desc())
             .limit(size)
             .fetch();
+    }
+
+    private BooleanExpression inGym(final Long gymId) {
+        return queryProblem.gymId.eq(gymId);
     }
 
     private BooleanExpression cursorCondition(final Cursor prevCursor) {

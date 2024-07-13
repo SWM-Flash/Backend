@@ -17,14 +17,14 @@ public class ProblemReadService {
 
     private final ProblemRepository problemRepository;
 
-    public ProblemsResponse findAll(final String cursor,
+    public ProblemsResponse findAll(final Long gymId, final String cursor,
         final String sortByRequest, final Integer size,
         final List<String> difficulty, final List<String> sector, final Boolean hasSolution) {
         Cursor prevCursor = Cursor.decode(cursor);
         SortBy sortBy = SortBy.from(sortByRequest);
 
         List<QueryProblem> queryProblems = problemRepository.findAll(prevCursor, sortBy, size,
-            difficulty, sector, hasSolution);
+            gymId, difficulty, sector, hasSolution);
         String nextCursor = getNextCursor(sortBy, size, queryProblems);
         return ProblemsResponse.of(queryProblems, nextCursor);
     }
