@@ -12,6 +12,10 @@ public enum SortBy {
         this.value = value;
     }
 
+    public String getValue() {
+        return value;
+    }
+
     public static SortBy from(final String value) {
         for (SortBy sortBy : SortBy.values()) {
             if (sortBy.value.equalsIgnoreCase(value)) {
