@@ -40,5 +40,4 @@ class CursorTest {
         assertThatThrownBy(() -> Cursor.decode(invalidCursor))
             .isInstanceOf(InvalidCursorException.class);
     }
-
 }
