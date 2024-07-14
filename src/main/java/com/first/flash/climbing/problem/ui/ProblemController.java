@@ -54,6 +54,6 @@ public class ProblemController {
     @GetMapping("/problems/{problemId}")
     public ResponseEntity<ProblemDetailResponseDto> findProblemById(
         @PathVariable final UUID problemId) {
-        return ResponseEntity.ok(problemReadService.findProblemById(problemId));
+        return ResponseEntity.ok(problemReadService.viewProblems(problemId));
     }
 }

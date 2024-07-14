@@ -4,8 +4,11 @@ import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.DIFF
 
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
+import com.first.flash.climbing.problem.domain.Problem;
+import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.domain.QueryProblemRepository;
+import com.first.flash.climbing.problem.exception.exceptions.ProblemNotFoundException;
 import com.first.flash.climbing.problem.exception.exceptions.QueryProblemExpiredException;
 import com.first.flash.climbing.problem.exception.exceptions.QueryProblemNotFoundException;
 import com.first.flash.climbing.problem.infrastructure.paging.Cursor;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class ProblemReadService {
 
     private final QueryProblemRepository queryProblemRepository;
+    private final ProblemRepository problemRepository;
 
     public ProblemsResponseDto findAll(final Long gymId, final String cursor,
         final String sortByRequest, final Integer size,
@@ -31,6 +35,31 @@ public class ProblemReadService {
             gymId, difficulty, sector, hasSolution);
         String nextCursor = getNextCursor(sortBy, size, queryProblems);
         return ProblemsResponseDto.of(queryProblems, nextCursor);
+    }
+
+    public ProblemDetailResponseDto viewProblems(final UUID problemId) {
+        QueryProblem queryProblem = findQueryProblemById(problemId);
+        Problem problem = findProblemById(problemId);
+        validateExpiration(problem, queryProblem);
+        problem.view();
+        queryProblem.view();
+        return ProblemDetailResponseDto.of(queryProblem);
+    }
+
+    private void validateExpiration(final Problem problem, final QueryProblem queryProblem) {
+        if (problem.isExpired() || queryProblem.isExpired()) {
+            throw new QueryProblemExpiredException(problem.getId());
+        }
+    }
+
+    private Problem findProblemById(final UUID problemId) {
+        return problemRepository.findById(problemId).orElseThrow(
+            () -> new ProblemNotFoundException(problemId));
+    }
+
+    private QueryProblem findQueryProblemById(final UUID problemId) {
+        return queryProblemRepository.findById(problemId).orElseThrow(
+            () -> new QueryProblemNotFoundException(problemId));
     }
 
     private String getNextCursor(final SortBy sortBy, final Integer size,
@@ -52,14 +81,5 @@ public class ProblemReadService {
             return lastProblem.getDifficultyLevel().toString();
         }
         return lastProblem.getViews().toString();
-    }
-
-    public ProblemDetailResponseDto findProblemById(final UUID problemId) {
-        QueryProblem queryProblem = queryProblemRepository.findById(problemId).orElseThrow(
-            () -> new QueryProblemNotFoundException(problemId));
-        if (queryProblem.isExpired()) {
-            throw new QueryProblemExpiredException(problemId);
-        }
-        return ProblemDetailResponseDto.of(queryProblem);
     }
 }
