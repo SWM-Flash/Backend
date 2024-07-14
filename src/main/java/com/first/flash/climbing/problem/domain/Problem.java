@@ -1,6 +1,8 @@
 package com.first.flash.climbing.problem.domain;
 
 import com.first.flash.climbing.problem.domain.vo.DifficultyInfo;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.util.UUID;
@@ -22,6 +24,8 @@ public class Problem {
     private static final Boolean DEFAULT_IS_EXPIRED = false;
 
     @Id
+    @Convert(converter = UUIDConverter.class)
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
     private String imageUrl;
     private Integer views;
