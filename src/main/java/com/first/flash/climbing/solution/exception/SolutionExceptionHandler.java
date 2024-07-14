@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class SolutionExceptionHandler {
 
     @ExceptionHandler(SolutionNotFoundException.class)
-    public ResponseEntity<String> handleSectorNotFoundException(
+    public ResponseEntity<String> handleSolutionNotFoundException(
         final SolutionNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(exception.getMessage());

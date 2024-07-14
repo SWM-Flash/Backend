@@ -49,4 +49,8 @@ public class Problem {
     public void view() {
         views++;
     }
+
+    public boolean isExpired() {
+        return isExpired;
+    }
 }
