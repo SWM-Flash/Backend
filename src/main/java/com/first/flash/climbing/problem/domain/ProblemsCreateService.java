@@ -3,6 +3,7 @@ package com.first.flash.climbing.problem.domain;
 import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.problem.domain.dto.ProblemCreateRequestDto;
+import com.first.flash.climbing.problem.util.UUIDGenerator;
 import com.first.flash.climbing.sector.domain.Sector;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

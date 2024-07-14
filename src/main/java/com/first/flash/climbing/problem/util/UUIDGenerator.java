@@ -1,4 +1,4 @@
-package com.first.flash.climbing.problem.domain;
+package com.first.flash.climbing.problem.util;
 
 import java.util.UUID;
 

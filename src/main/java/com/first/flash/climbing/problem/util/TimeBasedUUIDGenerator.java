@@ -1,7 +1,7 @@
-package com.first.flash.climbing.problem.infrastructure;
+package com.first.flash.climbing.problem.util;
 
 import com.fasterxml.uuid.Generators;
-import com.first.flash.climbing.problem.domain.UUIDGenerator;
+import com.first.flash.climbing.problem.util.UUIDGenerator;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
 
