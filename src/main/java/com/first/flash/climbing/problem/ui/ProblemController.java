@@ -23,6 +23,6 @@ public class ProblemController {
         @PathVariable("sectorId") final Long sectorId,
         @RequestBody final ProblemCreateRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(problemsSaveService.saveProblems(gymId, sectorId, requestDto));
+            .body(problemsSaveService.saveProblems(gymId, sectorId, requestDto));
     }
 }
