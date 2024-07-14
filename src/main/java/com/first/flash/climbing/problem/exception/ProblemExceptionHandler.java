@@ -1,5 +1,6 @@
 package com.first.flash.climbing.problem.exception;
 
+import com.first.flash.climbing.problem.exception.exceptions.ProblemNotFoundException;
 import com.first.flash.climbing.problem.exception.exceptions.QueryProblemExpiredException;
 import com.first.flash.climbing.problem.exception.exceptions.QueryProblemNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,14 @@ public class ProblemExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleProblemNotFoundException(
+    public ResponseEntity<String> handleQueryProblemNotFoundException(
         final QueryProblemNotFoundException exception) {
+        return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleProblemNotFoundException(
+        final ProblemNotFoundException exception) {
         return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
     }
 
