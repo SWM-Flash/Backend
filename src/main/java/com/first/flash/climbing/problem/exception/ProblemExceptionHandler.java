@@ -1,5 +1,6 @@
 package com.first.flash.climbing.problem.exception;
 
+import com.first.flash.climbing.problem.exception.exceptions.InvalidCursorException;
 import com.first.flash.climbing.problem.exception.exceptions.ProblemNotFoundException;
 import com.first.flash.climbing.problem.exception.exceptions.QueryProblemExpiredException;
 import com.first.flash.climbing.problem.exception.exceptions.QueryProblemNotFoundException;
@@ -27,6 +28,12 @@ public class ProblemExceptionHandler {
     public ResponseEntity<String> handleProblemNotFoundException(
         final ProblemNotFoundException exception) {
         return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleInvalidCursorException(
+        final InvalidCursorException exception) {
+        return getResponseWithStatus(HttpStatus.BAD_REQUEST, exception);
     }
 
     private ResponseEntity<String> getResponseWithStatus(final HttpStatus httpStatus,
