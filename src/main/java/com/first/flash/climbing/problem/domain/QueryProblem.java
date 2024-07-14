@@ -48,4 +48,8 @@ public class QueryProblem {
     public boolean isExpired() {
         return isExpired;
     }
+
+    public void view() {
+        views++;
+    }
 }
