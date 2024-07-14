@@ -43,6 +43,13 @@ dependencies {
 
 	// generate UUID
 	implementation 'com.fasterxml.uuid:java-uuid-generator:5.1.0'
+
+    // db
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 }
 
 tasks.named('test') {
