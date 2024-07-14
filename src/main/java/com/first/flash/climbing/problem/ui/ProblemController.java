@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProblemController {
 
     private final static String DEFAULT_SIZE = "2";
-    private final static String DEFAULT_SORT_BY = "view";
+    private final static String DEFAULT_SORT_BY = "recommend";
 
     private final ProblemsSaveService problemsSaveService;
     private final ProblemReadService problemReadService;

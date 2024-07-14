@@ -1,6 +1,7 @@
 package com.first.flash.climbing.problem.application;
 
 import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.DIFFICULTY;
+import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.VIEWS;
 
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
@@ -17,9 +18,11 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProblemReadService {
 
     private final QueryProblemRepository queryProblemRepository;
@@ -37,6 +40,7 @@ public class ProblemReadService {
         return ProblemsResponseDto.of(queryProblems, nextCursor);
     }
 
+    @Transactional
     public ProblemDetailResponseDto viewProblems(final UUID problemId) {
         QueryProblem queryProblem = findQueryProblemById(problemId);
         Problem problem = findProblemById(problemId);
@@ -80,6 +84,9 @@ public class ProblemReadService {
         if (sortBy.equals(DIFFICULTY)) {
             return lastProblem.getDifficultyLevel().toString();
         }
-        return lastProblem.getViews().toString();
+        if (sortBy.equals(VIEWS)) {
+            return lastProblem.getViews().toString();
+        }
+        return lastProblem.getRecommendationValue().toString();
     }
 }

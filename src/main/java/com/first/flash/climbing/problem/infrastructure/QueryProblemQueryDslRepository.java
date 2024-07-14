@@ -2,6 +2,7 @@ package com.first.flash.climbing.problem.infrastructure;
 
 import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem;
 import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.DIFFICULTY;
+import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.VIEWS;
 
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.infrastructure.paging.Cursor;
@@ -55,9 +56,15 @@ public class QueryProblemQueryDslRepository {
                                                    .eq(Integer.parseInt(cursorValue))
                                                    .and(queryProblem.id.lt(cursorId)));
         }
-        return queryProblem.views.lt(Integer.parseInt(cursorValue))
-                                 .or(queryProblem.views.eq(Integer.parseInt(cursorValue))
-                                                       .and(queryProblem.id.lt(cursorId)));
+        if (sortBy.equals(VIEWS)) {
+            return queryProblem.views.lt(Integer.parseInt(cursorValue))
+                                     .or(queryProblem.views.eq(Integer.parseInt(cursorValue))
+                                                           .and(queryProblem.id.lt(cursorId)));
+        }
+        return queryProblem.recommendationValue.lt(Integer.parseInt(cursorValue))
+                                               .or(queryProblem.recommendationValue
+                                                   .eq(Long.parseLong(cursorValue))
+                                                   .and(queryProblem.id.lt(cursorId)));
     }
 
     private BooleanExpression notExpired() {
@@ -68,7 +75,10 @@ public class QueryProblemQueryDslRepository {
         if (sortBy.equals(DIFFICULTY)) {
             return queryProblem.difficultyLevel.asc();
         }
-        return queryProblem.views.desc();
+        if (sortBy.equals(VIEWS)) {
+            return queryProblem.views.desc();
+        }
+        return queryProblem.recommendationValue.desc();
     }
 
     private BooleanExpression inSectors(final List<String> sector) {

@@ -3,9 +3,10 @@ package com.first.flash.climbing.problem.infrastructure.paging;
 public enum SortBy {
 
     VIEWS("views"),
-    DIFFICULTY("difficulty");
+    DIFFICULTY("difficulty"),
+    RECOMMEND("recommend");
 
-    private static final SortBy DEFAULT_SORT_BY = VIEWS;
+    private static final SortBy DEFAULT_SORT_BY = RECOMMEND;
     private final String value;
 
     SortBy(String value) {
