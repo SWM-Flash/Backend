@@ -4,7 +4,7 @@ import com.first.flash.climbing.gym.application.ClimbingGymService;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
-import com.first.flash.climbing.gym.domian.ClimbingGym;
+import com.first.flash.climbing.gym.application.dto.ClimbingGymDetailResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -35,7 +35,7 @@ public class ClimbingGymController {
     @GetMapping
     public List<ClimbingGymResponseDto> getGyms() {
         return climbingGymService.findAllClimbingGyms().stream()
-            .toList();
+                                 .toList();
     }
 
     @Operation(summary = "클라이밍장 생성", description = "새로운 클라이밍장 생성")
@@ -46,7 +46,7 @@ public class ClimbingGymController {
     public ResponseEntity<ClimbingGymCreateResponseDto> createGym(
         @RequestBody final ClimbingGymCreateRequestDto gymCreateRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(climbingGymService.save(gymCreateRequestDto));
+                             .body(climbingGymService.save(gymCreateRequestDto));
     }
 
     @Operation(summary = "클라이밍장 정보 조회", description = "특정 클라이밍장의 정보 조회")
@@ -55,7 +55,8 @@ public class ClimbingGymController {
         @ApiResponse(responseCode = "404", description = "클라이밍장을 찾을 수 없음")
     })
     @GetMapping("/{gymId}")
-    public ClimbingGym getGymDetails(@PathVariable final Long gymId) {
-        return climbingGymService.findClimbingGymById(gymId);
+    public ResponseEntity<ClimbingGymDetailResponseDto> getGymDetails(
+        @PathVariable final Long gymId) {
+        return ResponseEntity.ok(climbingGymService.findClimbingGymDetail(gymId));
     }
 }
