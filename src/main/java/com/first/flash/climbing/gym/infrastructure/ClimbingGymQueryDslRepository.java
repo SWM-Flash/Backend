@@ -15,8 +15,8 @@ public class ClimbingGymQueryDslRepository {
 
     public List<String> findSectorNamesByGymId(final Long gymId) {
         return jpaQueryFactory.select(sector.sectorName.name)
-                                                 .from(sector)
-                                                 .where(sector.gymId.eq(gymId))
-                                                 .fetch();
+                              .from(sector)
+                              .where(sector.gymId.eq(gymId), sector.removalInfo.isExpired.isFalse())
+                              .fetch();
     }
 }
