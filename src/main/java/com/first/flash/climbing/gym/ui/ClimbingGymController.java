@@ -52,7 +52,8 @@ public class ClimbingGymController {
     @Operation(summary = "클라이밍장 정보 조회", description = "특정 클라이밍장의 정보 조회")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공적으로 클라이밍장 정보를 조회함"),
-        @ApiResponse(responseCode = "404", description = "클라이밍장을 찾을 수 없음")
+        @ApiResponse(responseCode = "404", description = "클라이밍장을 찾을 수 없음"),
+        @ApiResponse(responseCode = "404", description = "클라이밍장에 섹터가 없음")
     })
     @GetMapping("/{gymId}")
     public ResponseEntity<ClimbingGymDetailResponseDto> getGymDetails(
