@@ -24,7 +24,7 @@ public class ProblemEventHandler {
     }
 
     @TransactionalEventListener(
-        classes = SectorRemovalDateUpdatedEvent.class,
+        classes = SectorExpiredEvent.class,
         phase = TransactionPhase.AFTER_COMMIT
     )
     @Async
