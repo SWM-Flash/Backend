@@ -8,6 +8,7 @@ import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class SolutionService {
     private final SolutionRepository solutionRepository;
 
     @Transactional
-    public SolutionResponseDto saveSolution(final Long problemId,
+    public SolutionResponseDto saveSolution(final UUID problemId,
         final SolutionCreateRequestDto createRequestDto) {
         Solution solution = Solution.of(createRequestDto, problemId);
         return SolutionResponseDto.toDto(solutionRepository.save(solution));
@@ -28,14 +29,14 @@ public class SolutionService {
 
     public Solution findSolutionById(final Long id) {
         return solutionRepository.findById(id)
-            .orElseThrow(() -> new SolutionNotFoundException(id));
+                                 .orElseThrow(() -> new SolutionNotFoundException(id));
     }
 
-    public SolutionsResponseDto findAllSolutionsByProblemId(final Long problemId) {
+    public SolutionsResponseDto findAllSolutionsByProblemId(final UUID problemId) {
         List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId)
-            .stream()
-            .map(SolutionResponseDto::toDto)
-            .toList();
+                                                                .stream()
+                                                                .map(SolutionResponseDto::toDto)
+                                                                .toList();
         return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
     }
 }

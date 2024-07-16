@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class SolutionController {
         @ApiResponse(responseCode = "404", description = "해설을 찾을 수 없음")
     })
     @GetMapping("problems/{problemId}/solutions")
-    public ResponseEntity<SolutionsResponseDto> getSolutions(@PathVariable final Long problemId) {
+    public ResponseEntity<SolutionsResponseDto> getSolutions(@PathVariable final UUID problemId) {
         SolutionsResponseDto response = solutionService.findAllSolutionsByProblemId(
             problemId);
 
@@ -44,10 +45,11 @@ public class SolutionController {
         @ApiResponse(responseCode = "201", description = "성공적으로 해설 영상을 업로드함")
     })
     @PostMapping("problems/{problemId}/solutions")
-    public ResponseEntity<SolutionResponseDto> createSolution(@PathVariable final Long problemId,
+    public ResponseEntity<SolutionResponseDto> createSolution(@PathVariable final UUID problemId,
         @RequestBody final SolutionCreateRequestDto solutionCreateRequestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(solutionService.saveSolution(problemId, solutionCreateRequestDto));
+                             .body(
+                                 solutionService.saveSolution(problemId, solutionCreateRequestDto));
     }
 }
