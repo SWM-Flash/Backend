@@ -42,6 +42,13 @@ public class QueryProblemQueryDslRepository {
                     .execute();
     }
 
+    public void expireSectorsById(final List<Long> expiredSectorsIds) {
+        queryFactory.update(queryProblem)
+                    .set(queryProblem.isExpired, true)
+                    .where(queryProblem.sectorId.in(expiredSectorsIds))
+                    .execute();
+    }
+
     private BooleanExpression inGym(final Long gymId) {
         return queryProblem.gymId.eq(gymId);
     }

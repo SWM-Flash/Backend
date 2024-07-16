@@ -2,7 +2,7 @@ package com.first.flash.climbing.problem.infrastructure;
 
 import com.first.flash.climbing.problem.domain.Problem;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +23,10 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     @Override
     public Optional<Problem> findById(final UUID id) {
         return jpaRepository.findById(id);
+    }
+
+    @Override
+    public void expireSectorsById(final List<Long> expiredSectorsIds) {
+        queryDslRepository.expireSectorsById(expiredSectorsIds);
     }
 }

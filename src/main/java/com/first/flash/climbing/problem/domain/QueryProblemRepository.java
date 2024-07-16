@@ -18,4 +18,6 @@ public interface QueryProblemRepository {
         final Boolean hasSolution);
 
     void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate);
+
+    void expireSectorsById(final List<Long> expiredSectorsIds);
 }
