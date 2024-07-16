@@ -2,8 +2,8 @@ package com.first.flash.climbing.gym.application;
 
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
-import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymDetailResponseDto;
+import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
@@ -42,7 +42,8 @@ public class ClimbingGymService {
         ClimbingGym climbingGym = findClimbingGymById(id);
         List<String> sectorNames = findSectorNamesById(id);
         List<String> difficultyNames = getDifficultyNames(climbingGym);
-        return new ClimbingGymDetailResponseDto(climbingGym.getMapImageUrl(),
+        return new ClimbingGymDetailResponseDto(climbingGym.getGymName(),
+            climbingGym.getMapImageUrl(),
             difficultyNames, sectorNames);
     }
 
