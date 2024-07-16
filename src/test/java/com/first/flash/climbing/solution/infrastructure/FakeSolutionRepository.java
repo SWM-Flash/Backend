@@ -11,7 +11,8 @@ import java.util.UUID;
 public class FakeSolutionRepository implements SolutionRepository {
 
     private final static Long DEFAULT_OPTIONAL_WEIGHT = 0L;
-    private final static UUID DEFAULT_PROBLEM_ID = UUID.randomUUID();
+    private final static UUID DEFAULT_PROBLEM_ID = UUID
+        .fromString("0000-0000-0000-0000-0000");
 
     final private Map<Long, Solution> db = new HashMap<>();
     private Long id = 0L;

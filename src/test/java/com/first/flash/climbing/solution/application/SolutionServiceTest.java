@@ -17,7 +17,8 @@ import org.junit.jupiter.api.Test;
 
 class SolutionServiceTest {
 
-    private final static UUID DEFAULT_PROBLEM_ID = UUID.randomUUID();
+    private final static UUID DEFAULT_PROBLEM_ID = UUID
+        .fromString("0000-0000-0000-0000-0000");
     private final static Long NON_EXISTENT_SOLUTION_ID = 999L;
 
     private SolutionRepository solutionRepository;
