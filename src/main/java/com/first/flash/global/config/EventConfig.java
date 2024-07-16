@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class EventConfiguration {
+public class EventConfig {
 
     private final ApplicationContext applicationContext;
 
