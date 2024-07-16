@@ -31,4 +31,9 @@ public class FakeClimbingGymRepository implements ClimbingGymRepository {
     public List<ClimbingGym> findAll() {
         return new ArrayList<>(db.values());
     }
+
+    @Override
+    public List<String> findGymSectorNamesById(final Long id) {
+        return null;
+    }
 }
