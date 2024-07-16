@@ -10,4 +10,6 @@ public interface ClimbingGymRepository {
     Optional<ClimbingGym> findById(final Long id);
 
     List<ClimbingGym> findAll();
+
+    List<String> findGymSectorNamesById(final Long id);
 }
