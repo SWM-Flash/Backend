@@ -4,6 +4,7 @@ import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.domain.QueryProblemRepository;
 import com.first.flash.climbing.problem.infrastructure.paging.Cursor;
 import com.first.flash.climbing.problem.infrastructure.paging.SortBy;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,5 +34,15 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
         final Boolean hasSolution) {
         return queryProblemQueryDslRepository.findAll(prevCursor, sortBy, size,
             gymId, difficulty, sector, hasSolution);
+    }
+
+    @Override
+    public void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate) {
+        queryProblemQueryDslRepository.updateRemovalDateBySectorId(sectorId, removalDate);
+    }
+
+    @Override
+    public void expireProblemsBySectorIds(final List<Long> expiredSectorsIds) {
+        queryProblemQueryDslRepository.expireProblemsBySectorIds(expiredSectorsIds);
     }
 }
