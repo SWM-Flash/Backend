@@ -1,7 +1,6 @@
 package com.first.flash.climbing.problem.domain;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
@@ -35,7 +34,6 @@ public class QueryProblem {
     private static final int DIFFICULTY_LEVEL_WEIGHT = 2;
 
     @Id
-    @Convert(converter = UUIDConverter.class)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
     private String imageUrl;
