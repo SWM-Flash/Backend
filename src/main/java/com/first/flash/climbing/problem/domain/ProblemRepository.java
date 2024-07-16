@@ -10,5 +10,5 @@ public interface ProblemRepository {
 
     Optional<Problem> findById(final UUID id);
 
-    void expireSectorsById(final List<Long> expiredSectorsIds);
+    void expireProblemsBySectorIds(final List<Long> expiredSectorsIds);
 }

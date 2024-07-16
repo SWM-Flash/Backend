@@ -23,7 +23,7 @@ public class ProblemsService {
 
     @Transactional
     public void expireProblems(final List<Long> expiredSectorsIds) {
-        queryProblemRepository.expireSectorsById(expiredSectorsIds);
-        problemRepository.expireSectorsById(expiredSectorsIds);
+        queryProblemRepository.expireProblemsBySectorIds(expiredSectorsIds);
+        problemRepository.expireProblemsBySectorIds(expiredSectorsIds);
     }
 }

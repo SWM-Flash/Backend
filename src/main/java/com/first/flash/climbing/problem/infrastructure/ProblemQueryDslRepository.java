@@ -13,7 +13,7 @@ public class ProblemQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public void expireSectorsById(final List<Long> expiredSectorsIds) {
+    public void expireProblemsBySectorIds(final List<Long> expiredSectorsIds) {
         queryFactory.update(problem)
                     .set(problem.isExpired, true)
                     .where(problem.sectorId.in(expiredSectorsIds))

@@ -42,7 +42,7 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
     }
 
     @Override
-    public void expireSectorsById(final List<Long> expiredSectorsIds) {
-        queryProblemQueryDslRepository.expireSectorsById(expiredSectorsIds);
+    public void expireProblemsBySectorIds(final List<Long> expiredSectorsIds) {
+        queryProblemQueryDslRepository.expireProblemsBySectorIds(expiredSectorsIds);
     }
 }

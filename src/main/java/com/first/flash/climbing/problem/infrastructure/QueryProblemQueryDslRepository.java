@@ -42,7 +42,7 @@ public class QueryProblemQueryDslRepository {
                     .execute();
     }
 
-    public void expireSectorsById(final List<Long> expiredSectorsIds) {
+    public void expireProblemsBySectorIds(final List<Long> expiredSectorsIds) {
         queryFactory.update(queryProblem)
                     .set(queryProblem.isExpired, true)
                     .where(queryProblem.sectorId.in(expiredSectorsIds))

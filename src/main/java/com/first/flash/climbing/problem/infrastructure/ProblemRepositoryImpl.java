@@ -26,7 +26,7 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     }
 
     @Override
-    public void expireSectorsById(final List<Long> expiredSectorsIds) {
-        queryDslRepository.expireSectorsById(expiredSectorsIds);
+    public void expireProblemsBySectorIds(final List<Long> expiredSectorsIds) {
+        queryDslRepository.expireProblemsBySectorIds(expiredSectorsIds);
     }
 }
