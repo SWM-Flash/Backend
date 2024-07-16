@@ -10,6 +10,7 @@ import com.first.flash.climbing.problem.infrastructure.paging.SortBy;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -32,6 +33,20 @@ public class QueryProblemQueryDslRepository {
             .orderBy(sortItem(sortBy), queryProblem.id.desc())
             .limit(size)
             .fetch();
+    }
+
+    public void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate) {
+        queryFactory.update(queryProblem)
+                    .set(queryProblem.removalDate, removalDate)
+                    .where(queryProblem.sectorId.eq(sectorId))
+                    .execute();
+    }
+
+    public void expireProblemsBySectorIds(final List<Long> expiredSectorsIds) {
+        queryFactory.update(queryProblem)
+                    .set(queryProblem.isExpired, true)
+                    .where(queryProblem.sectorId.in(expiredSectorsIds))
+                    .execute();
     }
 
     private BooleanExpression inGym(final Long gymId) {
