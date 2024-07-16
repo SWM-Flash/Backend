@@ -4,6 +4,7 @@ import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorWriteDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import com.first.flash.climbing.sector.domain.Sector;
+import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRepository;
 import com.first.flash.climbing.sector.exception.exceptions.SectorNotFoundException;

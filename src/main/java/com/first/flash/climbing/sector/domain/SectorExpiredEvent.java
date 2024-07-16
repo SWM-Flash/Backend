@@ -1,4 +1,4 @@
-package com.first.flash.climbing.sector.application;
+package com.first.flash.climbing.sector.domain;
 
 import com.first.flash.global.event.Event;
 import java.util.List;

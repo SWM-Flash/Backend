@@ -1,6 +1,6 @@
 package com.first.flash.climbing.problem.application;
 
-import com.first.flash.climbing.sector.application.SectorExpiredEvent;
+import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
