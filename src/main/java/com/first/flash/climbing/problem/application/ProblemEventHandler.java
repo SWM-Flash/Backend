@@ -1,5 +1,6 @@
 package com.first.flash.climbing.problem.application;
 
+import com.first.flash.climbing.sector.application.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -20,5 +21,14 @@ public class ProblemEventHandler {
     @Async
     public void changeRemovalDate(final SectorRemovalDateUpdatedEvent event) {
         problemsService.changeRemovalDate(event.getSectorId(), event.getRemovalDate());
+    }
+
+    @TransactionalEventListener(
+        classes = SectorRemovalDateUpdatedEvent.class,
+        phase = TransactionPhase.AFTER_COMMIT
+    )
+    @Async
+    public void expireProblem(final SectorExpiredEvent event) {
+        problemsService.expireProblems(event.getExpiredSectorsIds());
     }
 }
