@@ -4,6 +4,7 @@ import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +25,7 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public List<Solution> findAllByProblemId(final Long problemId) {
+    public List<Solution> findAllByProblemId(final UUID problemId) {
         return solutionJpaRepository.findByProblemId(problemId);
     }
 }

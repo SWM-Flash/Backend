@@ -1,4 +1,4 @@
-package com.first.flash.climbing.problem.domain;
+package com.first.flash.global.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.UUID;
 
-@Converter
+@Converter(autoApply = true)
 public class UUIDConverter implements AttributeConverter<UUID, byte[]> {
 
     @Override

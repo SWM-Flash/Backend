@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class FakeSolutionRepository implements SolutionRepository {
 
     private final static Long DEFAULT_OPTIONAL_WEIGHT = 0L;
-    private final static Long DEFAULT_PROBLEM_ID = 1L;
+    private final static UUID DEFAULT_PROBLEM_ID = UUID
+        .fromString("0000-0000-0000-0000-0000");
 
     final private Map<Long, Solution> db = new HashMap<>();
     private Long id = 0L;
@@ -32,9 +34,9 @@ public class FakeSolutionRepository implements SolutionRepository {
     }
 
     @Override
-    public List<Solution> findAllByProblemId(Long problemId) {
+    public List<Solution> findAllByProblemId(final UUID problemId) {
         return db.values().stream()
-            .filter(solution -> solution.getProblemId().equals(problemId))
-            .toList();
+                 .filter(solution -> solution.getProblemId().equals(problemId))
+                 .toList();
     }
 }

@@ -11,12 +11,14 @@ import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.climbing.solution.infrastructure.FakeSolutionRepository;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SolutionServiceTest {
 
-    private final static Long DEFAULT_PROBLEM_ID = 1L;
+    private final static UUID DEFAULT_PROBLEM_ID = UUID
+        .fromString("0000-0000-0000-0000-0000");
     private final static Long NON_EXISTENT_SOLUTION_ID = 999L;
 
     private SolutionRepository solutionRepository;
