@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 public class ClimbingGymRepositoryImpl implements ClimbingGymRepository {
 
     private final ClimbingGymJpaRepository climbingGymJpaRepository;
+    private final ClimbingGymQueryDslRepository climbingGymQueryDslRepository;
 
     @Override
     public ClimbingGym save(final ClimbingGym gym) {
@@ -26,5 +27,10 @@ public class ClimbingGymRepositoryImpl implements ClimbingGymRepository {
     @Override
     public List<ClimbingGym> findAll() {
         return climbingGymJpaRepository.findAll();
+    }
+
+    @Override
+    public List<String> findGymSectorNamesById(final Long id) {
+        return climbingGymQueryDslRepository.findSectorNamesByGymId(id);
     }
 }
