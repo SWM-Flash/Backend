@@ -9,6 +9,7 @@ import com.first.flash.climbing.sector.domain.SectorRepository;
 import com.first.flash.climbing.sector.exception.exceptions.SectorNotFoundException;
 import com.first.flash.global.event.Events;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,12 @@ public class SectorService {
         sector.updateRemovalDate(removalDate);
         Events.raise(SectorRemovalDateUpdatedEvent.of(sectorId, removalDate));
         return SectorWriteDetailResponseDto.toDto(sector);
+    }
+
+    @Transactional
+    public void expireSector() {
+        List<Long> expiredSectorIds = sectorRepository.updateExpiredSector();
+        Events.raise(SectorExpiredEvent.of(expiredSectorIds));
     }
 
     public Sector findById(final Long id) {
