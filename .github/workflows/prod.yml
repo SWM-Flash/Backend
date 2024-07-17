@@ -10,7 +10,7 @@ env:
   ECR_REPOSITORY: ${{ secrets.AWS_PROD_ECR_REPOSITORY }}
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
