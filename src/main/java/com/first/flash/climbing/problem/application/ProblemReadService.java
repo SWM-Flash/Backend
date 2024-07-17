@@ -50,20 +50,20 @@ public class ProblemReadService {
         return ProblemDetailResponseDto.of(queryProblem);
     }
 
-    private void validateExpiration(final Problem problem, final QueryProblem queryProblem) {
-        if (problem.isExpired() || queryProblem.isExpired()) {
-            throw new QueryProblemExpiredException(problem.getId());
-        }
-    }
-
-    private Problem findProblemById(final UUID problemId) {
+    public Problem findProblemById(final UUID problemId) {
         return problemRepository.findById(problemId).orElseThrow(
             () -> new ProblemNotFoundException(problemId));
     }
 
-    private QueryProblem findQueryProblemById(final UUID problemId) {
+    public QueryProblem findQueryProblemById(final UUID problemId) {
         return queryProblemRepository.findById(problemId).orElseThrow(
             () -> new QueryProblemNotFoundException(problemId));
+    }
+
+    private void validateExpiration(final Problem problem, final QueryProblem queryProblem) {
+        if (problem.isExpired() || queryProblem.isExpired()) {
+            throw new QueryProblemExpiredException(problem.getId());
+        }
     }
 
     private String getNextCursor(final SortBy sortBy, final Integer size,
