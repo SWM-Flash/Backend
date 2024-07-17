@@ -53,3 +53,24 @@ jobs:
           docker build -t $ECR_REPOSITORY:latest .
           docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+  deploy:
+    name: Deploy to ECS
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_PROD_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_PROD_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Update ECS service with new image
+        run: |
+          echo '[{"name":"flash-prod-application","imageUri":"${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.AWS_PROD_ECR_REPOSITORY }}:latest"}]' > imagedefinitions.json
+          aws ecs update-service --cluster ${{ secrets.AWS_ECS_CLUSTER }} --service ${{ secrets.AWS_ECS_SERVICE }} --force-new-deployment --cli-input-json file://imagedefinitions.json
