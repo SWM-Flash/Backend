@@ -26,11 +26,12 @@ public class SectorQueryDslRepository {
 
     private List<Long> findExpiredSectorIds() {
         return jpaQueryFactory.select(sector.id)
+                              .from(sector)
                               .where(isExpired())
                               .fetch();
     }
 
-    private static BooleanExpression isExpired() {
+    private BooleanExpression isExpired() {
         return sector.removalInfo.isExpired.isFalse()
                                            .and(
                                                sector.removalInfo.removalDate
