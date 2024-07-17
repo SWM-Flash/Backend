@@ -72,5 +72,4 @@ jobs:
 
       - name: Update ECS service with new image
         run: |
-          echo '[{"name":"flash-prod-application","imageUri":"${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.AWS_PROD_ECR_REPOSITORY }}:latest"}]' > imagedefinitions.json
-          aws ecs update-service --cluster ${{ secrets.AWS_ECS_CLUSTER }} --service ${{ secrets.AWS_ECS_SERVICE }} --force-new-deployment --cli-input-json file://imagedefinitions.json
+          aws ecs update-service --cluster ${{ secrets.AWS_ECS_CLUSTER }} --service ${{ secrets.AWS_ECS_SERVICE }} --force-new-deployment
