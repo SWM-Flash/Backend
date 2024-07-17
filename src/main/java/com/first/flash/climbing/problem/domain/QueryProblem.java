@@ -62,7 +62,19 @@ public class QueryProblem {
         calculateRecommendationValue();
     }
 
-    public void calculateRecommendationValue() {
+    public void addSolutionCount() {
+        solutionCount++;
+        enableSolution();
+        calculateRecommendationValue();
+    }
+
+    private void enableSolution() {
+        if (!hasSolution) {
+            hasSolution = true;
+        }
+    }
+
+    private void calculateRecommendationValue() {
         if (views < STANDARD_VIEW_COUNT) {
             recommendationValue = ((long) views * solutionCount + optionalWeight);
             return;
