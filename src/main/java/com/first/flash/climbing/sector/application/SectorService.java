@@ -1,6 +1,7 @@
 package com.first.flash.climbing.sector.application;
 
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
+import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorWriteDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import com.first.flash.climbing.sector.domain.Sector;
@@ -44,6 +45,17 @@ public class SectorService {
     public void expireSector() {
         List<Long> expiredSectorIds = sectorRepository.updateExpiredSector();
         Events.raise(SectorExpiredEvent.of(expiredSectorIds));
+    }
+
+    @Transactional
+    public SectorWriteDetailResponseDto updateSector(
+        final Long sectorId,
+        final SectorUpdateRequestDto updateRequestDto) {
+        Sector foundSector = findById(sectorId);
+        foundSector.updateSector(updateRequestDto.sectorName(), updateRequestDto.adminSectorName(),
+            updateRequestDto.settingDate(),
+            updateRequestDto.removalDate(), updateRequestDto.gymId());
+        return SectorWriteDetailResponseDto.toDto(foundSector);
     }
 
     public Sector findById(final Long id) {
