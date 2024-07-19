@@ -45,4 +45,10 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
     public void expireProblemsBySectorIds(final List<Long> expiredSectorsIds) {
         queryProblemQueryDslRepository.expireProblemsBySectorIds(expiredSectorsIds);
     }
+
+    @Override
+    public void updateQueryProblemInfo(final Long sectorId, final String sectorName,
+        final LocalDate settingDate) {
+        queryProblemQueryDslRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate);
+    }
 }

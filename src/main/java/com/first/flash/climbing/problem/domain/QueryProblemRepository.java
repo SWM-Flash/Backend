@@ -20,4 +20,7 @@ public interface QueryProblemRepository {
     void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate);
 
     void expireProblemsBySectorIds(final List<Long> expiredSectorsIds);
+
+    void updateQueryProblemInfo(final Long sectorId, final String sectorName,
+        final LocalDate settingDate);
 }
