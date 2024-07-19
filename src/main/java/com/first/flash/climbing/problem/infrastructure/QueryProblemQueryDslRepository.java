@@ -38,6 +38,7 @@ public class QueryProblemQueryDslRepository {
     public void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate) {
         queryFactory.update(queryProblem)
                     .set(queryProblem.removalDate, removalDate)
+                    .set(queryProblem.isFakeRemovalDate, false)
                     .where(queryProblem.sectorId.eq(sectorId))
                     .execute();
     }
@@ -46,6 +47,15 @@ public class QueryProblemQueryDslRepository {
         queryFactory.update(queryProblem)
                     .set(queryProblem.isExpired, true)
                     .where(queryProblem.sectorId.in(expiredSectorsIds))
+                    .execute();
+    }
+
+    public void updateQueryProblemInfo(final Long sectorId, final String sectorName,
+        final LocalDate settingDate) {
+        queryFactory.update(queryProblem)
+                    .set(queryProblem.sectorName, sectorName)
+                    .set(queryProblem.settingDate, settingDate)
+                    .where(queryProblem.sectorId.eq(sectorId))
                     .execute();
     }
 

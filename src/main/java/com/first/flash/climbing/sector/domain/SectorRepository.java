@@ -10,4 +10,6 @@ public interface SectorRepository {
     Optional<Sector> findById(final Long id);
 
     List<Long> updateExpiredSector();
+
+    List<Sector> findAll();
 }

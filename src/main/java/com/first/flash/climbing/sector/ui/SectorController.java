@@ -3,7 +3,9 @@ package com.first.flash.climbing.sector.ui;
 import com.first.flash.climbing.sector.application.SectorService;
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
-import com.first.flash.climbing.sector.application.dto.SectorWriteDetailResponseDto;
+import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
+import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
+import com.first.flash.climbing.sector.application.dto.SectorsDetailResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -11,9 +13,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,16 +30,25 @@ public class SectorController {
 
     private final SectorService sectorService;
 
+    @Operation(summary = "섹터 전체 조회", description = "모든 섹터의 정보를 반환")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 섹터를 조회"),
+    })
+    @GetMapping("sectors")
+    public ResponseEntity<SectorsDetailResponseDto> findAllSectors() {
+        return ResponseEntity.ok(sectorService.findAllSectors());
+    }
+
     @Operation(summary = "섹터 갱신(생성)", description = "특정 클라이밍장에 새로운 섹터 생성")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "성공적으로 섹터를 생성함"),
         @ApiResponse(responseCode = "400", description = "탈거일이 세팅일보다 빠름")
     })
     @PostMapping("gyms/{gymId}/sectors")
-    public ResponseEntity<SectorWriteDetailResponseDto> createSector(@PathVariable final Long gymId,
+    public ResponseEntity<SectorDetailResponseDto> createSector(@PathVariable final Long gymId,
         @RequestBody final SectorCreateRequestDto sectorCreateRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(sectorService.saveSector(gymId, sectorCreateRequestDto));
+                             .body(sectorService.saveSector(gymId, sectorCreateRequestDto));
     }
 
     @Operation(summary = "섹터 탈거일 수정", description = "특정 섹터의 탈거일 수정")
@@ -45,11 +58,22 @@ public class SectorController {
         @ApiResponse(responseCode = "404", description = "섹터를 찾을 수 없음")
     })
     @PatchMapping("sectors/{sectorId}")
-    public ResponseEntity<SectorWriteDetailResponseDto> updateSectorRemovalDate(
+    public ResponseEntity<SectorDetailResponseDto> updateSectorRemovalDate(
         @PathVariable final Long sectorId,
         @RequestBody final SectorUpdateRemovalDateRequestDto sectorUpdateRemovalDateRequestDto) {
-        SectorWriteDetailResponseDto response = sectorService.updateSectorRemovalDate(
+        SectorDetailResponseDto response = sectorService.updateSectorRemovalDate(
             sectorId, sectorUpdateRemovalDateRequestDto);
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "섹터 전체 수정", description = "특정 섹터의 정보 수정")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 섹터 정보 수정함"),
+    })
+    @PutMapping("sectors/{sectorId}")
+    public ResponseEntity<SectorDetailResponseDto> updateSector(
+        @PathVariable final Long sectorId,
+        @RequestBody final SectorUpdateRequestDto updateRequestDto) {
+        return ResponseEntity.ok(sectorService.updateSector(sectorId, updateRequestDto));
     }
 }

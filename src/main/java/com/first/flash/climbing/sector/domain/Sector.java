@@ -56,6 +56,15 @@ public class Sector {
         removalInfo = RemovalInfo.createDefault(removalDate);
     }
 
+    public void updateSector(final String sectorName, final String adminSectorName,
+        final LocalDate settingDate, final LocalDate removalDate, final Long gymId) {
+        validateRemovalDate(settingDate, removalDate);
+        this.sectorName = SectorName.of(sectorName, adminSectorName);
+        this.settingDate = settingDate;
+        this.removalInfo = RemovalInfo.createDefault(removalDate);
+        this.gymId = gymId;
+    }
+
     private static void validateRemovalDate(final LocalDate settingDate,
         final LocalDate removalDate) {
         if (removalDate.isBefore(settingDate)) {
