@@ -35,4 +35,10 @@ public class ProblemsService {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.addSolutionCount();
     }
+
+    @Transactional
+    public void updateQueryProblemInfo(final Long sectorId, final String sectorName,
+        final LocalDate settingDate) {
+        queryProblemRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate);
+    }
 }
