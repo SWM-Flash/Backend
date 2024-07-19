@@ -1,6 +1,7 @@
 package com.first.flash.climbing.problem.application;
 
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
+import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
 import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,12 @@ public class ProblemEventHandler {
     @Transactional
     public void updateProblemSolutionInfo(final SolutionSavedEvent event) {
         problemsService.updateProblemSolutionInfo(event.getProblemId());
+    }
+
+    @EventListener
+    @Transactional
+    public void updateQueryProblemInfo(final SectorInfoUpdatedEvent event) {
+        problemsService.updateQueryProblemInfo(event.getId(), event.getSectorName(),
+            event.getSettingDate());
     }
 }

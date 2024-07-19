@@ -28,4 +28,9 @@ public class SectorRepositoryImpl implements SectorRepository {
     public List<Long> updateExpiredSector() {
         return sectorQueryDslRepository.updateExpiredSector();
     }
+
+    @Override
+    public List<Sector> findAll() {
+        return sectorJpaRepository.findAll();
+    }
 }
