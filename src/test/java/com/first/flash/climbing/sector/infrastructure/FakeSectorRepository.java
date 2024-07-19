@@ -27,10 +27,15 @@ public class FakeSectorRepository implements SectorRepository {
     @Override
     public List<Long> updateExpiredSector() {
         List<Long> expiredIds = db.keySet().stream()
-                            .filter(key -> db.get(key).getRemovalInfo().getRemovalDate()
-                                             .isBefore(db.get(key).getSettingDate()))
-                            .toList();
+                                  .filter(key -> db.get(key).getRemovalInfo().getRemovalDate()
+                                                   .isBefore(db.get(key).getSettingDate()))
+                                  .toList();
         expiredIds.forEach(db::remove);
         return expiredIds;
+    }
+
+    @Override
+    public List<Sector> findAll() {
+        return List.copyOf(db.values());
     }
 }
