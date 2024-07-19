@@ -2,7 +2,7 @@ package com.first.flash.climbing.sector.application;
 
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
-import com.first.flash.climbing.sector.application.dto.SectorWriteDetailResponseDto;
+import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import com.first.flash.climbing.sector.domain.Sector;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
@@ -26,20 +26,20 @@ public class SectorService {
     private final SectorRepository sectorRepository;
 
     @Transactional
-    public SectorWriteDetailResponseDto saveSector(final Long gymId,
+    public SectorDetailResponseDto saveSector(final Long gymId,
         final SectorCreateRequestDto createRequestDto) {
         Sector sector = createSectorByDto(gymId, createRequestDto);
-        return SectorWriteDetailResponseDto.toDto(sectorRepository.save(sector));
+        return SectorDetailResponseDto.toDto(sectorRepository.save(sector));
     }
 
     @Transactional
-    public SectorWriteDetailResponseDto updateSectorRemovalDate(final Long sectorId,
+    public SectorDetailResponseDto updateSectorRemovalDate(final Long sectorId,
         final SectorUpdateRemovalDateRequestDto sectorUpdateRemovalDateRequestDto) {
         Sector sector = findById(sectorId);
         LocalDate removalDate = sectorUpdateRemovalDateRequestDto.removalDate();
         sector.updateRemovalDate(removalDate);
         Events.raise(SectorRemovalDateUpdatedEvent.of(sectorId, removalDate));
-        return SectorWriteDetailResponseDto.toDto(sector);
+        return SectorDetailResponseDto.toDto(sector);
     }
 
     @Transactional
@@ -49,7 +49,7 @@ public class SectorService {
     }
 
     @Transactional
-    public SectorWriteDetailResponseDto updateSector(
+    public SectorDetailResponseDto updateSector(
         final Long sectorId,
         final SectorUpdateRequestDto updateRequestDto) {
         Sector foundSector = findById(sectorId);
@@ -58,7 +58,7 @@ public class SectorService {
             updateRequestDto.removalDate(), updateRequestDto.gymId());
         Events.raise(SectorInfoUpdatedEvent.of(foundSector.getId(), updateRequestDto.sectorName(),
             updateRequestDto.settingDate()));
-        return SectorWriteDetailResponseDto.toDto(foundSector);
+        return SectorDetailResponseDto.toDto(foundSector);
     }
 
     public Sector findById(final Long id) {

@@ -4,7 +4,7 @@ import com.first.flash.climbing.sector.application.SectorService;
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
-import com.first.flash.climbing.sector.application.dto.SectorWriteDetailResponseDto;
+import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +35,7 @@ public class SectorController {
         @ApiResponse(responseCode = "400", description = "탈거일이 세팅일보다 빠름")
     })
     @PostMapping("gyms/{gymId}/sectors")
-    public ResponseEntity<SectorWriteDetailResponseDto> createSector(@PathVariable final Long gymId,
+    public ResponseEntity<SectorDetailResponseDto> createSector(@PathVariable final Long gymId,
         @RequestBody final SectorCreateRequestDto sectorCreateRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(sectorService.saveSector(gymId, sectorCreateRequestDto));
@@ -47,10 +48,10 @@ public class SectorController {
         @ApiResponse(responseCode = "404", description = "섹터를 찾을 수 없음")
     })
     @PatchMapping("sectors/{sectorId}")
-    public ResponseEntity<SectorWriteDetailResponseDto> updateSectorRemovalDate(
+    public ResponseEntity<SectorDetailResponseDto> updateSectorRemovalDate(
         @PathVariable final Long sectorId,
         @RequestBody final SectorUpdateRemovalDateRequestDto sectorUpdateRemovalDateRequestDto) {
-        SectorWriteDetailResponseDto response = sectorService.updateSectorRemovalDate(
+        SectorDetailResponseDto response = sectorService.updateSectorRemovalDate(
             sectorId, sectorUpdateRemovalDateRequestDto);
         return ResponseEntity.ok(response);
     }
@@ -60,7 +61,7 @@ public class SectorController {
         @ApiResponse(responseCode = "200", description = "성공적으로 섹터 탈거일을 수정함"),
     })
     @PutMapping("sectors/{sectorId}")
-    public ResponseEntity<SectorWriteDetailResponseDto> updateSector(
+    public ResponseEntity<SectorDetailResponseDto> updateSector(
         @PathVariable final Long sectorId,
         @RequestBody final SectorUpdateRequestDto updateRequestDto) {
         return ResponseEntity.ok(sectorService.updateSector(sectorId, updateRequestDto));
