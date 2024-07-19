@@ -4,6 +4,7 @@ import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
+import com.first.flash.climbing.sector.application.dto.SectorsDetailResponseDto;
 import com.first.flash.climbing.sector.domain.Sector;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
@@ -64,6 +65,16 @@ public class SectorService {
     public Sector findById(final Long id) {
         return sectorRepository.findById(id)
                                .orElseThrow(() -> new SectorNotFoundException(id));
+    }
+
+    public SectorsDetailResponseDto findAllSectors() {
+        List<SectorDetailResponseDto> sectorsResponse = sectorRepository
+            .findAll()
+            .stream()
+            .map(
+                SectorDetailResponseDto::toDto)
+            .toList();
+        return new SectorsDetailResponseDto(sectorsResponse);
     }
 
     private Sector createSectorByDto(final Long gymId,

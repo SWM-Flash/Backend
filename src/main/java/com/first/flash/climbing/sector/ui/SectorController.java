@@ -5,6 +5,7 @@ import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
+import com.first.flash.climbing.sector.application.dto.SectorsDetailResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,6 +29,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class SectorController {
 
     private final SectorService sectorService;
+
+    @Operation(summary = "섹터 전체 조회", description = "모든 섹터의 정보를 반환")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 섹터를 조회"),
+    })
+    @GetMapping("sectors")
+    public ResponseEntity<SectorsDetailResponseDto> findAllSectors() {
+        return ResponseEntity.ok(sectorService.findAllSectors());
+    }
 
     @Operation(summary = "섹터 갱신(생성)", description = "특정 클라이밍장에 새로운 섹터 생성")
     @ApiResponses(value = {
@@ -58,7 +68,7 @@ public class SectorController {
 
     @Operation(summary = "섹터 전체 수정", description = "특정 섹터의 정보 수정")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "성공적으로 섹터 탈거일을 수정함"),
+        @ApiResponse(responseCode = "200", description = "성공적으로 섹터 정보 수정함"),
     })
     @PutMapping("sectors/{sectorId}")
     public ResponseEntity<SectorDetailResponseDto> updateSector(
