@@ -53,6 +53,9 @@ dependencies {
 
 	// sentry
 	implementation 'io.sentry:sentry-spring-boot-starter-jakarta:7.9.0'
+
+	// Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
