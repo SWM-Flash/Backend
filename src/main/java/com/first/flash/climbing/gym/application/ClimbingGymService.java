@@ -9,7 +9,10 @@ import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
 import com.first.flash.climbing.gym.exception.exceptions.NoSectorGymException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,14 +43,14 @@ public class ClimbingGymService {
 
     public ClimbingGymDetailResponseDto findClimbingGymDetail(final Long id) {
         ClimbingGym climbingGym = findClimbingGymById(id);
-        List<String> sectorNames = findSectorNamesById(id);
+        Set<String> sectorNames = findSectorNamesById(id);
         List<String> difficultyNames = getDifficultyNames(climbingGym);
         return new ClimbingGymDetailResponseDto(climbingGym.getMapImageUrl(),
             difficultyNames, sectorNames);
     }
 
-    private List<String> findSectorNamesById(final Long id) {
-        List<String> sectorNames = climbingGymRepository.findGymSectorNamesById(id);
+    private Set<String> findSectorNamesById(final Long id) {
+        Set<String> sectorNames = new HashSet<>(climbingGymRepository.findGymSectorNamesById(id));
         if (sectorNames.isEmpty()) {
             throw new NoSectorGymException(id);
         }
