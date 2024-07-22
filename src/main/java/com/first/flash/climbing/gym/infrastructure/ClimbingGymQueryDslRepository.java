@@ -13,10 +13,12 @@ public class ClimbingGymQueryDslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<String> findSectorNamesByGymId(final Long gymId) {
+    public List<String> findSortedSectorNamesByGymId(final Long gymId) {
         return jpaQueryFactory.select(sector.sectorName.name)
                               .from(sector)
                               .where(sector.gymId.eq(gymId), sector.removalInfo.isExpired.isFalse())
+                              .distinct()
+                              .orderBy(sector.sectorName.name.asc())
                               .fetch();
     }
 }
