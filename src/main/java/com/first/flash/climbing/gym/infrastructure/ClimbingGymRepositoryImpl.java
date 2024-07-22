@@ -31,6 +31,6 @@ public class ClimbingGymRepositoryImpl implements ClimbingGymRepository {
 
     @Override
     public List<String> findGymSectorNamesById(final Long id) {
-        return climbingGymQueryDslRepository.findSectorNamesByGymId(id);
+        return climbingGymQueryDslRepository.findSortedSectorNamesByGymId(id);
     }
 }
