@@ -9,6 +9,9 @@ import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyLevelException;
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyNameException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,8 +49,14 @@ public class ClimbingGymController {
 
     @Operation(summary = "클라이밍장 생성", description = "새로운 클라이밍장 생성")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "성공적으로 클라이밍장을 생성함"),
-        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식"),
+        @ApiResponse(responseCode = "201", description = "성공적으로 클라이밍장을 생성함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ClimbingGymCreateResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"gymName\": \"클라이밍장 이름은 필수입니다.\"}"),
+                @ExampleObject(name = "난이도 이름 중복", value = "{\"error\": \"난이도 이름이 중복되었습니다: 파랑\"}"),
+                @ExampleObject(name = "난이도 레벨 중복", value = "{\"error\": \"난이도 레벨이 중복되었습니다: 2\"}"),
+            })),
     })
     @PostMapping
     public ResponseEntity<ClimbingGymCreateResponseDto> createGym(
