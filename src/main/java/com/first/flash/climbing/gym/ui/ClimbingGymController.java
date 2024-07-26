@@ -3,16 +3,18 @@ package com.first.flash.climbing.gym.ui;
 import com.first.flash.climbing.gym.application.ClimbingGymService;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
-import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymDetailResponseDto;
+import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/gyms")
 @RequiredArgsConstructor
+@Validated
 public class ClimbingGymController {
 
     private final ClimbingGymService climbingGymService;
@@ -41,10 +44,11 @@ public class ClimbingGymController {
     @Operation(summary = "클라이밍장 생성", description = "새로운 클라이밍장 생성")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "성공적으로 클라이밍장을 생성함"),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식"),
     })
     @PostMapping
     public ResponseEntity<ClimbingGymCreateResponseDto> createGym(
-        @RequestBody final ClimbingGymCreateRequestDto gymCreateRequestDto) {
+        @Valid @RequestBody final ClimbingGymCreateRequestDto gymCreateRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(climbingGymService.save(gymCreateRequestDto));
     }
