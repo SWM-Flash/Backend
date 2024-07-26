@@ -5,16 +5,20 @@ import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymDetailResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
+import com.first.flash.climbing.gym.domian.vo.Difficulty;
+import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyLevelException;
+import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyNameException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/gyms")
 @RequiredArgsConstructor
-@Validated
 public class ClimbingGymController {
 
     private final ClimbingGymService climbingGymService;
@@ -49,8 +52,25 @@ public class ClimbingGymController {
     @PostMapping
     public ResponseEntity<ClimbingGymCreateResponseDto> createGym(
         @Valid @RequestBody final ClimbingGymCreateRequestDto gymCreateRequestDto) {
+
+        validateDifficulties(gymCreateRequestDto.difficulties());
+
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(climbingGymService.save(gymCreateRequestDto));
+    }
+
+    private void validateDifficulties(final List<Difficulty> difficulties) {
+        Set<String> names = new HashSet<>();
+        Set<Integer> levels = new HashSet<>();
+
+        for (Difficulty difficulty : difficulties) {
+            if (!names.add(difficulty.getName())) {
+                throw new DuplicateDifficultyNameException(difficulty.getName());
+            }
+            if (!levels.add(difficulty.getLevel())) {
+                throw new DuplicateDifficultyLevelException(difficulty.getLevel());
+            }
+        }
     }
 
     @Operation(summary = "클라이밍장 정보 조회", description = "특정 클라이밍장의 정보 조회")
