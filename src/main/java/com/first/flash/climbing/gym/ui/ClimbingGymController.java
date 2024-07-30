@@ -9,6 +9,7 @@ import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyLevelException;
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyNameException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,7 +40,22 @@ public class ClimbingGymController {
 
     @Operation(summary = "모든 클라이밍장 조회", description = "모든 클라이밍장을 리스트로 반환")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "클라이밍장 리스트 조회 성공함")
+        @ApiResponse(responseCode = "200", description = "클라이밍장 리스트 조회 성공함",
+            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ClimbingGymResponseDto.class)),
+                examples = @ExampleObject(value = """
+                        [
+                            {
+                                "id": 1,
+                                "gymName": "더클라임 논현",
+                                "thumbnailUrl": "example_map_image1.jpeg"
+                            },
+                            {
+                                "id": 2,
+                                "gymName": "더클라임 양재",
+                                "thumbnailUrl": "example_map_image2.jpeg"
+                            }
+                        ]
+                    """))),
     })
     @GetMapping
     public List<ClimbingGymResponseDto> getGyms() {
@@ -84,9 +100,16 @@ public class ClimbingGymController {
 
     @Operation(summary = "클라이밍장 정보 조회", description = "특정 클라이밍장의 정보 조회")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "성공적으로 클라이밍장 정보를 조회함"),
-        @ApiResponse(responseCode = "404", description = "클라이밍장을 찾을 수 없음"),
-        @ApiResponse(responseCode = "404", description = "클라이밍장에 섹터가 없음")
+        @ApiResponse(responseCode = "200", description = "성공적으로 클라이밍장 정보를 조회함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ClimbingGymDetailResponseDto.class))),
+        @ApiResponse(responseCode = "404", description = "클라이밍장을 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "클라이밍장 없음", value = "{\"error\": \"아이디가 1인 클라이밍장을 찾을 수 없습니다.\"}")
+            })),
+        @ApiResponse(responseCode = "404", description = "클라이밍장에 섹터가 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "섹터 없음", value = "{\"error\": \"아이디가 1인 클라이밍장엔 섹터가 존재하지 않습니다.\"}")
+            }))
     })
     @GetMapping("/{gymId}")
     public ResponseEntity<ClimbingGymDetailResponseDto> getGymDetails(
