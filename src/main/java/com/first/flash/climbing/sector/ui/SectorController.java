@@ -65,6 +65,7 @@ public class SectorController {
                              .body(sectorService.saveSector(gymId, sectorCreateRequestDto));
     }
 
+    @Operation(summary = "섹터 탈거일 수정", description = "특정 섹터의 탈거일 정보 수정")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공적으로 섹터 탈거일을 수정함",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = SectorDetailResponseDto.class))),
