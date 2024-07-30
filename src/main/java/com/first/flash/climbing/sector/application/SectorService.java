@@ -62,7 +62,7 @@ public class SectorService {
             updateRequestDto.settingDate(),
             updateRequestDto.removalDate(), updateRequestDto.gymId());
         Events.raise(SectorInfoUpdatedEvent.of(foundSector.getId(), updateRequestDto.sectorName(),
-            updateRequestDto.settingDate()));
+            updateRequestDto.settingDate(), updateRequestDto.gymId()));
         return SectorDetailResponseDto.toDto(foundSector);
     }
 
