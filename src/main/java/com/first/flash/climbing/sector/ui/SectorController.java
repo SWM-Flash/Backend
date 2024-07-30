@@ -2,14 +2,18 @@ package com.first.flash.climbing.sector.ui;
 
 import com.first.flash.climbing.sector.application.SectorService;
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
+import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
-import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorsDetailResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,12 +45,17 @@ public class SectorController {
 
     @Operation(summary = "섹터 갱신(생성)", description = "특정 클라이밍장에 새로운 섹터 생성")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "성공적으로 섹터를 생성함"),
-        @ApiResponse(responseCode = "400", description = "탈거일이 세팅일보다 빠름")
+        @ApiResponse(responseCode = "201", description = "성공적으로 섹터를 생성함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SectorDetailResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"name\": \"섹터 이름은 필수입니다.\"}"),
+                @ExampleObject(name = "탈거일이 세팅일보다 빠름", value = "{\"error\": \"탈거일이 세팅일보다 빠를 수 없습니다.\"}")
+            })),
     })
     @PostMapping("gyms/{gymId}/sectors")
     public ResponseEntity<SectorDetailResponseDto> createSector(@PathVariable final Long gymId,
-        @RequestBody final SectorCreateRequestDto sectorCreateRequestDto) {
+        @Valid @RequestBody final SectorCreateRequestDto sectorCreateRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(sectorService.saveSector(gymId, sectorCreateRequestDto));
     }
