@@ -105,10 +105,6 @@ public class ClimbingGymController {
         @ApiResponse(responseCode = "404", description = "클라이밍장을 찾을 수 없음",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "클라이밍장 없음", value = "{\"error\": \"아이디가 1인 클라이밍장을 찾을 수 없습니다.\"}")
-            })),
-        @ApiResponse(responseCode = "404", description = "클라이밍장에 섹터가 없음",
-            content = @Content(mediaType = "application/json", examples = {
-                @ExampleObject(name = "섹터 없음", value = "{\"error\": \"아이디가 1인 클라이밍장엔 섹터가 존재하지 않습니다.\"}")
             }))
     })
     @GetMapping("/{gymId}")
