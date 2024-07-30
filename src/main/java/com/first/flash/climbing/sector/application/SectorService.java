@@ -1,11 +1,12 @@
 package com.first.flash.climbing.sector.application;
 
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
-import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
+import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorsDetailResponseDto;
 import com.first.flash.climbing.sector.domain.Sector;
+import com.first.flash.climbing.sector.domain.SectorCreatedEvent;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
@@ -29,7 +30,10 @@ public class SectorService {
     @Transactional
     public SectorDetailResponseDto saveSector(final Long gymId,
         final SectorCreateRequestDto createRequestDto) {
+
         Sector sector = createSectorByDto(gymId, createRequestDto);
+        Events.raise(new SectorCreatedEvent(gymId));
+
         return SectorDetailResponseDto.toDto(sectorRepository.save(sector));
     }
 

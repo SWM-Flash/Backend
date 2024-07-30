@@ -52,6 +52,10 @@ public class SectorController {
                 @ExampleObject(name = "요청값 누락", value = "{\"name\": \"섹터 이름은 필수입니다.\"}"),
                 @ExampleObject(name = "탈거일이 세팅일보다 빠름", value = "{\"error\": \"탈거일이 세팅일보다 빠를 수 없습니다.\"}")
             })),
+        @ApiResponse(responseCode = "404", description = "클라이밍장을 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "클라이밍장 없음", value = "{\"error\": \"아이디가 1인 클라이밍장을 찾을 수 없습니다.\"}")
+            }))
     })
     @PostMapping("gyms/{gymId}/sectors")
     public ResponseEntity<SectorDetailResponseDto> createSector(@PathVariable final Long gymId,
