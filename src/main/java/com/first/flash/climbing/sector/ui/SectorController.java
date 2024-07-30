@@ -34,9 +34,10 @@ public class SectorController {
 
     private final SectorService sectorService;
 
-    @Operation(summary = "섹터 전체 조회", description = "모든 섹터의 정보를 반환")
+    @Operation(summary = "모든 섹터 조회", description = "모든 섹터 정보를 리스트로 반환")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "성공적으로 섹터를 조회"),
+        @ApiResponse(responseCode = "200", description = "성공적으로 섹터를 조회",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SectorsDetailResponseDto.class))),
     })
     @GetMapping("sectors")
     public ResponseEntity<SectorsDetailResponseDto> findAllSectors() {
@@ -64,16 +65,23 @@ public class SectorController {
                              .body(sectorService.saveSector(gymId, sectorCreateRequestDto));
     }
 
-    @Operation(summary = "섹터 탈거일 수정", description = "특정 섹터의 탈거일 수정")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "성공적으로 섹터 탈거일을 수정함"),
-        @ApiResponse(responseCode = "400", description = "탈거일이 세팅일보다 빠름"),
-        @ApiResponse(responseCode = "404", description = "섹터를 찾을 수 없음")
+        @ApiResponse(responseCode = "200", description = "성공적으로 섹터 탈거일을 수정함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SectorDetailResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"name\": \"탈거일 수정 시 탈거일 정보는 비어있을 수 없습니다.\"}"),
+                @ExampleObject(name = "탈거일이 세팅일보다 빠름", value = "{\"error\": \"탈거일이 세팅일보다 빠를 수 없습니다.\"}")
+            })),
+        @ApiResponse(responseCode = "404", description = "섹터를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "섹터 없음", value = "{\"error\": \"아이디가 1인 섹터를 찾을 수 없습니다.\"}")
+            }))
     })
     @PatchMapping("sectors/{sectorId}")
     public ResponseEntity<SectorDetailResponseDto> updateSectorRemovalDate(
         @PathVariable final Long sectorId,
-        @RequestBody final SectorUpdateRemovalDateRequestDto sectorUpdateRemovalDateRequestDto) {
+        @Valid @RequestBody final SectorUpdateRemovalDateRequestDto sectorUpdateRemovalDateRequestDto) {
         SectorDetailResponseDto response = sectorService.updateSectorRemovalDate(
             sectorId, sectorUpdateRemovalDateRequestDto);
         return ResponseEntity.ok(response);
