@@ -5,6 +5,9 @@ import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "solutions", description = "해설 영상 관리 API")
+@Tag(name = "solutions", description = "해설 관리 API")
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
@@ -27,10 +30,14 @@ public class SolutionController {
 
     private final SolutionService solutionService;
 
-    @Operation(summary = "해설 영상 조회", description = "특정 문제에 대한 해설 영상 조회")
+    @Operation(summary = "해설 조회", description = "특정 문제에 대한 해설 조회")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "성공적으로 해설 영상을 조회함"),
-        @ApiResponse(responseCode = "404", description = "해설을 찾을 수 없음")
+        @ApiResponse(responseCode = "200", description = "성공적으로 해설을 조회함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionsResponseDto.class))),
+        @ApiResponse(responseCode = "404", description = "문제를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "문제 없음", value = "{\"error\": \"아이디가 0190c558-9063-7050-b4fc-eb421e3236b3인 문제를 찾을 수 없습니다.\"}")
+            }))
     })
     @GetMapping("problems/{problemId}/solutions")
     public ResponseEntity<SolutionsResponseDto> getSolutions(@PathVariable final UUID problemId) {
@@ -40,9 +47,9 @@ public class SolutionController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "해설 영상 업로드", description = "특정 문제에 대한 해설 영상 업로드")
+    @Operation(summary = "해설 업로드", description = "특정 문제에 대한 해설 업로드")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "성공적으로 해설 영상을 업로드함")
+        @ApiResponse(responseCode = "201", description = "성공적으로 해설을 업로드함")
     })
     @PostMapping("problems/{problemId}/solutions")
     public ResponseEntity<SolutionResponseDto> createSolution(@PathVariable final UUID problemId,

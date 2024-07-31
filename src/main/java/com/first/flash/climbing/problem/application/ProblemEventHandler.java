@@ -1,5 +1,6 @@
 package com.first.flash.climbing.problem.application;
 
+import com.first.flash.climbing.problem.domain.ProblemIdConfirmEvent;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProblemEventHandler {
 
     private final ProblemsService problemsService;
+    private final ProblemReadService problemReadService;
 
     @EventListener
     @Transactional
@@ -38,5 +40,11 @@ public class ProblemEventHandler {
     public void updateQueryProblemInfo(final SectorInfoUpdatedEvent event) {
         problemsService.updateQueryProblemInfo(event.getId(), event.getSectorName(),
             event.getSettingDate());
+    }
+
+    @EventListener
+    @Transactional
+    public void confirmProblemId(final ProblemIdConfirmEvent event) {
+        problemReadService.findProblemById(event.getProblemId());
     }
 }
