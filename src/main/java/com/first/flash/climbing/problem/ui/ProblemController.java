@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -39,12 +40,22 @@ public class ProblemController {
     @Operation(summary = "문제 생성", description = "특정 섹터에 문제 생성")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "성공적으로 문제 생성함"),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"name\": \"이미지 URL은 필수입니다.\"}")
+            })),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "클라이밍장 없음", value = "{\"error\": \"아이디가 1인 클라이밍장을 찾을 수 없습니다.\"}"),
+                @ExampleObject(name = "섹터 없음", value = "{\"error\": \"아이디가 1인 섹터를 찾을 수 없습니다.\"}"),
+                @ExampleObject(name = "난이도 없음", value = "{\"error\": \"이름이 핑크인 난이도를 찾을 수 없습니다.\"}")
+            }))
     })
     @PostMapping("/gyms/{gymId}/sectors/{sectorId}/problems")
     public ResponseEntity<ProblemCreateResponseDto> saveProblems(
         @PathVariable("gymId") final Long gymId,
         @PathVariable("sectorId") final Long sectorId,
-        @RequestBody final ProblemCreateRequestDto requestDto) {
+        @Valid @RequestBody final ProblemCreateRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(problemsSaveService.saveProblems(gymId, sectorId, requestDto));
     }
