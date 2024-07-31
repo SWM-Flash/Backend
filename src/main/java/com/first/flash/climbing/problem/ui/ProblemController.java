@@ -39,7 +39,8 @@ public class ProblemController {
 
     @Operation(summary = "문제 생성", description = "특정 섹터에 문제 생성")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "성공적으로 문제 생성함"),
+        @ApiResponse(responseCode = "201", description = "성공적으로 문제 생성함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemCreateResponseDto.class))),
         @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "요청값 누락", value = "{\"name\": \"이미지 URL은 필수입니다.\"}")
