@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -49,11 +50,20 @@ public class SolutionController {
 
     @Operation(summary = "해설 업로드", description = "특정 문제에 대한 해설 업로드")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "성공적으로 해설을 업로드함")
+        @ApiResponse(responseCode = "201", description = "성공적으로 해설을 업로드함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"uploader\": \"업로더 정보는 필수입니다.\"}"),
+            })),
+        @ApiResponse(responseCode = "404", description = "문제를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "문제 없음", value = "{\"error\": \"아이디가 0190c558-9063-7050-b4fc-eb421e3236b3인 문제를 찾을 수 없습니다.\"}")
+            }))
     })
     @PostMapping("problems/{problemId}/solutions")
     public ResponseEntity<SolutionResponseDto> createSolution(@PathVariable final UUID problemId,
-        @RequestBody final SolutionCreateRequestDto solutionCreateRequestDto) {
+        @Valid @RequestBody final SolutionCreateRequestDto solutionCreateRequestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(
