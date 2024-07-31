@@ -1,12 +1,12 @@
 package com.first.flash.climbing.sector.application;
 
+import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmEvent;
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorsDetailResponseDto;
 import com.first.flash.climbing.sector.domain.Sector;
-import com.first.flash.climbing.sector.domain.SectorCreatedEvent;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
@@ -32,7 +32,7 @@ public class SectorService {
         final SectorCreateRequestDto createRequestDto) {
 
         Sector sector = createSectorByDto(gymId, createRequestDto);
-        Events.raise(new SectorCreatedEvent(gymId));
+        Events.raise(new ClimbingGymIdConfirmEvent(gymId));
 
         return SectorDetailResponseDto.toDto(sectorRepository.save(sector));
     }
@@ -62,7 +62,8 @@ public class SectorService {
             updateRequestDto.settingDate(),
             updateRequestDto.removalDate(), updateRequestDto.gymId());
         Events.raise(SectorInfoUpdatedEvent.of(foundSector.getId(), updateRequestDto.sectorName(),
-            updateRequestDto.settingDate(), updateRequestDto.gymId()));
+            updateRequestDto.settingDate()));
+        Events.raise(ClimbingGymIdConfirmEvent.of(updateRequestDto.gymId()));
         return SectorDetailResponseDto.toDto(foundSector);
     }
 

@@ -11,10 +11,9 @@ public class SectorInfoUpdatedEvent {
     private Long id;
     private String sectorName;
     private LocalDate settingDate;
-    private Long gymId;
 
     public static SectorInfoUpdatedEvent of(final Long id, final String sectorName,
-        final LocalDate settingDate, final Long gymId) {
-        return new SectorInfoUpdatedEvent(id, sectorName, settingDate, gymId);
+        final LocalDate settingDate) {
+        return new SectorInfoUpdatedEvent(id, sectorName, settingDate);
     }
 }
