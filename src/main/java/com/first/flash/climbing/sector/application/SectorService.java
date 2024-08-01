@@ -32,7 +32,7 @@ public class SectorService {
         final SectorCreateRequestDto createRequestDto) {
 
         Sector sector = createSectorByDto(gymId, createRequestDto);
-        Events.raise(new ClimbingGymIdConfirmRequestedEvent(gymId));
+        Events.raise(ClimbingGymIdConfirmRequestedEvent.of(gymId));
 
         return SectorDetailResponseDto.toDto(sectorRepository.save(sector));
     }
