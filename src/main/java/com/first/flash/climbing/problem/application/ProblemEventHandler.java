@@ -1,6 +1,6 @@
 package com.first.flash.climbing.problem.application;
 
-import com.first.flash.climbing.problem.domain.ProblemIdConfirmEvent;
+import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
@@ -44,7 +44,7 @@ public class ProblemEventHandler {
 
     @EventListener
     @Transactional
-    public void confirmProblemId(final ProblemIdConfirmEvent event) {
+    public void confirmProblemId(final ProblemIdConfirmRequestedEvent event) {
         problemReadService.findProblemById(event.getProblemId());
     }
 }

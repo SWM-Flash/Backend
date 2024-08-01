@@ -1,6 +1,6 @@
 package com.first.flash.climbing.gym.application;
 
-import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmEvent;
+import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class ClimbingGymEventHandler {
 
     @EventListener
     @Transactional
-    public void confirmGymId(final ClimbingGymIdConfirmEvent event) {
+    public void confirmGymId(final ClimbingGymIdConfirmRequestedEvent event) {
         gymService.findClimbingGymById(event.getGymId());
     }
 }

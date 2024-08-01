@@ -6,11 +6,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ClimbingGymIdConfirmEvent extends Event {
+public class ClimbingGymIdConfirmRequestedEvent extends Event {
 
     private final Long gymId;
 
-    public static ClimbingGymIdConfirmEvent of(final Long gymId) {
-        return new ClimbingGymIdConfirmEvent(gymId);
+    public static ClimbingGymIdConfirmRequestedEvent of(final Long gymId) {
+        return new ClimbingGymIdConfirmRequestedEvent(gymId);
     }
 }

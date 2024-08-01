@@ -3,11 +3,11 @@ package com.first.flash.climbing.problem.application;
 import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.DIFFICULTY;
 import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.VIEWS;
 
-import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmEvent;
+import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.Problem;
-import com.first.flash.climbing.problem.domain.ProblemIdConfirmEvent;
+import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.domain.QueryProblemRepository;
@@ -37,7 +37,7 @@ public class ProblemReadService {
         Cursor prevCursor = Cursor.decode(cursor);
         SortBy sortBy = SortBy.from(sortByRequest);
 
-        Events.raise(ClimbingGymIdConfirmEvent.of(gymId));
+        Events.raise(ClimbingGymIdConfirmRequestedEvent.of(gymId));
 
         List<QueryProblem> queryProblems = queryProblemRepository.findAll(prevCursor, sortBy, size,
             gymId, difficulty, sector, hasSolution);
@@ -47,7 +47,7 @@ public class ProblemReadService {
 
     @Transactional
     public ProblemDetailResponseDto viewProblems(final UUID problemId) {
-        Events.raise(ProblemIdConfirmEvent.of(problemId));
+        Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
 
         QueryProblem queryProblem = findQueryProblemById(problemId);
         Problem problem = findProblemById(problemId);

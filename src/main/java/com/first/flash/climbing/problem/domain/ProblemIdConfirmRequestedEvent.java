@@ -7,11 +7,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ProblemIdConfirmEvent extends Event {
+public class ProblemIdConfirmRequestedEvent extends Event {
 
     private final UUID problemId;
 
-    public static ProblemIdConfirmEvent of(final UUID problemId) {
-        return new ProblemIdConfirmEvent(problemId);
+    public static ProblemIdConfirmRequestedEvent of(final UUID problemId) {
+        return new ProblemIdConfirmRequestedEvent(problemId);
     }
 }
