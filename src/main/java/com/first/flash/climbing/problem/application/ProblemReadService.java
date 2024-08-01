@@ -3,6 +3,7 @@ package com.first.flash.climbing.problem.application;
 import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.DIFFICULTY;
 import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.VIEWS;
 
+import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.Problem;
@@ -14,6 +15,7 @@ import com.first.flash.climbing.problem.exception.exceptions.QueryProblemExpired
 import com.first.flash.climbing.problem.exception.exceptions.QueryProblemNotFoundException;
 import com.first.flash.climbing.problem.infrastructure.paging.Cursor;
 import com.first.flash.climbing.problem.infrastructure.paging.SortBy;
+import com.first.flash.global.event.Events;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,8 @@ public class ProblemReadService {
         Cursor prevCursor = Cursor.decode(cursor);
         SortBy sortBy = SortBy.from(sortByRequest);
 
+        Events.raise(ClimbingGymIdConfirmRequestedEvent.of(gymId));
+
         List<QueryProblem> queryProblems = queryProblemRepository.findAll(prevCursor, sortBy, size,
             gymId, difficulty, sector, hasSolution);
         String nextCursor = getNextCursor(sortBy, size, queryProblems);
@@ -47,6 +51,7 @@ public class ProblemReadService {
         validateExpiration(problem, queryProblem);
         problem.view();
         queryProblem.view();
+
         return ProblemDetailResponseDto.of(queryProblem);
     }
 

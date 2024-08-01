@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.application;
 
+import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
 import com.first.flash.climbing.solution.application.dto.SolutionMetaResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
@@ -37,10 +38,13 @@ public class SolutionService {
     }
 
     public SolutionsResponseDto findAllSolutionsByProblemId(final UUID problemId) {
+        Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
+
         List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId)
                                                                 .stream()
                                                                 .map(SolutionResponseDto::toDto)
                                                                 .toList();
+
         return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
     }
 }
