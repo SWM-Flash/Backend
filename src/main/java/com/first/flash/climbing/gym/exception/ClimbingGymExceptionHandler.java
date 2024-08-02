@@ -5,6 +5,7 @@ import com.first.flash.climbing.gym.exception.exceptions.DifficultyNotFoundExcep
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyLevelException;
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyNameException;
 import com.first.flash.climbing.gym.exception.exceptions.NoSectorGymException;
+import com.first.flash.global.dto.ErrorResponseDto;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -18,19 +19,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ClimbingGymExceptionHandler {
 
     @ExceptionHandler(ClimbingGymNotFoundException.class)
-    public ResponseEntity<String> handleClimbingGymNotFoundException(
+    public ResponseEntity<ErrorResponseDto> handleClimbingGymNotFoundException(
         final ClimbingGymNotFoundException exception) {
         return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
     }
 
     @ExceptionHandler(DifficultyNotFoundException.class)
-    public ResponseEntity<String> handleDifficultyNotFoundException(
+    public ResponseEntity<ErrorResponseDto> handleDifficultyNotFoundException(
         final DifficultyNotFoundException exception) {
         return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
     }
 
     @ExceptionHandler(NoSectorGymException.class)
-    public ResponseEntity<String> handleNoSectorGymException(
+    public ResponseEntity<ErrorResponseDto> handleNoSectorGymException(
         final NoSectorGymException exception) {
         return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
     }
@@ -50,20 +51,21 @@ public class ClimbingGymExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateDifficultyLevelException.class)
-    public ResponseEntity<String> handleDuplicateDifficultyLevelException(
+    public ResponseEntity<ErrorResponseDto> handleDuplicateDifficultyLevelException(
         final DuplicateDifficultyLevelException exception) {
         return getResponseWithStatus(HttpStatus.BAD_REQUEST, exception);
     }
 
     @ExceptionHandler(DuplicateDifficultyNameException.class)
-    public ResponseEntity<String> handleDuplicateDifficultyNameException(
+    public ResponseEntity<ErrorResponseDto> handleDuplicateDifficultyNameException(
         final DuplicateDifficultyNameException exception) {
         return getResponseWithStatus(HttpStatus.BAD_REQUEST, exception);
     }
 
-    private ResponseEntity<String> getResponseWithStatus(final HttpStatus httpStatus,
+    private ResponseEntity<ErrorResponseDto> getResponseWithStatus(final HttpStatus httpStatus,
         final RuntimeException exception) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage());
         return ResponseEntity.status(httpStatus)
-                             .body(exception.getMessage());
+                             .body(errorResponse);
     }
 }
