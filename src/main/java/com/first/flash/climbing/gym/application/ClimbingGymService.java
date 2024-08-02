@@ -8,7 +8,6 @@ import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
-import com.first.flash.climbing.gym.exception.exceptions.NoSectorGymException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,11 +47,7 @@ public class ClimbingGymService {
     }
 
     private List<String> findSectorNamesById(final Long id) {
-        List<String> sectorNames = climbingGymRepository.findGymSectorNamesById(id);
-        if (sectorNames.isEmpty()) {
-            throw new NoSectorGymException(id);
-        }
-        return sectorNames;
+        return climbingGymRepository.findGymSectorNamesById(id);
     }
 
     private List<String> getDifficultyNames(final ClimbingGym climbingGym) {
