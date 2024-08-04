@@ -7,4 +7,5 @@ public interface MemberRepository {
 
     Member save(final Member member);
     Optional<Member> findById(final UUID id);
+    Optional<Member> findByEmail(final String email);
 }
