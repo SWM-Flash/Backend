@@ -3,6 +3,7 @@ package com.first.flash.account.auth.ui;
 import com.first.flash.account.auth.application.AuthService;
 import com.first.flash.account.auth.application.dto.LoginRequestDto;
 import com.first.flash.account.auth.application.dto.LoginResponseDto;
+import com.first.flash.global.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,11 @@ public class AuthController {
 
     @GetMapping("/admin/test")
     public ResponseEntity<String> test() {
-        return ResponseEntity.ok("admin test");
+        return ResponseEntity.ok(AuthUtil.getId() + " admin test");
+    }
+
+    @GetMapping("/api/test")
+    public ResponseEntity<String> apiTest() {
+        return ResponseEntity.ok(AuthUtil.getId() + " api test");
     }
 }
