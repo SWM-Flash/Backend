@@ -1,5 +1,7 @@
 package com.first.flash.account.member.application;
 
+import com.first.flash.account.member.application.dto.ConfirmNickNameRequest;
+import com.first.flash.account.member.application.dto.ConfirmNickNameResponse;
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationRequest;
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationResponse;
 import com.first.flash.account.member.domain.Member;
@@ -43,6 +45,6 @@ public class MemberService {
 
     public ConfirmNickNameResponse confirmNickName(final ConfirmNickNameRequest request) {
         boolean isDuplicated = memberRepository.existsByNickName(request.nickName());
-        return new ConfirmNickNameResponse(!isDuplicated);
+        return ConfirmNickNameResponse.from(isDuplicated);
     }
 }
