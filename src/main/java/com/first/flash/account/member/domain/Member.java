@@ -1,5 +1,6 @@
 package com.first.flash.account.member.domain;
 
+import com.first.flash.account.member.application.dto.MemberCompleteRegistrationRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -44,5 +45,14 @@ public class Member {
                      .gender(gender)
                      .role(Role.ROLE_USER)
                      .build();
+    }
+
+    public void completeRegistration(final String nickName, final String instagramId,
+        final Double height, final Double reach, final String profileImageUrl) {
+        this.nickName = nickName;
+        this.instagramId = instagramId;
+        this.height = height;
+        this.reach = reach;
+        this.profileImageUrl = profileImageUrl;
     }
 }
