@@ -1,6 +1,7 @@
 package com.first.flash.global.config;
 
 import com.first.flash.account.auth.domain.TokenManager;
+import com.first.flash.global.filter.TokenExceptionFilter;
 import com.first.flash.global.filter.handler.CustomAccessDeniedHandler;
 import com.first.flash.global.filter.handler.CustomAuthenticationEntryPoint;
 import com.first.flash.global.filter.JwtAuthFilter;
@@ -48,6 +49,7 @@ public class SecurityConfig {
                    )
                    .addFilterBefore(new JwtAuthFilter(tokenManager, userDetailsService),
                        UsernamePasswordAuthenticationFilter.class)
+                   .addFilterBefore(new TokenExceptionFilter(), JwtAuthFilter.class)
                    .build();
     }
 
