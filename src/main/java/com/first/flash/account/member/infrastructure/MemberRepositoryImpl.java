@@ -22,4 +22,9 @@ public class MemberRepositoryImpl implements MemberRepository {
     public Optional<Member> findById(final UUID id) {
         return jpaRepository.findById(id);
     }
+
+    @Override
+    public Optional<Member> findByEmail(final String email) {
+        return jpaRepository.findMemberByEmail(email);
+    }
 }
