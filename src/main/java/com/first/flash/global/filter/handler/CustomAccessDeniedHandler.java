@@ -14,7 +14,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(final HttpServletRequest request, final HttpServletResponse response,
         final AccessDeniedException accessDeniedException) throws IOException, ServletException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.getWriter().write(accessDeniedException.getMessage());
+        response.getWriter().write("요청에 대한 권한이 없습니다.");
     }
 }
