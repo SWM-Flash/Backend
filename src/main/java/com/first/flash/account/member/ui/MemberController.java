@@ -18,7 +18,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PatchMapping("/api/members")
+    @PatchMapping("/members")
     public ResponseEntity<MemberCompleteRegistrationResponse> completeMemberRegistration(
         @RequestBody final MemberCompleteRegistrationRequest request) {
         MemberCompleteRegistrationResponse response = memberService.completeMemberRegistration(
@@ -26,7 +26,7 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/api/members/nickname")
+    @GetMapping("/members/nickname")
     public ResponseEntity<ConfirmNickNameResponse> confirmNickName(
         @RequestBody final ConfirmNickNameRequest request) {
         return ResponseEntity.ok(memberService.confirmNickName(request));
