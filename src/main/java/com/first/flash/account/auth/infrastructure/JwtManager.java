@@ -7,7 +7,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jwts.SIG;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import java.util.Date;
@@ -73,10 +72,8 @@ public class JwtManager implements TokenManager {
                        .getPayload();
         } catch (ExpiredJwtException e) {
             throw new TokenExpiredException();
-        } catch (MalformedJwtException e) {
+        } catch (RuntimeException e) {
             throw new InvalidTokenException();
-        } catch (SecurityException e) {
-            throw new IllegalArgumentException();
         }
     }
 }
