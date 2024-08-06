@@ -40,7 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             UUID id = tokenManager.parseToken(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(id.toString());
             setAuthentication(userDetails);
-        } catch (TokenExpiredException exception) {
+        } catch (TokenExpiredException | InvalidTokenException exception) {
             throw exception;
         } catch (RuntimeException exception) {
             throw new AuthenticationServiceException(exception.getMessage());
@@ -61,11 +61,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.debug("토큰이 없음: {}", bearerToken);
             throw new InvalidTokenException();
         }
-        String token = bearerToken.substring(AUTH_HEADER_PREFIX_LENGTH);
-        if (!tokenManager.validateToken(token)) {
-            log.debug("토큰이 유효하지 않음: {}", token);
-            throw new InvalidTokenException();
-        }
-        return token;
+        return bearerToken.substring(AUTH_HEADER_PREFIX_LENGTH);
     }
 }
