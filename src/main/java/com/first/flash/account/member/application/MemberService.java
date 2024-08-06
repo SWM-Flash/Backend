@@ -45,6 +45,6 @@ public class MemberService {
 
     public ConfirmNickNameResponse confirmNickName(final ConfirmNickNameRequest request) {
         boolean isDuplicated = memberRepository.existsByNickName(request.nickName());
-        return ConfirmNickNameResponse.from(isDuplicated);
+        return ConfirmNickNameResponse.toDto(isDuplicated);
     }
 }
