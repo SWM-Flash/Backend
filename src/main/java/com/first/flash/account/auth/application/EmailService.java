@@ -1,6 +1,7 @@
 package com.first.flash.account.auth.application;
 
 import com.first.flash.account.auth.domain.EmailProvider;
+import com.first.flash.account.auth.domain.Provider;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailService {
 
-    private final Map<String, EmailProvider> providers;
+    private final Map<Provider, EmailProvider> providers;
 
-
+    public String getEmail(final Provider provider, final String token) {
+        return providers.get(provider).getEmail(token);
+    }
 }

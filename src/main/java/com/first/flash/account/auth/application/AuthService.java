@@ -4,6 +4,7 @@ import static com.first.flash.account.member.domain.Role.ROLE_USER;
 
 import com.first.flash.account.auth.application.dto.LoginRequestDto;
 import com.first.flash.account.auth.application.dto.LoginResponseDto;
+import com.first.flash.account.auth.domain.Provider;
 import com.first.flash.account.auth.domain.TokenManager;
 import com.first.flash.account.member.domain.Member;
 import com.first.flash.account.member.domain.MemberRepository;
@@ -25,24 +26,25 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final TokenManager tokenManager;
+    private final EmailService emailService;
 
     @Transactional
     public LoginResponseDto login(final LoginRequestDto request) {
         log.info("로그인 요청: {}", request);
-        Optional<Member> foundMember = memberRepository.findByEmail(request.email());
-        Member member = saveOrGetMember(request, foundMember);
+        String email = emailService.getEmail(Provider.valueOf(request.provider()), request.token());
+        Optional<Member> foundMember = memberRepository.findByEmail(email);
+        Member member = saveOrGetMember(foundMember, email);
         String accessToken = tokenManager.createAccessToken(member.getId());
         return new LoginResponseDto(accessToken);
     }
 
-    private Member saveOrGetMember(final LoginRequestDto request,
-        final Optional<Member> foundMember) {
+    private Member saveOrGetMember(final Optional<Member> foundMember, final String email) {
         if (foundMember.isPresent()) {
             return foundMember.get();
         }
         Member member = Member.builder()
                               .id(UUID.randomUUID())
-                              .email(request.email())
+                              .email(email)
                               .role(DEFAULT_ROLE)
                               .build();
         memberRepository.save(member);
