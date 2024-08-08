@@ -5,6 +5,7 @@ import com.first.flash.account.member.application.dto.ConfirmNickNameRequest;
 import com.first.flash.account.member.application.dto.ConfirmNickNameResponse;
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationRequest;
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ public class MemberController {
 
     @PatchMapping("/members")
     public ResponseEntity<MemberCompleteRegistrationResponse> completeMemberRegistration(
-        @RequestBody final MemberCompleteRegistrationRequest request) {
+        @Valid @RequestBody final MemberCompleteRegistrationRequest request) {
         MemberCompleteRegistrationResponse response = memberService.completeMemberRegistration(
             request);
         return ResponseEntity.ok(response);
