@@ -36,7 +36,7 @@ public class KakaoSocialInfoProvider implements SocialInfoProvider {
             ResponseEntity<KakaoEmailResponseDto> response = restTemplate.exchange(KAKAO_API_URL,
                 HttpMethod.GET, httpEntity, KakaoEmailResponseDto.class);
             return resolveResponse(response);
-        } catch (RuntimeException exception) {
+        } catch (final RuntimeException exception) {
             throw new SocialRequestFailedException(exception.getMessage());
         }
     }

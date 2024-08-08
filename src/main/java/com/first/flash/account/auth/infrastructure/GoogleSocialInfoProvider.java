@@ -36,7 +36,7 @@ public class GoogleSocialInfoProvider implements SocialInfoProvider {
             ResponseEntity<GoogleEmailResponseDto> response = restTemplate.exchange(GOOGLE_API_URL,
                 HttpMethod.GET, httpEntity, GoogleEmailResponseDto.class);
             return resolveResponse(response);
-        } catch (RuntimeException exception) {
+        } catch (final RuntimeException exception) {
             throw new SocialRequestFailedException(exception.getMessage());
         }
     }

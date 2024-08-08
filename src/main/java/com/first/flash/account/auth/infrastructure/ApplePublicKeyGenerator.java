@@ -41,7 +41,7 @@ public class ApplePublicKeyGenerator {
         try {
             final KeyFactory keyFactory = KeyFactory.getInstance(applePublicKey.kty());
             return keyFactory.generatePublic(rsaPublicKeySpec);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException exception) {
+        } catch (final NoSuchAlgorithmException | InvalidKeySpecException exception) {
             throw new InvalidAppleKeyException();
         }
     }
