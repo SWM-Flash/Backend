@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidProvider {
 
-    String message() default "유효한 Provider가 아닙니다.";
+    String message() default "유효하지 않은 플랫폼입니다.";
 
     Class<?>[] groups() default {};
 
