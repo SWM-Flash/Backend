@@ -6,6 +6,7 @@ import com.first.flash.account.auth.application.dto.LoginRequestDto;
 import com.first.flash.account.auth.application.dto.LoginResponseDto;
 import com.first.flash.account.auth.domain.Provider;
 import com.first.flash.account.auth.domain.TokenManager;
+import com.first.flash.account.auth.infrastructure.dto.SocialInfo;
 import com.first.flash.account.member.domain.Member;
 import com.first.flash.account.member.domain.MemberRepository;
 import com.first.flash.account.member.domain.Role;
@@ -31,20 +32,23 @@ public class AuthService {
     @Transactional
     public LoginResponseDto login(final LoginRequestDto request) {
         log.info("로그인 요청: {}", request);
-        String email = socialService.getEmail(Provider.valueOf(request.provider()), request.token());
-        Optional<Member> foundMember = memberRepository.findByEmail(email);
-        Member member = saveOrGetMember(foundMember, email);
+        SocialInfo socialInfo = socialService.getSocialInfo(Provider.valueOf(request.provider()),
+            request.token());
+        Optional<Member> foundMember = memberRepository.findByEmail(socialInfo.socialId());
+        Member member = saveOrGetMember(foundMember, socialInfo);
         String accessToken = tokenManager.createAccessToken(member.getId());
         return new LoginResponseDto(accessToken);
     }
 
-    private Member saveOrGetMember(final Optional<Member> foundMember, final String email) {
+    private Member saveOrGetMember(final Optional<Member> foundMember,
+        final SocialInfo socialInfo) {
         if (foundMember.isPresent()) {
             return foundMember.get();
         }
         Member member = Member.builder()
                               .id(UUID.randomUUID())
-                              .email(email)
+                              .email(socialInfo.email())
+                              .socialId(socialInfo.socialId())
                               .role(DEFAULT_ROLE)
                               .build();
         memberRepository.save(member);
