@@ -1,8 +1,9 @@
 package com.first.flash.account.auth.infrastructure;
 
-import com.first.flash.account.auth.domain.EmailProvider;
+import com.first.flash.account.auth.domain.SocialInfoProvider;
 import com.first.flash.account.auth.exception.exceptions.EmailRequestFailedException;
-import com.first.flash.account.auth.infrastructure.dto.google.GoogleEmailResponseDto;
+import com.first.flash.account.auth.infrastructure.dto.SocialInfo;
+import com.first.flash.account.auth.infrastructure.dto.kakao.KakaoEmailResponseDto;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -15,31 +16,32 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @RequiredArgsConstructor
-public class GoogleEmailProvider implements EmailProvider {
+public class KakaoSocialInfoProvider implements SocialInfoProvider {
 
-    private static final String GOOGLE_API_URL = "https://people.googleapis.com/v1/people/me?personFields=emailAddresses";
+    private static final String KAKAO_API_URL = "https://kapi.kakao.com/v2/user/me";
     private static final String AUTH_HEADER = "Authorization";
     private static final String AUTH_HEADER_PREFIX = "Bearer ";
 
     private final RestTemplate restTemplate;
 
     @Override
-    public String getEmail(final String token) {
+    public SocialInfo getSocialInfo(final String token) {
         HttpEntity<String> httpEntity = prepareRequest(token);
-        return requestEmail(httpEntity);
+        String email = requestEmail(httpEntity);
+        return SocialInfo.from(email);
     }
 
     private String requestEmail(final HttpEntity<String> httpEntity) {
         try {
-            ResponseEntity<GoogleEmailResponseDto> response = restTemplate.exchange(GOOGLE_API_URL,
-                HttpMethod.GET, httpEntity, GoogleEmailResponseDto.class);
+            ResponseEntity<KakaoEmailResponseDto> response = restTemplate.exchange(KAKAO_API_URL,
+                HttpMethod.GET, httpEntity, KakaoEmailResponseDto.class);
             return resolveResponse(response);
         } catch (Exception e) {
             throw new EmailRequestFailedException(e.getMessage());
         }
     }
 
-    private static String resolveResponse(final ResponseEntity<GoogleEmailResponseDto> response) {
+    private static String resolveResponse(final ResponseEntity<KakaoEmailResponseDto> response) {
         if (isSuccessfulResponse(response)) {
             return response.getBody()
                            .getEmail();
@@ -49,7 +51,7 @@ public class GoogleEmailProvider implements EmailProvider {
     }
 
     private static boolean isSuccessfulResponse(
-        final ResponseEntity<GoogleEmailResponseDto> response) {
+        final ResponseEntity<KakaoEmailResponseDto> response) {
         return response.getStatusCode().equals(HttpStatus.OK) &&
             !Objects.isNull(response.getBody());
     }
