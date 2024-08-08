@@ -11,15 +11,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    @PatchMapping("/members")
+    @PatchMapping
     public ResponseEntity<MemberCompleteRegistrationResponse> completeMemberRegistration(
         @Valid @RequestBody final MemberCompleteRegistrationRequest request) {
         MemberCompleteRegistrationResponse response = memberService.completeMemberRegistration(
@@ -27,7 +29,7 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/members/nickname")
+    @GetMapping("/nickname")
     public ResponseEntity<ConfirmNickNameResponse> confirmNickName(
         @Valid @RequestBody final ConfirmNickNameRequest request) {
         return ResponseEntity.ok(memberService.confirmNickName(request));
