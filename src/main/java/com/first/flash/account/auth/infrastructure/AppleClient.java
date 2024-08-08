@@ -17,7 +17,7 @@ public class AppleClient {
     public ApplePublicKeys getApplePublicKeys() {
         try {
             return restTemplate.getForObject(APPLE_PUBLIC_KEYS_URL, ApplePublicKeys.class);
-        } catch (RuntimeException exception) {
+        } catch (final RuntimeException exception) {
             throw new SocialRequestFailedException(exception.getMessage());
         }
     }
