@@ -1,7 +1,7 @@
 package com.first.flash.account.auth.infrastructure;
 
 import com.first.flash.account.auth.domain.SocialInfoProvider;
-import com.first.flash.account.auth.exception.exceptions.EmailRequestFailedException;
+import com.first.flash.account.auth.exception.exceptions.SocialRequestFailedException;
 import com.first.flash.account.auth.infrastructure.dto.SocialInfo;
 import com.first.flash.account.auth.infrastructure.dto.kakao.KakaoEmailResponseDto;
 import java.util.Objects;
@@ -36,8 +36,8 @@ public class KakaoSocialInfoProvider implements SocialInfoProvider {
             ResponseEntity<KakaoEmailResponseDto> response = restTemplate.exchange(KAKAO_API_URL,
                 HttpMethod.GET, httpEntity, KakaoEmailResponseDto.class);
             return resolveResponse(response);
-        } catch (Exception e) {
-            throw new EmailRequestFailedException(e.getMessage());
+        } catch (RuntimeException exception) {
+            throw new SocialRequestFailedException(exception.getMessage());
         }
     }
 
@@ -46,7 +46,7 @@ public class KakaoSocialInfoProvider implements SocialInfoProvider {
             return response.getBody()
                            .getEmail();
         } else {
-            throw new EmailRequestFailedException();
+            throw new SocialRequestFailedException();
         }
     }
 
