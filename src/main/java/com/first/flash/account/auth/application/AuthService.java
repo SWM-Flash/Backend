@@ -26,12 +26,12 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final TokenManager tokenManager;
-    private final EmailService emailService;
+    private final SocialService socialService;
 
     @Transactional
     public LoginResponseDto login(final LoginRequestDto request) {
         log.info("로그인 요청: {}", request);
-        String email = emailService.getEmail(Provider.valueOf(request.provider()), request.token());
+        String email = socialService.getEmail(Provider.valueOf(request.provider()), request.token());
         Optional<Member> foundMember = memberRepository.findByEmail(email);
         Member member = saveOrGetMember(foundMember, email);
         String accessToken = tokenManager.createAccessToken(member.getId());
