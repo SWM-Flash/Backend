@@ -29,7 +29,7 @@ public class MemberController {
 
     @GetMapping("/members/nickname")
     public ResponseEntity<ConfirmNickNameResponse> confirmNickName(
-        @RequestBody final ConfirmNickNameRequest request) {
+        @Valid @RequestBody final ConfirmNickNameRequest request) {
         return ResponseEntity.ok(memberService.confirmNickName(request));
     }
 }
