@@ -66,4 +66,8 @@ public class Member {
         }
         return this.nickName.equals(nickName);
     }
+
+    public boolean isCompleteRegistration() {
+        return Objects.nonNull(nickName);
+    }
 }

@@ -36,7 +36,7 @@ public class AuthService {
         Optional<Member> foundMember = memberRepository.findByEmail(socialInfo.socialId());
         Member member = saveOrGetMember(foundMember, socialInfo);
         String accessToken = tokenManager.createAccessToken(member.getId());
-        return new LoginResponseDto(accessToken);
+        return new LoginResponseDto(accessToken, member.isCompleteRegistration());
     }
 
     private Member saveOrGetMember(final Optional<Member> foundMember,

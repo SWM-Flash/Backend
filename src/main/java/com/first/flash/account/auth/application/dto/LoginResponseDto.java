@@ -1,5 +1,5 @@
 package com.first.flash.account.auth.application.dto;
 
-public record LoginResponseDto(String accessToken) {
+public record LoginResponseDto(String accessToken, boolean isCompleteRegistration) {
 
 }
