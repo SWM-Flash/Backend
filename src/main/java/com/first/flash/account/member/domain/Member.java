@@ -1,6 +1,5 @@
 package com.first.flash.account.member.domain;
 
-import com.first.flash.account.member.application.dto.MemberCompleteRegistrationRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +20,7 @@ public class Member {
     @Id
     private UUID id;
     private String email;
+    private String socialId;
     private String nickName;
     private String instagramId;
     private Double height;
@@ -33,7 +33,7 @@ public class Member {
 
     public static Member of(final UUID id, final String email, final String nickName,
         final String instagramId, final Double height, final Double reach,
-        final String profileImageUrl, final Gender gender) {
+        final String profileImageUrl, final Gender gender, final String socialId) {
         return Member.builder()
                      .id(id)
                      .email(email)
