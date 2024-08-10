@@ -7,14 +7,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = ProviderValidator.class)
+@Constraint(validatedBy = EnumValidator.class)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidProvider {
+public @interface ValidEnum {
 
-    String message() default "유효하지 않은 플랫폼입니다.";
+    String message() default "유효하지 않은 값입니다.";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
+    Class<? extends Enum<?>> enumClass();
 }
