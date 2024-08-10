@@ -33,13 +33,14 @@ public class MemberService {
     @Transactional
     public MemberCompleteRegistrationResponse completeMemberRegistration(
         final MemberCompleteRegistrationRequest request) {
-        if (memberRepository.existsByNickName(request.nickName())) {
-            throw new NickNameDuplicatedException();
-        }
         UUID id = AuthUtil.getId();
         Member member = findById(id);
+        if (!member.hasSameNickName(request.nickName()) &&
+            memberRepository.existsByNickName(request.nickName())) {
+            throw new NickNameDuplicatedException();
+        }
         member.completeRegistration(request.nickName(), request.instagramId(), request.height(),
-            request.reach(), request.profileImageUrl());
+            request.gender(), request.reach(), request.profileImageUrl());
         return MemberCompleteRegistrationResponse.toDto(member);
     }
 
