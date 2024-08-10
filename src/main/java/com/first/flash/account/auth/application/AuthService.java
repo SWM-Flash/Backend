@@ -32,8 +32,7 @@ public class AuthService {
     @Transactional
     public LoginResponseDto login(final LoginRequestDto request) {
         log.info("로그인 요청: {}", request);
-        SocialInfo socialInfo = socialService.getSocialInfo(Provider.valueOf(request.provider()),
-            request.token());
+        SocialInfo socialInfo = socialService.getSocialInfo(request.provider(), request.token());
         Optional<Member> foundMember = memberRepository.findByEmail(socialInfo.socialId());
         Member member = saveOrGetMember(foundMember, socialInfo);
         String accessToken = tokenManager.createAccessToken(member.getId());
