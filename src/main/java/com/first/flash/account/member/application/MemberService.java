@@ -6,9 +6,11 @@ import com.first.flash.account.member.application.dto.MemberCompleteRegistration
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationResponse;
 import com.first.flash.account.member.application.dto.MemberInfoResponse;
 import com.first.flash.account.member.domain.Member;
+import com.first.flash.account.member.domain.MemberInfoUpdatedEvent;
 import com.first.flash.account.member.domain.MemberRepository;
 import com.first.flash.account.member.exception.exceptions.MemberNotFoundException;
 import com.first.flash.account.member.exception.exceptions.NickNameDuplicatedException;
+import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,9 @@ public class MemberService {
         }
         member.completeRegistration(request.nickName(), request.instagramId(), request.height(),
             request.gender(), request.reach(), request.profileImageUrl());
+
+        Events.raise(MemberInfoUpdatedEvent.of(member));
+
         return MemberCompleteRegistrationResponse.toDto(member);
     }
 

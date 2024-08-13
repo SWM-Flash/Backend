@@ -1,6 +1,6 @@
 package com.first.flash.climbing.solution.ui;
 
-import com.first.flash.climbing.solution.application.SolutionCreateService;
+import com.first.flash.climbing.solution.application.SolutionSaveService;
 import com.first.flash.climbing.solution.application.SolutionService;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SolutionController {
 
     private final SolutionService solutionService;
-    private final SolutionCreateService solutionCreateService;
+    private final SolutionSaveService solutionSaveService;
 
     @Operation(summary = "해설 조회", description = "특정 문제에 대한 해설 조회")
     @ApiResponses(value = {
@@ -69,7 +69,7 @@ public class SolutionController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(
-                                 solutionCreateService.saveSolution(problemId,
+                                 solutionSaveService.saveSolution(problemId,
                                      solutionCreateRequestDto));
     }
 }

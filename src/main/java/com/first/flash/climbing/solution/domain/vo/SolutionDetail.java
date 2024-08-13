@@ -30,4 +30,9 @@ public class SolutionDetail {
 
         return new SolutionDetail(uploader, review, instagramId, videoUrl);
     }
+
+    public void updateMemberInfo(final String uploader, final String instagramId) {
+        this.uploader = uploader;
+        this.instagramId = instagramId;
+    }
 }

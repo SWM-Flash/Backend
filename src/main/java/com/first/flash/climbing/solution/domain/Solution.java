@@ -44,4 +44,8 @@ public class Solution {
 
         return new Solution(uploader, review, instagramId, videoUrl, problemId, memberId);
     }
+
+    public void updateMemberInfo(final String uploader, final String instagramId) {
+        this.solutionDetail.updateMemberInfo(uploader, instagramId);
+    }
 }
