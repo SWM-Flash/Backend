@@ -1,7 +1,6 @@
 package com.first.flash.climbing.solution.fixture;
 
-import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
-
+/*
 public class SolutionFixture {
 
     public static SolutionCreateRequestDto createDefaultRequestDto() {
@@ -9,3 +8,4 @@ public class SolutionFixture {
             "review content", "@instagram_id");
     }
 }
+*/
