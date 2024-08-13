@@ -6,8 +6,6 @@ import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
-import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
-import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.global.event.Events;
 import java.util.List;
@@ -22,15 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class SolutionService {
 
     private final SolutionRepository solutionRepository;
-
-    @Transactional
-    public SolutionResponseDto saveSolution(final UUID problemId,
-        final SolutionCreateRequestDto createRequestDto) {
-        Solution solution = Solution.of(createRequestDto, problemId);
-        Solution savedSolution = solutionRepository.save(solution);
-        Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
-        return SolutionResponseDto.toDto(savedSolution);
-    }
 
     public Solution findSolutionById(final Long id) {
         return solutionRepository.findById(id)
