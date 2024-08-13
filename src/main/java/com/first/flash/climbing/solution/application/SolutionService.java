@@ -6,6 +6,7 @@ import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
+import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.global.event.Events;
@@ -61,7 +62,10 @@ public class SolutionService {
     @Transactional
     public void deleteSolution(final Long id, final UUID problemId) {
         Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
+        solutionRepository.findById(id).orElseThrow(() -> new SolutionNotFoundException(id));
 
         solutionRepository.deleteById(id);
+
+        Events.raise(SolutionDeletedEvent.of(problemId));
     }
 }
