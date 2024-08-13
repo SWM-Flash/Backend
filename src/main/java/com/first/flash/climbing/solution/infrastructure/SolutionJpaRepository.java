@@ -13,4 +13,6 @@ public interface SolutionJpaRepository extends JpaRepository<Solution, Long> {
     Optional<Solution> findById(final Long id);
 
     List<Solution> findByProblemId(final UUID problemId);
+
+    List<Solution> findByMemberId(final UUID memberId);
 }

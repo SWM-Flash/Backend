@@ -28,4 +28,9 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     public List<Solution> findAllByProblemId(final UUID problemId) {
         return solutionJpaRepository.findByProblemId(problemId);
     }
+
+    @Override
+    public List<Solution> findAllByMemberId(final UUID memberId) {
+        return solutionJpaRepository.findByMemberId(memberId);
+    }
 }
