@@ -33,4 +33,9 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     public List<Solution> findAllByMemberId(final UUID memberId) {
         return solutionJpaRepository.findByMemberId(memberId);
     }
+
+    @Override
+    public void deleteById(final Long id) {
+        solutionJpaRepository.deleteById(id);
+    }
 }

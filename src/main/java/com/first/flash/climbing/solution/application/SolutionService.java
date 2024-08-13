@@ -57,4 +57,11 @@ public class SolutionService {
 
         return SolutionResponseDto.toDto(solution);
     }
+
+    @Transactional
+    public void deleteSolution(final Long id, final UUID problemId) {
+        Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
+
+        solutionRepository.deleteById(id);
+    }
 }

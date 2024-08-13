@@ -18,6 +18,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -84,5 +85,14 @@ public class SolutionController {
                              .body(
                                  solutionService.updateContent(solutionId, solutionUpdateRequestDto)
                              );
+    }
+
+    @DeleteMapping("problems/{problemId}/solutions/{solutionId}")
+    public ResponseEntity<Void> deleteSolution(@PathVariable final UUID problemId,
+        @PathVariable Long solutionId) {
+
+        solutionService.deleteSolution(solutionId, problemId);
+
+        return ResponseEntity.noContent().build();
     }
 }
