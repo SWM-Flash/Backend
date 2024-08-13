@@ -1,6 +1,7 @@
 package com.first.flash.climbing.solution.domain;
 
 import com.first.flash.climbing.solution.domain.vo.SolutionDetail;
+import com.first.flash.global.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Solution {
+public class Solution extends BaseEntity {
 
     private static final Long DEFAULT_OPTIONAL_WEIGHT = 0L;
 
