@@ -48,4 +48,8 @@ public class Solution {
     public void updateMemberInfo(final String uploader, final String instagramId) {
         this.solutionDetail.updateMemberInfo(uploader, instagramId);
     }
+
+    public void updateContentInfo(final String review, final String videoUrl) {
+        this.solutionDetail.updateContentInfo(review, videoUrl);
+    }
 }

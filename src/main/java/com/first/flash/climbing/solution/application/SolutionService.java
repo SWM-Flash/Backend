@@ -3,6 +3,7 @@ package com.first.flash.climbing.solution.application;
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
 import com.first.flash.climbing.solution.application.dto.SolutionMetaResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
@@ -44,5 +45,16 @@ public class SolutionService {
                                                                 .toList();
 
         return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
+    }
+
+    @Transactional
+    public SolutionResponseDto updateContent(final Long id,
+        final SolutionUpdateRequestDto requestDto) {
+
+        Solution solution = solutionRepository.findById(id)
+                                              .orElseThrow(() -> new SolutionNotFoundException(id));
+        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl());
+
+        return SolutionResponseDto.toDto(solution);
     }
 }
