@@ -36,4 +36,13 @@ public class SolutionService {
 
         return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
     }
+
+    public SolutionsResponseDto findAllSolutionsByMemberId(final UUID memberId) {
+        List<SolutionResponseDto> solutions = solutionRepository.findAllByMemberId(memberId)
+                                                                .stream()
+                                                                .map(SolutionResponseDto::toDto)
+                                                                .toList();
+
+        return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
+    }
 }

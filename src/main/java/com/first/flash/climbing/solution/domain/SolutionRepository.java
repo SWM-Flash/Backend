@@ -11,4 +11,6 @@ public interface SolutionRepository {
     Optional<Solution> findById(final Long id);
 
     List<Solution> findAllByProblemId(final UUID problemId);
+
+    List<Solution> findAllByMemberId(final UUID memberId);
 }
