@@ -35,4 +35,9 @@ public class SolutionDetail {
         this.uploader = uploader;
         this.instagramId = instagramId;
     }
+
+    public void updateContentInfo(final String review, final String videoUrl) {
+        this.review = review;
+        this.videoUrl = videoUrl;
+    }
 }

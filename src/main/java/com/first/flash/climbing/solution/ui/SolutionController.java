@@ -3,6 +3,7 @@ package com.first.flash.climbing.solution.ui;
 import com.first.flash.climbing.solution.application.SolutionSaveService;
 import com.first.flash.climbing.solution.application.SolutionService;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,5 +73,16 @@ public class SolutionController {
                              .body(
                                  solutionSaveService.saveSolution(problemId,
                                      solutionCreateRequestDto));
+    }
+
+    @PatchMapping("problems/{problemId}/solutions/{solutionId}")
+    public ResponseEntity<SolutionResponseDto> updateSolution(@PathVariable final UUID problemId,
+        @PathVariable Long solutionId,
+        @Valid @RequestBody final SolutionUpdateRequestDto solutionUpdateRequestDto) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(
+                                 solutionService.updateContent(solutionId, solutionUpdateRequestDto)
+                             );
     }
 }
