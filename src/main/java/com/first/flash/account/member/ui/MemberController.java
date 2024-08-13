@@ -88,6 +88,15 @@ public class MemberController {
         return ResponseEntity.ok(memberService.confirmNickName(request));
     }
 
+    @Operation(summary = "유저 차단", description = "특정 유저 차단")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "차단 성공",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MemberBlockResponse.class))),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "차단하려는 유저를 찾을 수 없음", value = "{\"error\": \"사용자를 찾을 수 없습니다!\"}"),
+            }))
+    })
     @PostMapping("/blocks/{blockedUserId}")
     public ResponseEntity<MemberBlockResponse> blockMember(@PathVariable final UUID blockedUserId) {
         return ResponseEntity.ok(blockService.blockMember(blockedUserId));
