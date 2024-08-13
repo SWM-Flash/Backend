@@ -106,7 +106,12 @@ public class MemberController {
         return ResponseEntity.ok(blockService.blockMember(blockedUserId));
     }
 
-    @PostMapping("/reports/{reportedUserId}")
+    @Operation(summary = "컨텐츠 신고", description = "특정 컨텐츠 신고")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "신고 성공",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MemberReportRequest.class)))
+    })
+    @PostMapping("/reports/{reportedContentId}")
     public ResponseEntity<MemberReportResponse> reportMember(
         @PathVariable final Long reportedContentId,
         @RequestBody @Valid final MemberReportRequest request) {
