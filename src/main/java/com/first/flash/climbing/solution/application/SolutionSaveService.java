@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class SolutionCreateService {
+public class SolutionSaveService {
 
     private final MemberService memberService;
     private final SolutionRepository solutionRepository;
@@ -34,5 +34,12 @@ public class SolutionCreateService {
         Solution savedSolution = solutionRepository.save(solution);
         Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
         return SolutionResponseDto.toDto(savedSolution);
+    }
+
+    @Transactional
+    public void updateMemberInfo(final Member member) {
+        solutionRepository.findAllByMemberId(member.getId())
+                          .forEach(solution -> solution.updateMemberInfo(member.getNickName(),
+                              member.getInstagramId()));
     }
 }
