@@ -76,6 +76,19 @@ public class SolutionController {
                                      solutionCreateRequestDto));
     }
 
+    @Operation(summary = "해설 수정", description = "특정 해설 정보 수정")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 해설을 수정함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"videoUrl\": \"비디오 URL은 필수입니다.\"}"),
+            })),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "해설 없음", value = "{\"error\": \"아이디가 1인 해설을 찾을 수 없습니다.\"}")
+            }))
+    })
     @PatchMapping("problems/{problemId}/solutions/{solutionId}")
     public ResponseEntity<SolutionResponseDto> updateSolution(@PathVariable final UUID problemId,
         @PathVariable Long solutionId,
@@ -87,6 +100,16 @@ public class SolutionController {
                              );
     }
 
+    @Operation(summary = "해설 삭제", description = "특정 해설 삭제")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "성공적으로 해설을 수정함",
+            content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "문제 없음", value = "{\"error\": \"아이디가 0190c558-9063-7050-b4fc-eb421e3236b3인 문제를 찾을 수 없습니다.\"}"),
+                @ExampleObject(name = "해설 없음", value = "{\"error\": \"아이디가 1인 해설을 찾을 수 없습니다.\"}")
+            }))
+    })
     @DeleteMapping("problems/{problemId}/solutions/{solutionId}")
     public ResponseEntity<Void> deleteSolution(@PathVariable final UUID problemId,
         @PathVariable Long solutionId) {
