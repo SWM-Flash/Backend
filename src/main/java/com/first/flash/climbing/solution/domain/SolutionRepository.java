@@ -13,4 +13,6 @@ public interface SolutionRepository {
     List<Solution> findAllByProblemId(final UUID problemId);
 
     List<Solution> findAllByMemberId(final UUID memberId);
+
+    void deleteById(final Long id);
 }
