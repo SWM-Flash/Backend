@@ -24,18 +24,16 @@ public class MemberReport extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "reporterId")
     private Member reporter;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "reportedId")
-    private Member reported;
+    private Long reportedContentId;
 
-    private MemberReport(final String reason, final Member reporter, final Member reported) {
+    private MemberReport(final String reason, final Member reporter, final Long reportedContentId) {
         this.reason = reason;
         this.reporter = reporter;
-        this.reported = reported;
+        this.reportedContentId = reportedContentId;
     }
 
-    public static MemberReport reportMember(final String reason, final Member reporter,
-        final Member reported) {
-        return new MemberReport(reason, reporter, reported);
+    public static MemberReport reportContent(final String reason, final Member reporter,
+        final Long reportedContentId) {
+        return new MemberReport(reason, reporter, reportedContentId);
     }
 }

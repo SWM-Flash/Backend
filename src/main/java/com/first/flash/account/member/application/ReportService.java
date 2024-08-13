@@ -16,16 +16,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ReportService {
 
-    private final ReportRepository repository;
+    private final ReportRepository reportRepository;
     private final MemberService memberService;
 
     @Transactional
-    public MemberReportResponse reportMember(final UUID reportedUserId, final MemberReportRequest request) {
+    public MemberReportResponse reportMember(final Long reportedContentId,
+        final MemberReportRequest request) {
         UUID reporterId = AuthUtil.getId();
         Member reporter = memberService.findById(reporterId);
-        Member reportedMember = memberService.findById(reportedUserId);
-        MemberReport memberReport = MemberReport.reportMember(request.reason(), reporter, reportedMember);
-        repository.save(memberReport);
-        return MemberReportResponse.toDto(reportedMember, request.reason());
+        MemberReport memberReport = MemberReport.reportContent(request.reason(), reporter,
+            reportedContentId);
+        reportRepository.save(memberReport);
+        return MemberReportResponse.toDto(reportedContentId, request.reason());
     }
 }

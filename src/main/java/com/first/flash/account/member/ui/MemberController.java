@@ -108,7 +108,8 @@ public class MemberController {
 
     @PostMapping("/reports/{reportedUserId}")
     public ResponseEntity<MemberReportResponse> reportMember(
-        @PathVariable final UUID reportedUserId, @RequestBody @Valid final MemberReportRequest request) {
-        return ResponseEntity.ok(reportService.reportMember(reportedUserId, request));
+        @PathVariable final Long reportedContentId,
+        @RequestBody @Valid final MemberReportRequest request) {
+        return ResponseEntity.ok(reportService.reportMember(reportedContentId, request));
     }
 }
