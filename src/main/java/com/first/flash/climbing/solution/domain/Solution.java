@@ -1,6 +1,5 @@
 package com.first.flash.climbing.solution.domain;
 
-import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.climbing.solution.domain.vo.SolutionDetail;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,19 +26,22 @@ public class Solution {
     private Long optionalWeight;
     @Column(columnDefinition = "BINARY(16)")
     private UUID problemId;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID memberId;
 
     protected Solution(final String uploader, final String review, final String instagramId,
-        final String videoUrl, final UUID problemId) {
+        final String videoUrl, final UUID problemId, final UUID memberId) {
 
         this.solutionDetail = SolutionDetail.of(uploader, review, instagramId, videoUrl);
         this.optionalWeight = DEFAULT_OPTIONAL_WEIGHT;
         this.problemId = problemId;
+        this.memberId = memberId;
     }
 
-    public static Solution of(final SolutionCreateRequestDto createRequestDto,
-        final UUID problemId) {
+    public static Solution of(final String uploader, final String review, final String instagramId,
+        final String videoUrl,
+        final UUID problemId, final UUID memberId) {
 
-        return new Solution(createRequestDto.uploader(), createRequestDto.review(),
-            createRequestDto.instagramId(), createRequestDto.videoUrl(), problemId);
+        return new Solution(uploader, review, instagramId, videoUrl, problemId, memberId);
     }
 }

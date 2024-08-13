@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.ui;
 
+import com.first.flash.climbing.solution.application.SolutionCreateService;
 import com.first.flash.climbing.solution.application.SolutionService;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SolutionController {
 
     private final SolutionService solutionService;
+    private final SolutionCreateService solutionCreateService;
 
     @Operation(summary = "해설 조회", description = "특정 문제에 대한 해설 조회")
     @ApiResponses(value = {
@@ -54,7 +56,7 @@ public class SolutionController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionResponseDto.class))),
         @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
             content = @Content(mediaType = "application/json", examples = {
-                @ExampleObject(name = "요청값 누락", value = "{\"uploader\": \"업로더 정보는 필수입니다.\"}"),
+                @ExampleObject(name = "요청값 누락", value = "{\"videoUrl\": \"비디오 URL은 필수입니다.\"}"),
             })),
         @ApiResponse(responseCode = "404", description = "문제를 찾을 수 없음",
             content = @Content(mediaType = "application/json", examples = {
@@ -67,6 +69,7 @@ public class SolutionController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(
-                                 solutionService.saveSolution(problemId, solutionCreateRequestDto));
+                                 solutionCreateService.saveSolution(problemId,
+                                     solutionCreateRequestDto));
     }
 }
