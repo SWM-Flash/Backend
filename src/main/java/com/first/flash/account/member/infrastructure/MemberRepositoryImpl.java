@@ -24,8 +24,8 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByEmail(final String email) {
-        return jpaRepository.findMemberByEmail(email);
+    public Optional<Member> findBySocialId(final String socialId) {
+        return jpaRepository.findMemberBySocialId(socialId);
     }
 
     @Override

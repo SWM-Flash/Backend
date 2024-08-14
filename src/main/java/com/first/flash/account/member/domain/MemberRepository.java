@@ -7,6 +7,6 @@ public interface MemberRepository {
 
     Member save(final Member member);
     Optional<Member> findById(final UUID id);
-    Optional<Member> findByEmail(final String email);
+    Optional<Member> findBySocialId(final String socialId);
     boolean existsByNickName(final String nickName);
 }

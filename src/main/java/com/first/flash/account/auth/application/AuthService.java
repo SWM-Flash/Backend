@@ -33,7 +33,7 @@ public class AuthService {
     public LoginResponseDto login(final LoginRequestDto request) {
         log.info("로그인 요청: {}", request);
         SocialInfo socialInfo = socialService.getSocialInfo(request.provider(), request.token());
-        Optional<Member> foundMember = memberRepository.findByEmail(socialInfo.socialId());
+        Optional<Member> foundMember = memberRepository.findBySocialId(socialInfo.socialId());
         Member member = saveOrGetMember(foundMember, socialInfo);
         String accessToken = tokenManager.createAccessToken(member.getId());
         return new LoginResponseDto(accessToken, member.isCompleteRegistration());
