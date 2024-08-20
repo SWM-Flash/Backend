@@ -45,7 +45,8 @@ public class MemberService {
         member.completeRegistration(request.nickName(), request.instagramId(), request.height(),
             request.gender(), request.reach(), request.profileImageUrl());
 
-        Events.raise(MemberInfoUpdatedEvent.of(member));
+        Events.raise(MemberInfoUpdatedEvent.of(member.getId(), member.getNickName(),
+            member.getInstagramId()));
 
         return MemberCompleteRegistrationResponse.toDto(member);
     }
