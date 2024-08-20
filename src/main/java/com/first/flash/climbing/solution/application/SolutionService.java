@@ -40,7 +40,7 @@ public class SolutionService {
     }
 
     public SolutionsResponseDto findAllSolutionsByMemberId(final UUID memberId) {
-        List<SolutionResponseDto> solutions = solutionRepository.findAllByMemberId(memberId)
+        List<SolutionResponseDto> solutions = solutionRepository.findAllByUploaderId(memberId)
                                                                 .stream()
                                                                 .map(SolutionResponseDto::toDto)
                                                                 .toList();

@@ -15,7 +15,7 @@ public class SolutionEventHandler {
     @EventListener
     @Transactional
     public void updateSolutionInfo(final MemberInfoUpdatedEvent event) {
-        solutionSaveService.updateMemberInfo(event.getMemberId(), event.getNickName(),
+        solutionSaveService.updateUploaderInfo(event.getMemberId(), event.getNickName(),
             event.getInstagramId());
     }
 }
