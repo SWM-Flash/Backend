@@ -37,9 +37,9 @@ public class SolutionSaveService {
     }
 
     @Transactional
-    public void updateMemberInfo(final Member member) {
-        solutionRepository.findAllByMemberId(member.getId())
-                          .forEach(solution -> solution.updateMemberInfo(member.getNickName(),
-                              member.getInstagramId()));
+    public void updateMemberInfo(final UUID memberId, final String nickName,
+        final String instagramId) {
+        solutionRepository.findAllByMemberId(memberId)
+                          .forEach(solution -> solution.updateMemberInfo(nickName, instagramId));
     }
 }

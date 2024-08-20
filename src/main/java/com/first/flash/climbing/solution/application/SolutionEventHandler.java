@@ -1,6 +1,5 @@
 package com.first.flash.climbing.solution.application;
 
-import com.first.flash.account.member.domain.Member;
 import com.first.flash.account.member.domain.MemberInfoUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -16,7 +15,7 @@ public class SolutionEventHandler {
     @EventListener
     @Transactional
     public void updateSolutionInfo(final MemberInfoUpdatedEvent event) {
-        Member member = event.getMember();
-        solutionSaveService.updateMemberInfo(member);
+        solutionSaveService.updateMemberInfo(event.getMemberId(), event.getNickName(),
+            event.getInstagramId());
     }
 }
