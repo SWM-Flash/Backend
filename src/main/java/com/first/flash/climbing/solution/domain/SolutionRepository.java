@@ -12,7 +12,7 @@ public interface SolutionRepository {
 
     List<Solution> findAllByProblemId(final UUID problemId);
 
-    List<Solution> findAllByMemberId(final UUID memberId);
+    List<Solution> findAllByUploaderId(final UUID uploaderId);
 
     void deleteById(final Long id);
 }

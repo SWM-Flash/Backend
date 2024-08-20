@@ -30,8 +30,8 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public List<Solution> findAllByMemberId(final UUID memberId) {
-        return solutionJpaRepository.findByMemberId(memberId);
+    public List<Solution> findAllByUploaderId(final UUID uploaderId) {
+        return solutionJpaRepository.findByUploaderDetail_UploaderId(uploaderId);
     }
 
     @Override
