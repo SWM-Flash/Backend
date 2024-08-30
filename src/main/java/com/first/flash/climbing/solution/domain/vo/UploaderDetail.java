@@ -18,13 +18,15 @@ public class UploaderDetail {
     private String uploader;
     private String instagramId;
 
-    protected UploaderDetail(UUID uploaderId, String uploader, String instagramId) {
+    protected UploaderDetail(final UUID uploaderId, final String uploader,
+        final String instagramId) {
         this.uploaderId = uploaderId;
         this.uploader = uploader;
         this.instagramId = instagramId;
     }
 
-    public static UploaderDetail of(UUID uploaderId, String uploader, String instagramId) {
+    public static UploaderDetail of(final UUID uploaderId, final String uploader,
+        final String instagramId) {
         return new UploaderDetail(uploaderId, uploader, instagramId);
     }
 
