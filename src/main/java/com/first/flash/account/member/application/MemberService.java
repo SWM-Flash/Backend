@@ -55,4 +55,8 @@ public class MemberService {
         Member member = findById(id);
         return MemberInfoResponse.toDto(member);
     }
+    private Member findMemberByAuthInfo() {
+        UUID id = AuthUtil.getId();
+        return findById(id);
+    }
 }
