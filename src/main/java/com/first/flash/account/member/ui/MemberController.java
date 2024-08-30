@@ -93,6 +93,11 @@ public class MemberController {
         return ResponseEntity.ok(memberService.confirmNickName(request));
     }
 
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MemberInfoResponse.class)))
+    })
     @DeleteMapping
     public ResponseEntity<MemberInfoResponse> deleteMember() {
         return ResponseEntity.ok(memberService.deleteMember());
