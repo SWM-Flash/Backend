@@ -7,6 +7,7 @@ import com.first.flash.account.member.application.dto.MemberCompleteRegistration
 import com.first.flash.account.member.application.dto.MemberInfoResponse;
 import com.first.flash.account.member.domain.Member;
 import com.first.flash.account.member.domain.MemberInfoUpdatedEvent;
+import com.first.flash.account.member.domain.MemberDeletedEvent;
 import com.first.flash.account.member.domain.MemberRepository;
 import com.first.flash.account.member.exception.exceptions.MemberNotFoundException;
 import com.first.flash.account.member.exception.exceptions.NickNameDuplicatedException;
@@ -57,8 +58,20 @@ public class MemberService {
     }
 
     public MemberInfoResponse getMyInfo() {
-        UUID id = AuthUtil.getId();
-        Member member = findById(id);
+        Member member = findMemberByAuthInfo();
         return MemberInfoResponse.toDto(member);
+    }
+
+    @Transactional
+    public MemberInfoResponse deleteMember() {
+        Member member = findMemberByAuthInfo();
+        memberRepository.deleteById(member.getId());
+        Events.raise(MemberDeletedEvent.of(member.getId()));
+        return MemberInfoResponse.toDto(member);
+    }
+
+    private Member findMemberByAuthInfo() {
+        UUID id = AuthUtil.getId();
+        return findById(id);
     }
 }

@@ -2,12 +2,15 @@ package com.first.flash.account.member.ui;
 
 import com.first.flash.account.member.application.BlockService;
 import com.first.flash.account.member.application.MemberService;
+import com.first.flash.account.member.application.ReportService;
 import com.first.flash.account.member.application.dto.ConfirmNickNameRequest;
 import com.first.flash.account.member.application.dto.ConfirmNickNameResponse;
 import com.first.flash.account.member.application.dto.MemberBlockResponse;
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationRequest;
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationResponse;
 import com.first.flash.account.member.application.dto.MemberInfoResponse;
+import com.first.flash.account.member.application.dto.MemberReportRequest;
+import com.first.flash.account.member.application.dto.MemberReportResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -19,6 +22,7 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +39,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final BlockService blockService;
+    private final ReportService reportService;
 
     @Operation(summary = "내 정보 조회", description = "특정 회원 정보 조회")
     @ApiResponses(value = {
@@ -88,6 +93,16 @@ public class MemberController {
         return ResponseEntity.ok(memberService.confirmNickName(request));
     }
 
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MemberInfoResponse.class)))
+    })
+    @DeleteMapping
+    public ResponseEntity<MemberInfoResponse> deleteMember() {
+        return ResponseEntity.ok(memberService.deleteMember());
+    }
+
     @Operation(summary = "유저 차단", description = "특정 유저 차단")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "차단 성공",
@@ -100,5 +115,17 @@ public class MemberController {
     @PostMapping("/blocks/{blockedUserId}")
     public ResponseEntity<MemberBlockResponse> blockMember(@PathVariable final UUID blockedUserId) {
         return ResponseEntity.ok(blockService.blockMember(blockedUserId));
+    }
+
+    @Operation(summary = "컨텐츠 신고", description = "특정 컨텐츠 신고")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "신고 성공",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MemberReportRequest.class)))
+    })
+    @PostMapping("/reports/{reportedContentId}")
+    public ResponseEntity<MemberReportResponse> reportMember(
+        @PathVariable final Long reportedContentId,
+        @RequestBody @Valid final MemberReportRequest request) {
+        return ResponseEntity.ok(reportService.reportMember(reportedContentId, request));
     }
 }
