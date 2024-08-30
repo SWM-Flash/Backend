@@ -32,4 +32,9 @@ public class MemberRepositoryImpl implements MemberRepository {
     public boolean existsByNickName(final String nickName) {
         return jpaRepository.existsByNickName(nickName);
     }
+
+    @Override
+    public void deleteById(final UUID id) {
+        jpaRepository.deleteById(id);
+    }
 }

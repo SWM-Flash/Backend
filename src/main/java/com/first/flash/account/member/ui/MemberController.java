@@ -22,6 +22,7 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -90,6 +91,16 @@ public class MemberController {
     public ResponseEntity<ConfirmNickNameResponse> confirmNickName(
         @Valid @RequestBody final ConfirmNickNameRequest request) {
         return ResponseEntity.ok(memberService.confirmNickName(request));
+    }
+
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MemberInfoResponse.class)))
+    })
+    @DeleteMapping
+    public ResponseEntity<MemberInfoResponse> deleteMember() {
+        return ResponseEntity.ok(memberService.deleteMember());
     }
 
     @Operation(summary = "유저 차단", description = "특정 유저 차단")
