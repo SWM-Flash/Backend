@@ -3,11 +3,11 @@ package com.first.flash.climbing.solution.application;
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
 import com.first.flash.climbing.solution.application.dto.SolutionMetaResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
+import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
-import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
-import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.global.event.Events;
 import java.util.List;
@@ -23,15 +23,6 @@ public class SolutionService {
 
     private final SolutionRepository solutionRepository;
 
-    @Transactional
-    public SolutionResponseDto saveSolution(final UUID problemId,
-        final SolutionCreateRequestDto createRequestDto) {
-        Solution solution = Solution.of(createRequestDto, problemId);
-        Solution savedSolution = solutionRepository.save(solution);
-        Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
-        return SolutionResponseDto.toDto(savedSolution);
-    }
-
     public Solution findSolutionById(final Long id) {
         return solutionRepository.findById(id)
                                  .orElseThrow(() -> new SolutionNotFoundException(id));
@@ -46,5 +37,35 @@ public class SolutionService {
                                                                 .toList();
 
         return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
+    }
+
+    public SolutionsResponseDto findAllSolutionsByMemberId(final UUID memberId) {
+        List<SolutionResponseDto> solutions = solutionRepository.findAllByUploaderId(memberId)
+                                                                .stream()
+                                                                .map(SolutionResponseDto::toDto)
+                                                                .toList();
+
+        return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
+    }
+
+    @Transactional
+    public SolutionResponseDto updateContent(final Long id,
+        final SolutionUpdateRequestDto requestDto) {
+
+        Solution solution = solutionRepository.findById(id)
+                                              .orElseThrow(() -> new SolutionNotFoundException(id));
+        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl());
+
+        return SolutionResponseDto.toDto(solution);
+    }
+
+    @Transactional
+    public void deleteSolution(final Long id, final UUID problemId) {
+        Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
+        solutionRepository.findById(id).orElseThrow(() -> new SolutionNotFoundException(id));
+
+        solutionRepository.deleteById(id);
+
+        Events.raise(SolutionDeletedEvent.of(problemId));
     }
 }

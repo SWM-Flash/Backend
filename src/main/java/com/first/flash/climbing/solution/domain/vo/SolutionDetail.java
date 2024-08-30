@@ -11,23 +11,15 @@ import lombok.NoArgsConstructor;
 @Getter
 public class SolutionDetail {
 
-    private String uploader;
     private String review;
-    private String instagramId;
     private String videoUrl;
 
-    protected SolutionDetail(final String uploader, final String review, final String instagramId,
-        final String videoUrl) {
-
-        this.uploader = uploader;
+    protected SolutionDetail(final String review, final String videoUrl) {
         this.review = review;
-        this.instagramId = instagramId;
         this.videoUrl = videoUrl;
     }
 
-    public static SolutionDetail of(final String uploader, final String review,
-        final String instagramId, final String videoUrl) {
-
-        return new SolutionDetail(uploader, review, instagramId, videoUrl);
+    public static SolutionDetail of(final String review, final String videoUrl) {
+        return new SolutionDetail(review, videoUrl);
     }
 }

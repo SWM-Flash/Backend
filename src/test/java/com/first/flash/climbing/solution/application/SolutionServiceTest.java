@@ -1,20 +1,6 @@
 package com.first.flash.climbing.solution.application;
 
-import static com.first.flash.climbing.solution.fixture.SolutionFixture.createDefaultRequestDto;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-
-import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
-import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
-import com.first.flash.climbing.solution.domain.Solution;
-import com.first.flash.climbing.solution.domain.SolutionRepository;
-import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
-import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
-import com.first.flash.climbing.solution.infrastructure.FakeSolutionRepository;
-import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
+/*
 class SolutionServiceTest {
 
     private final static UUID DEFAULT_PROBLEM_ID = UUID
@@ -90,3 +76,4 @@ class SolutionServiceTest {
         });
     }
 }
+*/

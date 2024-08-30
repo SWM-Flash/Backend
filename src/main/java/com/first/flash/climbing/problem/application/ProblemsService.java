@@ -37,6 +37,12 @@ public class ProblemsService {
     }
 
     @Transactional
+    public void updateProblemDeletedSolutionInfo(final UUID problemId) {
+        QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
+        queryProblem.decrementSolutionCount();
+    }
+
+    @Transactional
     public void updateQueryProblemInfo(final Long sectorId, final String sectorName,
         final LocalDate settingDate) {
         queryProblemRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate);
