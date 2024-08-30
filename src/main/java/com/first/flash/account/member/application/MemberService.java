@@ -55,6 +55,14 @@ public class MemberService {
         Member member = findById(id);
         return MemberInfoResponse.toDto(member);
     }
+
+    @Transactional
+    public MemberInfoResponse deleteMember() {
+        Member member = findMemberByAuthInfo();
+        memberRepository.deleteById(member.getId());
+        return MemberInfoResponse.toDto(member);
+    }
+
     private Member findMemberByAuthInfo() {
         UUID id = AuthUtil.getId();
         return findById(id);
