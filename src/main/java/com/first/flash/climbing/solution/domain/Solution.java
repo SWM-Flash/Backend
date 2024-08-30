@@ -41,16 +41,18 @@ public class Solution extends BaseEntity {
 
     public static Solution of(final String uploader, final String review, final String instagramId,
         final String videoUrl,
-        final UUID problemId, final UUID memberId) {
+        final UUID problemId, final UUID uploaderId) {
 
-        return new Solution(uploader, review, instagramId, videoUrl, problemId, memberId);
+        return new Solution(uploader, review, instagramId, videoUrl, problemId, uploaderId);
     }
 
     public void updateUploaderInfo(final String uploader, final String instagramId) {
-        this.uploaderDetail.updateInfo(uploader, instagramId);
+        UUID uploaderId = this.uploaderDetail.getUploaderId();
+
+        this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId);
     }
 
     public void updateContentInfo(final String review, final String videoUrl) {
-        this.solutionDetail.updateInfo(review, videoUrl);
+        this.solutionDetail = SolutionDetail.of(review, videoUrl);
     }
 }

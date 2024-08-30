@@ -22,9 +22,4 @@ public class SolutionDetail {
     public static SolutionDetail of(final String review, final String videoUrl) {
         return new SolutionDetail(review, videoUrl);
     }
-
-    public void updateInfo(final String review, final String videoUrl) {
-        this.review = review;
-        this.videoUrl = videoUrl;
-    }
 }

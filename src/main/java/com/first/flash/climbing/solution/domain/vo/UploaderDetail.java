@@ -29,9 +29,4 @@ public class UploaderDetail {
         final String instagramId) {
         return new UploaderDetail(uploaderId, uploader, instagramId);
     }
-
-    public void updateInfo(final String uploader, final String instagramId) {
-        this.uploader = uploader;
-        this.instagramId = instagramId;
-    }
 }
