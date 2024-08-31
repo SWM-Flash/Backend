@@ -6,6 +6,7 @@ import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
+import com.first.flash.global.util.AuthUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -35,6 +36,19 @@ public class SolutionController {
 
     private final SolutionService solutionService;
     private final SolutionSaveService solutionSaveService;
+
+    @Operation(summary = "해설 조회", description = "본인이 등록한 해설 조회")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 해설을 조회함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionsResponseDto.class)))
+    })
+    @GetMapping("solutions")
+    public ResponseEntity<SolutionsResponseDto> getMySolutions() {
+        UUID myId = AuthUtil.getId();
+        SolutionsResponseDto response = solutionService.findAllSolutionsByMemberId(myId);
+
+        return ResponseEntity.ok(response);
+    }
 
     @Operation(summary = "해설 조회", description = "특정 문제에 대한 해설 조회")
     @ApiResponses(value = {
