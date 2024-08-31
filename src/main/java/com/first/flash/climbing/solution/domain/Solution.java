@@ -1,7 +1,8 @@
 package com.first.flash.climbing.solution.domain;
 
-import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.climbing.solution.domain.vo.SolutionDetail;
+import com.first.flash.climbing.solution.domain.vo.UploaderDetail;
+import com.first.flash.global.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,30 +17,42 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Solution {
+public class Solution extends BaseEntity {
 
     private static final Long DEFAULT_OPTIONAL_WEIGHT = 0L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    SolutionDetail solutionDetail;
-    private Long optionalWeight;
     @Column(columnDefinition = "BINARY(16)")
     private UUID problemId;
+    private SolutionDetail solutionDetail;
+    private UploaderDetail uploaderDetail;
+    private Long optionalWeight;
 
     protected Solution(final String uploader, final String review, final String instagramId,
-        final String videoUrl, final UUID problemId) {
+        final String videoUrl, final UUID problemId, final UUID uploaderId) {
 
-        this.solutionDetail = SolutionDetail.of(uploader, review, instagramId, videoUrl);
+        this.solutionDetail = SolutionDetail.of(review, videoUrl);
+        this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId);
         this.optionalWeight = DEFAULT_OPTIONAL_WEIGHT;
         this.problemId = problemId;
     }
 
-    public static Solution of(final SolutionCreateRequestDto createRequestDto,
-        final UUID problemId) {
+    public static Solution of(final String uploader, final String review, final String instagramId,
+        final String videoUrl,
+        final UUID problemId, final UUID uploaderId) {
 
-        return new Solution(createRequestDto.uploader(), createRequestDto.review(),
-            createRequestDto.instagramId(), createRequestDto.videoUrl(), problemId);
+        return new Solution(uploader, review, instagramId, videoUrl, problemId, uploaderId);
+    }
+
+    public void updateUploaderInfo(final String uploader, final String instagramId) {
+        UUID uploaderId = this.uploaderDetail.getUploaderId();
+
+        this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId);
+    }
+
+    public void updateContentInfo(final String review, final String videoUrl) {
+        this.solutionDetail = SolutionDetail.of(review, videoUrl);
     }
 }

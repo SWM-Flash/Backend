@@ -68,6 +68,14 @@ public class QueryProblem {
         calculateRecommendationValue();
     }
 
+    public void decrementSolutionCount() {
+        solutionCount--;
+        if (solutionCount == 0) {
+            hasSolution = false;
+        }
+        calculateRecommendationValue();
+    }
+
     private void enableSolution() {
         if (!hasSolution) {
             hasSolution = true;

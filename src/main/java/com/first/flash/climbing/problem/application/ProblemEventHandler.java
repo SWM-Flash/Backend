@@ -4,6 +4,7 @@ import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
+import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -33,6 +34,12 @@ public class ProblemEventHandler {
     @Transactional
     public void updateProblemSolutionInfo(final SolutionSavedEvent event) {
         problemsService.updateProblemSolutionInfo(event.getProblemId());
+    }
+
+    @EventListener
+    @Transactional
+    public void updateProblemDeletedSolutionInfo(final SolutionDeletedEvent event) {
+        problemsService.updateProblemDeletedSolutionInfo(event.getProblemId());
     }
 
     @EventListener

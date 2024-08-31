@@ -28,4 +28,14 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     public List<Solution> findAllByProblemId(final UUID problemId) {
         return solutionJpaRepository.findByProblemId(problemId);
     }
+
+    @Override
+    public List<Solution> findAllByUploaderId(final UUID uploaderId) {
+        return solutionJpaRepository.findByUploaderDetail_UploaderId(uploaderId);
+    }
+
+    @Override
+    public void deleteById(final Long id) {
+        solutionJpaRepository.deleteById(id);
+    }
 }

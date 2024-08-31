@@ -1,13 +1,6 @@
 package com.first.flash.climbing.solution.infrastructure;
 
-import com.first.flash.climbing.solution.domain.Solution;
-import com.first.flash.climbing.solution.domain.SolutionRepository;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
+/*
 public class FakeSolutionRepository implements SolutionRepository {
 
     private final static Long DEFAULT_OPTIONAL_WEIGHT = 0L;
@@ -39,4 +32,10 @@ public class FakeSolutionRepository implements SolutionRepository {
                  .filter(solution -> solution.getProblemId().equals(problemId))
                  .toList();
     }
+
+    @Override
+    public List<Solution> findAllByMemberId(final UUID memberId) {
+
+    }
 }
+*/
