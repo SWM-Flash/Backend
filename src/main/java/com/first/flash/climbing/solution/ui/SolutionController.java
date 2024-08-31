@@ -98,6 +98,10 @@ public class SolutionController {
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "요청값 누락", value = "{\"videoUrl\": \"비디오 URL은 필수입니다.\"}"),
             })),
+        @ApiResponse(responseCode = "403", description = "본인의 해설이 아님",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "수정 권한 없음", value = "{\"error\": \"해당 해설에 접근할 권한이 없습니다.\"}"),
+            })),
         @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "해설 없음", value = "{\"error\": \"아이디가 1인 해설을 찾을 수 없습니다.\"}")
@@ -118,6 +122,10 @@ public class SolutionController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "성공적으로 해설을 수정함",
             content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "403", description = "본인의 해설이 아님",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "삭제 권한 없음", value = "{\"error\": \"해당 해설에 접근할 권한이 없습니다.\"}"),
+            })),
         @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "문제 없음", value = "{\"error\": \"아이디가 0190c558-9063-7050-b4fc-eb421e3236b3인 문제를 찾을 수 없습니다.\"}"),
