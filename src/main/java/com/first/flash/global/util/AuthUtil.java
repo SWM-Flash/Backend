@@ -13,6 +13,10 @@ public class AuthUtil {
         return UUID.fromString((String) authentication.getPrincipal());
     }
 
+    public static Boolean isSameId(UUID id) {
+        return getId().equals(id);
+    }
+
     public static Collection<? extends GrantedAuthority> getRoles() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getAuthorities();
