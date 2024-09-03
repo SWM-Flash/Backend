@@ -13,8 +13,8 @@ public record SolutionResponseDto(Long id, String uploader, String review, Strin
         SolutionDetail solutionDetail = solution.getSolutionDetail();
         UploaderDetail uploaderDetail = solution.getUploaderDetail();
 
-        UUID currentUserId = AuthUtil.getId();
-        boolean isUploader = uploaderDetail.getUploaderId().equals(currentUserId);
+        UUID uploaderId = uploaderDetail.getUploaderId();
+        Boolean isUploader = AuthUtil.isSameId(uploaderId);
 
         return new SolutionResponseDto(solution.getId(), uploaderDetail.getUploader(),
             solutionDetail.getReview(), uploaderDetail.getInstagramId(),
