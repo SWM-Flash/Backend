@@ -6,7 +6,6 @@ import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
-import com.first.flash.global.util.AuthUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -44,8 +43,7 @@ public class SolutionController {
     })
     @GetMapping("solutions")
     public ResponseEntity<SolutionsResponseDto> getMySolutions() {
-        UUID myId = AuthUtil.getId();
-        SolutionsResponseDto response = solutionService.findAllSolutionsByMemberId(myId);
+        SolutionsResponseDto response = solutionService.findMySolutions();
 
         return ResponseEntity.ok(response);
     }

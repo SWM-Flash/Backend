@@ -41,6 +41,11 @@ public class SolutionService {
         return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
     }
 
+    public SolutionsResponseDto findMySolutions() {
+        UUID myId = AuthUtil.getId();
+        return findAllSolutionsByMemberId(myId);
+    }
+
     public SolutionsResponseDto findAllSolutionsByMemberId(final UUID memberId) {
         List<SolutionResponseDto> solutions = solutionRepository.findAllByUploaderId(memberId)
                                                                 .stream()
