@@ -62,7 +62,8 @@ public class SolutionService {
         Solution solution = solutionRepository.findById(id)
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
 
-        validateUploader(solution);
+        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
+        validateUploader(uploaderId);
 
         solution.updateContentInfo(requestDto.review(), requestDto.videoUrl());
 
@@ -76,15 +77,15 @@ public class SolutionService {
         Solution solution = solutionRepository.findById(id)
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
 
-        validateUploader(solution);
+        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
+        validateUploader(uploaderId);
 
         solutionRepository.deleteById(id);
 
         Events.raise(SolutionDeletedEvent.of(problemId));
     }
 
-    private void validateUploader(final Solution solution) {
-        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
+    private void validateUploader(final UUID uploaderId) {
         if (!AuthUtil.isSameId(uploaderId)) {
             throw new SolutionAccessDeniedException();
         }
