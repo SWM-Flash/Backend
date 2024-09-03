@@ -13,7 +13,7 @@ public class AuthUtil {
         return UUID.fromString((String) authentication.getPrincipal());
     }
 
-    public static Boolean isSameId(UUID id) {
+    public static Boolean isSameId(final UUID id) {
         return getId().equals(id);
     }
 
