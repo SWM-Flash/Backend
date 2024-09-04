@@ -5,6 +5,7 @@ import com.first.flash.account.member.domain.Member;
 import com.first.flash.account.member.domain.MemberBlock;
 import com.first.flash.account.member.infrastructure.BlockRepository;
 import com.first.flash.global.util.AuthUtil;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,5 +28,10 @@ public class BlockService {
         MemberBlock blockResult = blockRepository.save(MemberBlock.blockMember(blocker, blocked));
         blockRepository.save(blockResult);
         return MemberBlockResponse.toDto(blocked);
+    }
+
+    public List<UUID> findBlockedMembers() {
+        UUID blockerId = AuthUtil.getId();
+        return blockRepository.findBlockedMembers(blockerId);
     }
 }
