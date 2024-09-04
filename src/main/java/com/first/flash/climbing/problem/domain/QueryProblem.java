@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
             columnList = "isExpired, recommendationValue, id")
     }
 )
+@ToString
 public class QueryProblem {
 
     private static final Boolean DEFAULT_HAS_SOLUTION = false;

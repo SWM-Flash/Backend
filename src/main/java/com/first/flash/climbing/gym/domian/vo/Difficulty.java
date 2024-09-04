@@ -6,11 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Embeddable
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
+@ToString
 public class Difficulty {
 
     @NotEmpty(message = "난이도 이름은 필수입니다.")
