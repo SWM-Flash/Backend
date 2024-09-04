@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 public class SolutionRepositoryImpl implements SolutionRepository {
 
     private final SolutionJpaRepository solutionJpaRepository;
+    private final SolutionQueryDslRepository solutionQueryDslRepository;
 
     @Override
     public Solution save(final Solution solution) {
@@ -25,8 +26,13 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public List<Solution> findAllByProblemId(final UUID problemId) {
-        return solutionJpaRepository.findByProblemId(problemId);
+    public List<Solution> findAllByProblemId(final UUID problemId,
+        final List<UUID> blockedMembers) {
+        if (blockedMembers.isEmpty()) {
+            return solutionJpaRepository.findByProblemId(problemId);
+        }
+        return solutionQueryDslRepository.findAllExcludedBlockedMembers(
+            problemId, blockedMembers);
     }
 
     @Override
