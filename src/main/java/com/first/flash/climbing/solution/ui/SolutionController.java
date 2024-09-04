@@ -2,6 +2,7 @@ package com.first.flash.climbing.solution.ui;
 
 import com.first.flash.climbing.solution.application.SolutionSaveService;
 import com.first.flash.climbing.solution.application.SolutionService;
+import com.first.flash.climbing.solution.application.dto.MySolutionsResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
@@ -39,11 +40,11 @@ public class SolutionController {
     @Operation(summary = "해설 조회", description = "본인이 등록한 해설 조회")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공적으로 해설을 조회함",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionsResponseDto.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MySolutionsResponseDto.class)))
     })
     @GetMapping("solutions")
-    public ResponseEntity<SolutionsResponseDto> getMySolutions() {
-        SolutionsResponseDto response = solutionService.findMySolutions();
+    public ResponseEntity<MySolutionsResponseDto> getMySolutions() {
+        MySolutionsResponseDto response = solutionService.findMySolutions();
 
         return ResponseEntity.ok(response);
     }
