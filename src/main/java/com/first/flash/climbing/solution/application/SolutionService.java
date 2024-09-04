@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.application;
 
+import com.first.flash.account.member.application.BlockService;
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
 import com.first.flash.climbing.solution.application.dto.SolutionMetaResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SolutionService {
 
     private final SolutionRepository solutionRepository;
+    private final BlockService blockService;
 
     public Solution findSolutionById(final Long id) {
         return solutionRepository.findById(id)
@@ -32,8 +34,8 @@ public class SolutionService {
 
     public SolutionsResponseDto findAllSolutionsByProblemId(final UUID problemId) {
         Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
-
-        List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId)
+        List<UUID> blockedMembers = blockService.findBlockedMembers();
+        List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId, blockedMembers)
                                                                 .stream()
                                                                 .map(SolutionResponseDto::toDto)
                                                                 .toList();
