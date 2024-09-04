@@ -96,6 +96,9 @@ public class LoggingAspect {
 
     @AfterReturning(value = "com.first.flash.global.aspect.PointCuts.allService() || com.first.flash.global.aspect.PointCuts.allRepository()", returning = "result")
     public void afterReturnLog(final JoinPoint joinPoint, final Object result) {
+        if (Objects.isNull(result)) {
+            return;
+        }
         log.info("return type = {}", result.getClass().getSimpleName());
         log.info("return value = {}", result);
         String objectName = joinPoint.getTarget()
