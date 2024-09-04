@@ -43,18 +43,14 @@ public class SolutionService {
         return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
     }
 
-    public SolutionsResponseDto findMySolutions() {
+    public MySolutionsResponseDto findMySolutions() {
         UUID myId = AuthUtil.getId();
         return findAllSolutionsByMemberId(myId);
     }
 
-    public SolutionsResponseDto findAllSolutionsByMemberId(final UUID memberId) {
-        List<SolutionResponseDto> solutions = solutionRepository.findAllByUploaderId(memberId)
-                                                                .stream()
-                                                                .map(SolutionResponseDto::toDto)
-                                                                .toList();
-
-        return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
+    public MySolutionsResponseDto findAllSolutionsByMemberId(final UUID memberId) {
+        List<MySolutionDto> solutions = solutionRepository.findAllByUploaderId(memberId);
+        return MySolutionsResponseDto.of(solutions);
     }
 
     @Transactional
