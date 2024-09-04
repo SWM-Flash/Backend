@@ -12,11 +12,13 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@ToString
 public class Solution extends BaseEntity {
 
     private static final Long DEFAULT_OPTIONAL_WEIGHT = 0L;

@@ -6,11 +6,13 @@ import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Embeddable
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
+@ToString
 public class UploaderDetail {
 
     @Column(columnDefinition = "BINARY(16)")
