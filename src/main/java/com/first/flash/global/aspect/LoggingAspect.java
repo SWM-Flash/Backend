@@ -81,7 +81,14 @@ public class LoggingAspect {
         log.info("======= {} Start =======", objectName);
         log.info("method name = {}", method.getName());
         Object[] args = joinPoint.getArgs();
+        if (Objects.isNull(args) || args.length == 0) {
+            log.info("no parameter");
+            return;
+        }
         for (Object arg : args) {
+            if (Objects.isNull(arg)) {
+                continue;
+            }
             log.info("parameter type = {}", arg.getClass().getSimpleName());
             log.info("parameter value = {}", arg);
         }
