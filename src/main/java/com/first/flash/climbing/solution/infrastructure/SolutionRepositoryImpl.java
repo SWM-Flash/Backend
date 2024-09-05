@@ -45,4 +45,10 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     public void deleteById(final Long id) {
         solutionJpaRepository.deleteById(id);
     }
+
+    @Override
+    public void updateUploaderInfo(final UUID uploaderId, final String nickName,
+        final String instagramId) {
+        solutionQueryDslRepository.updateUploaderInfo(uploaderId, nickName, instagramId);
+    }
 }

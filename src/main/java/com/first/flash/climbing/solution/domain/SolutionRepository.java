@@ -16,4 +16,6 @@ public interface SolutionRepository {
     List<MySolutionDto> findAllByUploaderId(final UUID uploaderId);
 
     void deleteById(final Long id);
+
+    void updateUploaderInfo(final UUID uploaderId, final String nickName, final String instagramId);
 }
