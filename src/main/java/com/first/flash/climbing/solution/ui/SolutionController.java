@@ -46,12 +46,16 @@ public class SolutionController {
     @GetMapping("solutions")
     public ResponseEntity<MySolutionsResponseDto> getMySolutions() {
         MySolutionsResponseDto response = solutionService.findMySolutions();
-
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "해설 디테일 조회", description = "해설 id로 상세 정보 조회")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 해설 디테일을 조회함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DetailSolutionDto.class)))
+    })
     @GetMapping("solutions/{solutionId}")
-    public ResponseEntity<DetailSolutionDto> getSolution(@PathVariable final Long solutionId) {
+    public ResponseEntity<DetailSolutionDto> getDetailSolution(@PathVariable final Long solutionId) {
         DetailSolutionDto response = solutionService.findDetailSolutionById(solutionId);
         return ResponseEntity.ok(response);
     }
