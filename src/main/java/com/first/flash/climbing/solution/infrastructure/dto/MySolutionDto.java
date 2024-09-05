@@ -1,9 +1,9 @@
 package com.first.flash.climbing.solution.infrastructure.dto;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-public record MySolutionDto(String gymName, String sectorName, String difficultyName,
-                            UUID problemId, Long solutionId, LocalDateTime uploadedAt) {
+public record MySolutionDto(Long solutionId, String videoUrl, String gymName, String sectorName,
+                            String review, String difficultyName, LocalDateTime removalDate,
+                            LocalDateTime settingDate, LocalDateTime uploadedAt) {
 
 }

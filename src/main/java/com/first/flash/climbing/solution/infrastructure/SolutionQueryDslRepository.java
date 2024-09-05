@@ -28,8 +28,9 @@ public class SolutionQueryDslRepository {
 
     public List<MySolutionDto> findByUploaderId(final UUID uploaderId) {
         return jpaQueryFactory.select(Projections.constructor(MySolutionDto.class,
-                                  queryProblem.gymName, queryProblem.sectorName, queryProblem.difficultyName,
-                                  queryProblem.id, solution.id, solution.createdAt
+                                  solution.id, solution.solutionDetail.videoUrl, queryProblem.gymName,
+                                  queryProblem.sectorName, solution.solutionDetail.review, queryProblem.difficultyName,
+                                  queryProblem.removalDate, queryProblem.settingDate, solution.createdAt
                               ))
                               .from(solution)
                               .innerJoin(queryProblem)
