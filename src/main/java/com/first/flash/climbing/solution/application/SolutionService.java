@@ -11,6 +11,7 @@ import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
+import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
@@ -31,6 +32,10 @@ public class SolutionService {
     public Solution findSolutionById(final Long id) {
         return solutionRepository.findById(id)
                                  .orElseThrow(() -> new SolutionNotFoundException(id));
+    }
+
+    public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
+        return solutionRepository.findDetailSolutionById(solutionId);
     }
 
     public SolutionsResponseDto findAllSolutionsByProblemId(final UUID problemId) {
