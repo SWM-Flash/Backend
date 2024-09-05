@@ -2,6 +2,7 @@ package com.first.flash.climbing.solution.infrastructure;
 
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
+import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import java.util.List;
 import java.util.Optional;
@@ -50,5 +51,10 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
         final String instagramId) {
         solutionQueryDslRepository.updateUploaderInfo(uploaderId, nickName, instagramId);
+    }
+
+    @Override
+    public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
+        return solutionQueryDslRepository.findDetailSolutionById(solutionId);
     }
 }
