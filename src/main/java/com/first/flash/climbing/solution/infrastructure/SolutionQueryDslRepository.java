@@ -39,4 +39,13 @@ public class SolutionQueryDslRepository {
                               .where(solution.uploaderDetail.uploaderId.eq(uploaderId))
                               .fetch();
     }
+
+    public void updateUploaderInfo(final UUID uploaderId, final String nickName,
+        final String instagramId) {
+        jpaQueryFactory.update(solution)
+                      .set(solution.uploaderDetail.uploader, nickName)
+                      .set(solution.uploaderDetail.instagramId, instagramId)
+                      .where(solution.uploaderDetail.uploaderId.eq(uploaderId))
+                      .execute();
+    }
 }

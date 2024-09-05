@@ -39,7 +39,6 @@ public class SolutionSaveService {
     @Transactional
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
         final String instagramId) {
-        solutionRepository.findAllByUploaderId(uploaderId)
-                          .forEach(solution -> solution.updateUploaderInfo(nickName, instagramId));
+        solutionRepository.updateUploaderInfo(uploaderId, nickName, instagramId);
     }
 }
