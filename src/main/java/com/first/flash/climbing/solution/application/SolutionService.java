@@ -2,7 +2,7 @@ package com.first.flash.climbing.solution.application;
 
 import com.first.flash.account.member.application.BlockService;
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
-import com.first.flash.climbing.solution.application.dto.SolutionMetaResponseDto;
+import com.first.flash.climbing.solution.application.dto.MySolutionsResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
@@ -11,6 +11,7 @@ import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
+import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
 import java.util.List;
@@ -35,12 +36,13 @@ public class SolutionService {
     public SolutionsResponseDto findAllSolutionsByProblemId(final UUID problemId) {
         Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
         List<UUID> blockedMembers = blockService.findBlockedMembers();
-        List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId, blockedMembers)
+        List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId,
+                                                                    blockedMembers)
                                                                 .stream()
                                                                 .map(SolutionResponseDto::toDto)
                                                                 .toList();
 
-        return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
+        return SolutionsResponseDto.of(solutions);
     }
 
     public MySolutionsResponseDto findMySolutions() {
