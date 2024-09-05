@@ -48,4 +48,18 @@ public class SolutionQueryDslRepository {
                       .where(solution.uploaderDetail.uploaderId.eq(uploaderId))
                       .execute();
     }
+
+    public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
+        return jpaQueryFactory.select(Projections.constructor(DetailSolutionDto.class,
+                                  solution.id, solution.solutionDetail.videoUrl, queryProblem.gymName,
+                                  queryProblem.sectorName, solution.solutionDetail.review, queryProblem.difficultyName,
+                                  queryProblem.removalDate, queryProblem.settingDate, solution.createdAt
+                              ))
+                              .from(solution)
+                              .innerJoin(queryProblem)
+                              .on(solution.problemId.eq(queryProblem.id))
+                              .where(solution.id.eq(solutionId))
+                              .fetchJoin()
+                              .fetchOne();
+    }
 }
