@@ -7,6 +7,7 @@ import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
+import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -46,6 +47,12 @@ public class SolutionController {
     public ResponseEntity<MySolutionsResponseDto> getMySolutions() {
         MySolutionsResponseDto response = solutionService.findMySolutions();
 
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("solutions/{solutionId}")
+    public ResponseEntity<DetailSolutionDto> getSolution(@PathVariable final Long solutionId) {
+        DetailSolutionDto response = solutionService.findDetailSolutionById(solutionId);
         return ResponseEntity.ok(response);
     }
 
