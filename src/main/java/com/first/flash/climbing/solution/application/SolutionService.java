@@ -76,18 +76,13 @@ public class SolutionService {
     }
 
     @Transactional
-    public void deleteSolution(final Long id, final UUID problemId) {
-        Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
-
+    public void deleteSolution(final Long id) {
         Solution solution = solutionRepository.findById(id)
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
-
         UUID uploaderId = solution.getUploaderDetail().getUploaderId();
         validateUploader(uploaderId);
-
         solutionRepository.deleteById(id);
-
-        Events.raise(SolutionDeletedEvent.of(problemId));
+        Events.raise(SolutionDeletedEvent.of(solution.getProblemId()));
     }
 
     private void validateUploader(final UUID uploaderId) {

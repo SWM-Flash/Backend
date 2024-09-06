@@ -55,7 +55,8 @@ public class SolutionController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = DetailSolutionDto.class)))
     })
     @GetMapping("solutions/{solutionId}")
-    public ResponseEntity<DetailSolutionDto> getDetailSolution(@PathVariable final Long solutionId) {
+    public ResponseEntity<DetailSolutionDto> getDetailSolution(
+        @PathVariable final Long solutionId) {
         DetailSolutionDto response = solutionService.findDetailSolutionById(solutionId);
         return ResponseEntity.ok(response);
     }
@@ -117,11 +118,9 @@ public class SolutionController {
                 @ExampleObject(name = "해설 없음", value = "{\"error\": \"아이디가 1인 해설을 찾을 수 없습니다.\"}")
             }))
     })
-    @PatchMapping("problems/{problemId}/solutions/{solutionId}")
-    public ResponseEntity<SolutionResponseDto> updateSolution(@PathVariable final UUID problemId,
-        @PathVariable Long solutionId,
+    @PatchMapping("/solutions/{solutionId}")
+    public ResponseEntity<SolutionResponseDto> updateSolution(@PathVariable Long solutionId,
         @Valid @RequestBody final SolutionUpdateRequestDto solutionUpdateRequestDto) {
-
         return ResponseEntity.status(HttpStatus.OK)
                              .body(
                                  solutionService.updateContent(solutionId, solutionUpdateRequestDto)
@@ -142,12 +141,9 @@ public class SolutionController {
                 @ExampleObject(name = "해설 없음", value = "{\"error\": \"아이디가 1인 해설을 찾을 수 없습니다.\"}")
             }))
     })
-    @DeleteMapping("problems/{problemId}/solutions/{solutionId}")
-    public ResponseEntity<Void> deleteSolution(@PathVariable final UUID problemId,
-        @PathVariable Long solutionId) {
-
-        solutionService.deleteSolution(solutionId, problemId);
-
+    @DeleteMapping("/solutions/{solutionId}")
+    public ResponseEntity<Void> deleteSolution(@PathVariable Long solutionId) {
+        solutionService.deleteSolution(solutionId);
         return ResponseEntity.noContent().build();
     }
 }
