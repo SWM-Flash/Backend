@@ -29,8 +29,7 @@ public class SolutionSaveService {
         Member member = memberService.findById(id);
 
         Solution solution = Solution.of(member.getNickName(), createRequestDto.review(),
-            member.getInstagramId(),
-            createRequestDto.videoUrl(), problemId, member.getId());
+            member.getInstagramId(), createRequestDto.videoUrl(), problemId, member.getId());
         Solution savedSolution = solutionRepository.save(solution);
         Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
         return SolutionResponseDto.toDto(savedSolution);
@@ -39,7 +38,6 @@ public class SolutionSaveService {
     @Transactional
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
         final String instagramId) {
-        solutionRepository.findAllByUploaderId(uploaderId)
-                          .forEach(solution -> solution.updateUploaderInfo(nickName, instagramId));
+        solutionRepository.updateUploaderInfo(uploaderId, nickName, instagramId);
     }
 }

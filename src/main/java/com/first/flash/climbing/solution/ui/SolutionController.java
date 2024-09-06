@@ -2,10 +2,12 @@ package com.first.flash.climbing.solution.ui;
 
 import com.first.flash.climbing.solution.application.SolutionSaveService;
 import com.first.flash.climbing.solution.application.SolutionService;
+import com.first.flash.climbing.solution.application.dto.MySolutionsResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
+import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -39,12 +41,23 @@ public class SolutionController {
     @Operation(summary = "해설 조회", description = "본인이 등록한 해설 조회")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공적으로 해설을 조회함",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionsResponseDto.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MySolutionsResponseDto.class)))
     })
     @GetMapping("solutions")
-    public ResponseEntity<SolutionsResponseDto> getMySolutions() {
-        SolutionsResponseDto response = solutionService.findMySolutions();
+    public ResponseEntity<MySolutionsResponseDto> getMySolutions() {
+        MySolutionsResponseDto response = solutionService.findMySolutions();
+        return ResponseEntity.ok(response);
+    }
 
+    @Operation(summary = "해설 디테일 조회", description = "해설 id로 상세 정보 조회")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 해설 디테일을 조회함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DetailSolutionDto.class)))
+    })
+    @GetMapping("solutions/{solutionId}")
+    public ResponseEntity<DetailSolutionDto> getDetailSolution(
+        @PathVariable final Long solutionId) {
+        DetailSolutionDto response = solutionService.findDetailSolutionById(solutionId);
         return ResponseEntity.ok(response);
     }
 
@@ -105,11 +118,9 @@ public class SolutionController {
                 @ExampleObject(name = "해설 없음", value = "{\"error\": \"아이디가 1인 해설을 찾을 수 없습니다.\"}")
             }))
     })
-    @PatchMapping("problems/{problemId}/solutions/{solutionId}")
-    public ResponseEntity<SolutionResponseDto> updateSolution(@PathVariable final UUID problemId,
-        @PathVariable Long solutionId,
+    @PatchMapping("/solutions/{solutionId}")
+    public ResponseEntity<SolutionResponseDto> updateSolution(@PathVariable Long solutionId,
         @Valid @RequestBody final SolutionUpdateRequestDto solutionUpdateRequestDto) {
-
         return ResponseEntity.status(HttpStatus.OK)
                              .body(
                                  solutionService.updateContent(solutionId, solutionUpdateRequestDto)
@@ -130,12 +141,9 @@ public class SolutionController {
                 @ExampleObject(name = "해설 없음", value = "{\"error\": \"아이디가 1인 해설을 찾을 수 없습니다.\"}")
             }))
     })
-    @DeleteMapping("problems/{problemId}/solutions/{solutionId}")
-    public ResponseEntity<Void> deleteSolution(@PathVariable final UUID problemId,
-        @PathVariable Long solutionId) {
-
-        solutionService.deleteSolution(solutionId, problemId);
-
+    @DeleteMapping("/solutions/{solutionId}")
+    public ResponseEntity<Void> deleteSolution(@PathVariable Long solutionId) {
+        solutionService.deleteSolution(solutionId);
         return ResponseEntity.noContent().build();
     }
 }

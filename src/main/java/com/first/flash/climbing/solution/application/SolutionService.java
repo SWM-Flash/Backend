@@ -2,7 +2,7 @@ package com.first.flash.climbing.solution.application;
 
 import com.first.flash.account.member.application.BlockService;
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
-import com.first.flash.climbing.solution.application.dto.SolutionMetaResponseDto;
+import com.first.flash.climbing.solution.application.dto.MySolutionsResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
@@ -11,6 +11,8 @@ import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
+import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
+import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
 import java.util.List;
@@ -32,29 +34,30 @@ public class SolutionService {
                                  .orElseThrow(() -> new SolutionNotFoundException(id));
     }
 
+    public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
+        return solutionRepository.findDetailSolutionById(solutionId);
+    }
+
     public SolutionsResponseDto findAllSolutionsByProblemId(final UUID problemId) {
         Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
         List<UUID> blockedMembers = blockService.findBlockedMembers();
-        List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId, blockedMembers)
+        List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId,
+                                                                    blockedMembers)
                                                                 .stream()
                                                                 .map(SolutionResponseDto::toDto)
                                                                 .toList();
 
-        return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
+        return SolutionsResponseDto.of(solutions);
     }
 
-    public SolutionsResponseDto findMySolutions() {
+    public MySolutionsResponseDto findMySolutions() {
         UUID myId = AuthUtil.getId();
         return findAllSolutionsByMemberId(myId);
     }
 
-    public SolutionsResponseDto findAllSolutionsByMemberId(final UUID memberId) {
-        List<SolutionResponseDto> solutions = solutionRepository.findAllByUploaderId(memberId)
-                                                                .stream()
-                                                                .map(SolutionResponseDto::toDto)
-                                                                .toList();
-
-        return new SolutionsResponseDto(solutions, new SolutionMetaResponseDto(solutions.size()));
+    public MySolutionsResponseDto findAllSolutionsByMemberId(final UUID memberId) {
+        List<MySolutionDto> solutions = solutionRepository.findAllByUploaderId(memberId);
+        return MySolutionsResponseDto.of(solutions);
     }
 
     @Transactional
@@ -73,18 +76,13 @@ public class SolutionService {
     }
 
     @Transactional
-    public void deleteSolution(final Long id, final UUID problemId) {
-        Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
-
+    public void deleteSolution(final Long id) {
         Solution solution = solutionRepository.findById(id)
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
-
         UUID uploaderId = solution.getUploaderDetail().getUploaderId();
         validateUploader(uploaderId);
-
         solutionRepository.deleteById(id);
-
-        Events.raise(SolutionDeletedEvent.of(problemId));
+        Events.raise(SolutionDeletedEvent.of(solution.getProblemId()));
     }
 
     private void validateUploader(final UUID uploaderId) {

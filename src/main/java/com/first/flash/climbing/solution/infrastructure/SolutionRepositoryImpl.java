@@ -2,6 +2,8 @@ package com.first.flash.climbing.solution.infrastructure;
 
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
+import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
+import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,12 +38,23 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public List<Solution> findAllByUploaderId(final UUID uploaderId) {
-        return solutionJpaRepository.findByUploaderDetail_UploaderId(uploaderId);
+    public List<MySolutionDto> findAllByUploaderId(final UUID uploaderId) {
+        return solutionQueryDslRepository.findByUploaderId(uploaderId);
     }
 
     @Override
     public void deleteById(final Long id) {
         solutionJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateUploaderInfo(final UUID uploaderId, final String nickName,
+        final String instagramId) {
+        solutionQueryDslRepository.updateUploaderInfo(uploaderId, nickName, instagramId);
+    }
+
+    @Override
+    public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
+        return solutionQueryDslRepository.findDetailSolutionById(solutionId);
     }
 }
