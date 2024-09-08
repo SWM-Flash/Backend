@@ -58,7 +58,7 @@ public class SectorController {
                 @ExampleObject(name = "클라이밍장 없음", value = "{\"error\": \"아이디가 1인 클라이밍장을 찾을 수 없습니다.\"}")
             }))
     })
-    @PostMapping("gyms/{gymId}/sectors")
+    @PostMapping("admin/gyms/{gymId}/sectors")
     public ResponseEntity<SectorDetailResponseDto> createSector(@PathVariable final Long gymId,
         @Valid @RequestBody final SectorCreateRequestDto sectorCreateRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -79,7 +79,7 @@ public class SectorController {
                 @ExampleObject(name = "섹터 없음", value = "{\"error\": \"아이디가 1인 섹터를 찾을 수 없습니다.\"}")
             }))
     })
-    @PatchMapping("sectors/{sectorId}")
+    @PatchMapping("admin/sectors/{sectorId}")
     public ResponseEntity<SectorDetailResponseDto> updateSectorRemovalDate(
         @PathVariable final Long sectorId,
         @Valid @RequestBody final SectorUpdateRemovalDateRequestDto sectorUpdateRemovalDateRequestDto) {
@@ -103,7 +103,7 @@ public class SectorController {
                 @ExampleObject(name = "클라이밍장 없음", value = "{\"error\": \"아이디가 1인 클라이밍장을 찾을 수 없습니다.\"}")
             }))
     })
-    @PutMapping("sectors/{sectorId}")
+    @PutMapping("admin/sectors/{sectorId}")
     public ResponseEntity<SectorDetailResponseDto> updateSector(
         @PathVariable final Long sectorId,
         @Valid @RequestBody final SectorUpdateRequestDto updateRequestDto) {
