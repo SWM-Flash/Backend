@@ -52,7 +52,7 @@ public class ProblemController {
                 @ExampleObject(name = "난이도 없음", value = "{\"error\": \"이름이 핑크인 난이도를 찾을 수 없습니다.\"}")
             }))
     })
-    @PostMapping("/gyms/{gymId}/sectors/{sectorId}/problems")
+    @PostMapping("admin/gyms/{gymId}/sectors/{sectorId}/problems")
     public ResponseEntity<ProblemCreateResponseDto> saveProblems(
         @PathVariable("gymId") final Long gymId,
         @PathVariable("sectorId") final Long sectorId,
