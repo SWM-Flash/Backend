@@ -17,4 +17,6 @@ public interface SolutionJpaRepository extends JpaRepository<Solution, Long> {
     List<Solution> findByUploaderDetail_UploaderId(final UUID uploaderId);
 
     void deleteById(final Long id);
+
+    void deleteByUploaderDetail_UploaderId(final UUID memberId);
 }
