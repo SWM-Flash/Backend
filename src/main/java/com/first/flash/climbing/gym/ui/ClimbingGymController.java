@@ -106,7 +106,7 @@ public class ClimbingGymController {
                 @ExampleObject(name = "클라이밍장 없음", value = "{\"error\": \"아이디가 1인 클라이밍장을 찾을 수 없습니다.\"}")
             }))
     })
-    @GetMapping("/{gymId}")
+    @GetMapping("/gyms/{gymId}")
     public ResponseEntity<ClimbingGymDetailResponseDto> getGymDetails(
         @PathVariable final Long gymId) {
         return ResponseEntity.ok(climbingGymService.findClimbingGymDetail(gymId));
