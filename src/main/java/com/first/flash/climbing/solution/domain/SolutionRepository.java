@@ -21,4 +21,6 @@ public interface SolutionRepository {
     void updateUploaderInfo(final UUID uploaderId, final String nickName, final String instagramId);
 
     DetailSolutionDto findDetailSolutionById(final Long solutionId);
+
+    void deleteByUploaderId(final UUID memberId);
 }
