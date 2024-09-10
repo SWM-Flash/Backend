@@ -19,16 +19,18 @@ public class UploaderDetail {
     private UUID uploaderId;
     private String uploader;
     private String instagramId;
+    private String profileImageUrl;
 
     protected UploaderDetail(final UUID uploaderId, final String uploader,
-        final String instagramId) {
+        final String instagramId, final String profileImageUrl) {
         this.uploaderId = uploaderId;
         this.uploader = uploader;
         this.instagramId = instagramId;
+        this.profileImageUrl = profileImageUrl;
     }
 
     public static UploaderDetail of(final UUID uploaderId, final String uploader,
-        final String instagramId) {
-        return new UploaderDetail(uploaderId, uploader, instagramId);
+        final String instagramId, final String profileImageUrl) {
+        return new UploaderDetail(uploaderId, uploader, instagramId, profileImageUrl);
     }
 }

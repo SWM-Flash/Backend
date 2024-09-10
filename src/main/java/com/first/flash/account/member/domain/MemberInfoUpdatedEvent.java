@@ -12,9 +12,10 @@ public class MemberInfoUpdatedEvent extends Event {
     private final UUID memberId;
     private final String nickName;
     private final String instagramId;
+    private final String profileImageUrl;
 
     public static MemberInfoUpdatedEvent of(final UUID memberId, final String nickName,
-        final String instagramId) {
-        return new MemberInfoUpdatedEvent(memberId, nickName, instagramId);
+        final String instagramId, final String profileImageUrl) {
+        return new MemberInfoUpdatedEvent(memberId, nickName, instagramId, profileImageUrl);
     }
 }
