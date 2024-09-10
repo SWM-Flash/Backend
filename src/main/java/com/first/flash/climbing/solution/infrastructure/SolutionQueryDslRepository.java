@@ -41,10 +41,11 @@ public class SolutionQueryDslRepository {
     }
 
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
-        final String instagramId) {
+        final String instagramId, final String profileImageUrl) {
         jpaQueryFactory.update(solution)
                        .set(solution.uploaderDetail.uploader, nickName)
                        .set(solution.uploaderDetail.instagramId, instagramId)
+                       .set(solution.uploaderDetail.profileImageUrl, profileImageUrl)
                        .where(solution.uploaderDetail.uploaderId.eq(uploaderId))
                        .execute();
     }

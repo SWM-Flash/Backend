@@ -49,12 +49,18 @@ public class SolutionRepositoryImpl implements SolutionRepository {
 
     @Override
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
-        final String instagramId) {
-        solutionQueryDslRepository.updateUploaderInfo(uploaderId, nickName, instagramId);
+        final String instagramId, final String profileImageUrl) {
+        solutionQueryDslRepository.updateUploaderInfo(uploaderId, nickName, instagramId,
+            profileImageUrl);
     }
 
     @Override
     public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
         return solutionQueryDslRepository.findDetailSolutionById(solutionId);
+    }
+
+    @Override
+    public void deleteByUploaderId(final UUID memberId) {
+        solutionJpaRepository.deleteByUploaderDetail_UploaderId(memberId);
     }
 }

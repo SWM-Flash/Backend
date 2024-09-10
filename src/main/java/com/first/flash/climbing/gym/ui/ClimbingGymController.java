@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "gyms", description = "클라이밍장 조회 API")
 @RestController
-@RequestMapping("/gyms")
 @RequiredArgsConstructor
 public class ClimbingGymController {
 
@@ -57,7 +56,7 @@ public class ClimbingGymController {
                         ]
                     """))),
     })
-    @GetMapping
+    @GetMapping("/gyms")
     public List<ClimbingGymResponseDto> getGyms() {
         return climbingGymService.findAllClimbingGyms().stream()
                                  .toList();
@@ -74,7 +73,7 @@ public class ClimbingGymController {
                 @ExampleObject(name = "난이도 레벨 중복", value = "{\"error\": \"난이도 레벨이 중복되었습니다: 2\"}"),
             })),
     })
-    @PostMapping
+    @PostMapping("/admin/gyms")
     public ResponseEntity<ClimbingGymCreateResponseDto> createGym(
         @Valid @RequestBody final ClimbingGymCreateRequestDto gymCreateRequestDto) {
 
