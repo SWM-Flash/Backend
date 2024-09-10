@@ -3,6 +3,7 @@ package com.first.flash.global.filter;
 import com.first.flash.account.auth.domain.TokenManager;
 import com.first.flash.account.auth.exception.exceptions.InvalidTokenException;
 import com.first.flash.account.auth.exception.exceptions.TokenExpiredException;
+import com.first.flash.account.member.exception.exceptions.MemberNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,9 +41,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             UUID id = tokenManager.parseToken(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(id.toString());
             setAuthentication(userDetails);
-        } catch (TokenExpiredException | InvalidTokenException exception) {
+        } catch (final TokenExpiredException | InvalidTokenException |
+                       MemberNotFoundException exception) {
+            log.error(exception.getMessage());
             throw exception;
         } catch (RuntimeException exception) {
+            log.error("인증 오류: {}", exception.getMessage());
             throw new AuthenticationServiceException(exception.getMessage());
         }
         filterChain.doFilter(request, response);
