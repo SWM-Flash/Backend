@@ -85,6 +85,11 @@ public class SolutionService {
         Events.raise(SolutionDeletedEvent.of(solution.getProblemId()));
     }
 
+    @Transactional
+    public void deleteByUploaderId(final UUID memberId) {
+        solutionRepository.deleteByUploaderId(memberId);
+    }
+
     private void validateUploader(final UUID uploaderId) {
         if (!AuthUtil.isSameId(uploaderId)) {
             throw new SolutionAccessDeniedException();
