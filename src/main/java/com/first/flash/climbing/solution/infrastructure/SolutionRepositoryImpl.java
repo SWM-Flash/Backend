@@ -57,4 +57,9 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
         return solutionQueryDslRepository.findDetailSolutionById(solutionId);
     }
+
+    @Override
+    public void deleteByUploaderId(final UUID memberId) {
+        solutionJpaRepository.deleteByUploaderDetail_UploaderId(memberId);
+    }
 }
