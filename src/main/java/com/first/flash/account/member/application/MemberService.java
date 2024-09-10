@@ -6,8 +6,8 @@ import com.first.flash.account.member.application.dto.MemberCompleteRegistration
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationResponse;
 import com.first.flash.account.member.application.dto.MemberInfoResponse;
 import com.first.flash.account.member.domain.Member;
-import com.first.flash.account.member.domain.MemberInfoUpdatedEvent;
 import com.first.flash.account.member.domain.MemberDeletedEvent;
+import com.first.flash.account.member.domain.MemberInfoUpdatedEvent;
 import com.first.flash.account.member.domain.MemberRepository;
 import com.first.flash.account.member.exception.exceptions.MemberNotFoundException;
 import com.first.flash.account.member.exception.exceptions.NickNameDuplicatedException;
@@ -47,7 +47,7 @@ public class MemberService {
             request.gender(), request.reach(), request.profileImageUrl());
 
         Events.raise(MemberInfoUpdatedEvent.of(member.getId(), member.getNickName(),
-            member.getInstagramId()));
+            member.getInstagramId(), member.getProfileImageUrl()));
 
         return MemberCompleteRegistrationResponse.toDto(member);
     }
