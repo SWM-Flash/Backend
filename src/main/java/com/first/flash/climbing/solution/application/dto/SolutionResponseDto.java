@@ -7,7 +7,8 @@ import com.first.flash.global.util.AuthUtil;
 import java.util.UUID;
 
 public record SolutionResponseDto(Long id, String uploader, String review, String instagramId,
-                                  String videoUrl, UUID uploaderId, Boolean isUploader) {
+                                  String videoUrl, UUID uploaderId, Boolean isUploader,
+                                  String profileImageUrl) {
 
     public static SolutionResponseDto toDto(final Solution solution) {
         SolutionDetail solutionDetail = solution.getSolutionDetail();
@@ -18,6 +19,7 @@ public record SolutionResponseDto(Long id, String uploader, String review, Strin
 
         return new SolutionResponseDto(solution.getId(), uploaderDetail.getUploader(),
             solutionDetail.getReview(), uploaderDetail.getInstagramId(),
-            solutionDetail.getVideoUrl(), uploaderDetail.getUploaderId(), isUploader);
+            solutionDetail.getVideoUrl(), uploaderDetail.getUploaderId(), isUploader,
+            uploaderDetail.getProfileImageUrl());
     }
 }

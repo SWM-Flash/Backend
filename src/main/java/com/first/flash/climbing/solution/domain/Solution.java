@@ -33,25 +33,28 @@ public class Solution extends BaseEntity {
     private Long optionalWeight;
 
     protected Solution(final String uploader, final String review, final String instagramId,
-        final String videoUrl, final UUID problemId, final UUID uploaderId) {
+        final String videoUrl, final UUID problemId, final UUID uploaderId,
+        final String profileImageUrl) {
 
         this.solutionDetail = SolutionDetail.of(review, videoUrl);
-        this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId);
+        this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId, profileImageUrl);
         this.optionalWeight = DEFAULT_OPTIONAL_WEIGHT;
         this.problemId = problemId;
     }
 
     public static Solution of(final String uploader, final String review, final String instagramId,
-        final String videoUrl,
-        final UUID problemId, final UUID uploaderId) {
+        final String videoUrl, final UUID problemId, final UUID uploaderId,
+        final String profileImageUrl) {
 
-        return new Solution(uploader, review, instagramId, videoUrl, problemId, uploaderId);
+        return new Solution(uploader, review, instagramId, videoUrl, problemId, uploaderId,
+            profileImageUrl);
     }
 
-    public void updateUploaderInfo(final String uploader, final String instagramId) {
+    public void updateUploaderInfo(final String uploader, final String instagramId,
+        final String profileImageUrl) {
         UUID uploaderId = this.uploaderDetail.getUploaderId();
 
-        this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId);
+        this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId, profileImageUrl);
     }
 
     public void updateContentInfo(final String review, final String videoUrl) {
