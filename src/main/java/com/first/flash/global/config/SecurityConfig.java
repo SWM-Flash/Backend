@@ -48,9 +48,9 @@ public class SecurityConfig {
                    .authorizeHttpRequests(authorize -> authorize
                        .requestMatchers(AUTH_WHITELIST).permitAll()
                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                       .requestMatchers(HttpMethod.GET, "/**").hasRole("WEB")
+                       .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("ADMIN", "USER", "WEB")
                        .requestMatchers("/**").hasAnyRole("ADMIN", "USER")
-                       .anyRequest().denyAll()
+                       .anyRequest().authenticated()
                    )
                    .addFilterBefore(new JwtAuthFilter(tokenManager, userDetailsService),
                        UsernamePasswordAuthenticationFilter.class)
