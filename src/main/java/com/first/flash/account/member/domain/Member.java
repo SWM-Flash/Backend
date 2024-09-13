@@ -29,6 +29,7 @@ public class Member {
     private Double height;
     private Double reach;
     private String profileImageUrl;
+    private Boolean hasAgreedToMarketing;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Enumerated(EnumType.STRING)
