@@ -5,12 +5,10 @@ import static com.first.flash.account.member.domain.Role.ROLE_USER;
 import com.first.flash.account.auth.application.dto.LoginRequestDto;
 import com.first.flash.account.auth.application.dto.LoginResponseDto;
 import com.first.flash.account.auth.domain.TokenManager;
-import com.first.flash.account.auth.exception.exceptions.MarketingConsentRequiredException;
 import com.first.flash.account.auth.infrastructure.dto.SocialInfo;
 import com.first.flash.account.member.domain.Member;
 import com.first.flash.account.member.domain.MemberRepository;
 import com.first.flash.account.member.domain.Role;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -35,25 +33,21 @@ public class AuthService {
         log.info("로그인 요청: {}", request);
         SocialInfo socialInfo = socialService.getSocialInfo(request.provider(), request.token());
         Optional<Member> foundMember = memberRepository.findBySocialId(socialInfo.socialId());
-        Member member = saveOrGetMember(foundMember, socialInfo, request.hasAgreedToMarketing());
+        Member member = saveOrGetMember(foundMember, socialInfo);
         String accessToken = tokenManager.createAccessToken(member.getId());
         return new LoginResponseDto(accessToken, member.isCompleteRegistration());
     }
 
     private Member saveOrGetMember(final Optional<Member> foundMember,
-        final SocialInfo socialInfo, final Boolean hasAgreedToMarketing) {
+        final SocialInfo socialInfo) {
         if (foundMember.isPresent()) {
             return foundMember.get();
-        }
-        if (Objects.isNull(hasAgreedToMarketing)) {
-            throw new MarketingConsentRequiredException();
         }
         Member member = Member.builder()
                               .id(UUID.randomUUID())
                               .email(socialInfo.email())
                               .socialId(socialInfo.socialId())
                               .role(DEFAULT_ROLE)
-                              .hasAgreedToMarketing(hasAgreedToMarketing)
                               .build();
         memberRepository.save(member);
         return member;
