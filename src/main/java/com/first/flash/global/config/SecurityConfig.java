@@ -6,7 +6,6 @@ import com.first.flash.global.filter.handler.CustomAccessDeniedHandler;
 import com.first.flash.global.filter.handler.CustomAuthenticationEntryPoint;
 import com.first.flash.global.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,13 +28,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Value("${management.endpoints.web.base-path}")
-    private String actuatorBasePath;
-
     private static final String[] AUTH_WHITELIST = {
         "/auth/login",
         "/swagger-ui/*",
-        "/v1/api-docs/**"
+        "/v1/api-docs/**",
+        "/flash-climbing-answer-health/**"
     };
 
     private final TokenManager tokenManager;
@@ -61,7 +58,6 @@ public class SecurityConfig {
                    .exceptionHandling(this::configureExceptionHandler)
                    .authorizeHttpRequests(authorize -> authorize
                        .requestMatchers(AUTH_WHITELIST).permitAll()
-                       .requestMatchers(actuatorBasePath + "/**").permitAll()
                        .requestMatchers("/admin/**").hasRole("ADMIN")
                        .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("ADMIN", "USER", "WEB")
                        .requestMatchers("/**").hasAnyRole("ADMIN", "USER")
