@@ -131,6 +131,15 @@ public class MemberController {
         return ResponseEntity.ok(reportService.reportMember(reportedContentId, request));
     }
 
+    @Operation(summary = "마케팅 수신 동의 여부 설정", description = "마케팅 수신 동의 여부 설정")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "동의 여부 설정 완료",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ManageConsentResponse.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"hasAgreedToMarketing\": \"동의 여부는 필수입니다.\"}"),
+            }))
+    })
     @PostMapping("/marketing-consent")
     public ResponseEntity<ManageConsentResponse> manageMarketingConsent(
         @RequestBody @Valid final ManageConsentRequest request) {
