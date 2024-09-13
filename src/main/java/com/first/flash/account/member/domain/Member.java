@@ -34,23 +34,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public static Member of(final UUID id, final String email, final String nickName,
-        final String instagramId, final Double height, final Double reach,
-        final String profileImageUrl, final Gender gender, final String socialId) {
-        return Member.builder()
-                     .id(id)
-                     .email(email)
-                     .nickName(nickName)
-                     .socialId(socialId)
-                     .instagramId(instagramId)
-                     .height(height)
-                     .reach(reach)
-                     .profileImageUrl(profileImageUrl)
-                     .gender(gender)
-                     .role(Role.ROLE_USER)
-                     .build();
-    }
-
     public void completeRegistration(final String nickName, final String instagramId,
         final Double height, final Gender gender, final Double reach,
         final String profileImageUrl) {
