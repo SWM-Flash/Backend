@@ -56,4 +56,8 @@ public class Member {
     public boolean isCompleteRegistration() {
         return Objects.nonNull(nickName);
     }
+
+    public void manageMarketingConsent(final Boolean hasAgreedToMarketing) {
+        this.hasAgreedToMarketing = hasAgreedToMarketing;
+    }
 }

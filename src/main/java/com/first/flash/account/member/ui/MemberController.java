@@ -5,6 +5,8 @@ import com.first.flash.account.member.application.MemberService;
 import com.first.flash.account.member.application.ReportService;
 import com.first.flash.account.member.application.dto.ConfirmNickNameRequest;
 import com.first.flash.account.member.application.dto.ConfirmNickNameResponse;
+import com.first.flash.account.member.application.dto.ManageConsentRequest;
+import com.first.flash.account.member.application.dto.ManageConsentResponse;
 import com.first.flash.account.member.application.dto.MemberBlockResponse;
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationRequest;
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationResponse;
@@ -127,5 +129,11 @@ public class MemberController {
         @PathVariable final Long reportedContentId,
         @RequestBody @Valid final MemberReportRequest request) {
         return ResponseEntity.ok(reportService.reportMember(reportedContentId, request));
+    }
+
+    @PostMapping("/marketing-consent")
+    public ResponseEntity<ManageConsentResponse> manageMarketingConsent(
+        @RequestBody @Valid final ManageConsentRequest request) {
+        return ResponseEntity.ok(memberService.manageMarketingConsent(request));
     }
 }
