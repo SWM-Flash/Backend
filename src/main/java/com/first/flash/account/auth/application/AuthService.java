@@ -4,7 +4,6 @@ import static com.first.flash.account.member.domain.Role.ROLE_USER;
 
 import com.first.flash.account.auth.application.dto.LoginRequestDto;
 import com.first.flash.account.auth.application.dto.LoginResponseDto;
-import com.first.flash.account.auth.domain.Provider;
 import com.first.flash.account.auth.domain.TokenManager;
 import com.first.flash.account.auth.infrastructure.dto.SocialInfo;
 import com.first.flash.account.member.domain.Member;

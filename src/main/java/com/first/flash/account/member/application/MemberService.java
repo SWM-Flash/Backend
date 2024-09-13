@@ -2,6 +2,8 @@ package com.first.flash.account.member.application;
 
 import com.first.flash.account.member.application.dto.ConfirmNickNameRequest;
 import com.first.flash.account.member.application.dto.ConfirmNickNameResponse;
+import com.first.flash.account.member.application.dto.ManageConsentRequest;
+import com.first.flash.account.member.application.dto.ManageConsentResponse;
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationRequest;
 import com.first.flash.account.member.application.dto.MemberCompleteRegistrationResponse;
 import com.first.flash.account.member.application.dto.MemberInfoResponse;
@@ -68,6 +70,14 @@ public class MemberService {
         memberRepository.deleteById(member.getId());
         Events.raise(MemberDeletedEvent.of(member.getId()));
         return MemberInfoResponse.toDto(member);
+    }
+
+    @Transactional
+    public ManageConsentResponse manageMarketingConsent(final ManageConsentRequest request) {
+        Boolean hasAgreedToMarketing = request.hasAgreedToMarketing();
+        Member member = findMemberByAuthInfo();
+        member.manageMarketingConsent(hasAgreedToMarketing);
+        return ManageConsentResponse.toDto(member);
     }
 
     private Member findMemberByAuthInfo() {
