@@ -2,6 +2,7 @@ package com.first.flash.account.auth.exception;
 
 import com.first.flash.account.auth.exception.exceptions.InvalidAppleKeyException;
 import com.first.flash.account.auth.exception.exceptions.InvalidTokenException;
+import com.first.flash.account.auth.exception.exceptions.MarketingConsentRequiredException;
 import com.first.flash.account.auth.exception.exceptions.SocialRequestFailedException;
 import com.first.flash.account.auth.exception.exceptions.TokenExpiredException;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,12 @@ public class AuthExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<String> handleTokenExpiredException(
         final TokenExpiredException exception) {
+        return getResponseWithStatus(HttpStatus.BAD_REQUEST, exception);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleMarketingConsentRequiredException(
+        final MarketingConsentRequiredException exception) {
         return getResponseWithStatus(HttpStatus.BAD_REQUEST, exception);
     }
 
