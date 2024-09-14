@@ -1,6 +1,6 @@
 package com.first.flash.account.auth.application;
 
-import static com.first.flash.account.member.domain.Role.ROLE_USER;
+import static com.first.flash.account.member.domain.Role.ROLE_UNREGISTERED_USER;
 
 import com.first.flash.account.auth.application.dto.LoginRequestDto;
 import com.first.flash.account.auth.application.dto.LoginResponseDto;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class AuthService {
 
-    private static final Role DEFAULT_ROLE = ROLE_USER;
+    private static final Role DEFAULT_ROLE = ROLE_UNREGISTERED_USER;
 
     private final MemberRepository memberRepository;
     private final TokenManager tokenManager;

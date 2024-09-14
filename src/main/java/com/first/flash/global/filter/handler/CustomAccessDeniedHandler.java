@@ -1,5 +1,7 @@
 package com.first.flash.global.filter.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.first.flash.global.filter.handler.dto.DeniedExceptionDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +19,10 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.getWriter().write("요청에 대한 권한이 없습니다.");
+
+        DeniedExceptionDto defaultException = DeniedExceptionDto.createDefault();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(defaultException);
+        response.getWriter().write(jsonResponse);
     }
 }
