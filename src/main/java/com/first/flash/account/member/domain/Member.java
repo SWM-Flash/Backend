@@ -38,6 +38,9 @@ public class Member {
     public void completeRegistration(final String nickName, final String instagramId,
         final Double height, final Gender gender, final Double reach,
         final String profileImageUrl) {
+        if (role.isUnregisteredUser()) {
+            role = Role.ROLE_USER;
+        }
         this.nickName = nickName;
         this.instagramId = instagramId;
         this.height = height;
