@@ -21,4 +21,8 @@ public class AuthUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getAuthorities();
     }
+
+    public static Boolean hasRole(final String role) {
+        return getRoles().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(role));
+    }
 }

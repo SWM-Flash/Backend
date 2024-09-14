@@ -31,6 +31,7 @@ public class SecurityConfig {
         "/swagger-ui/*",
         "/v1/api-docs/**"
     };
+    private static final String COMPLETE_REGISTRATION = "/members";
 
     private final TokenManager tokenManager;
     private final UserDetailsService userDetailsService;
@@ -48,6 +49,7 @@ public class SecurityConfig {
                    .authorizeHttpRequests(authorize -> authorize
                        .requestMatchers(AUTH_WHITELIST).permitAll()
                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                       .requestMatchers(HttpMethod.PATCH, COMPLETE_REGISTRATION).hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
                        .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("ADMIN", "USER", "WEB")
                        .requestMatchers("/**").hasAnyRole("ADMIN", "USER")
                        .anyRequest().authenticated()
