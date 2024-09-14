@@ -1,10 +1,10 @@
 package com.first.flash.global.config;
 
 import com.first.flash.account.auth.domain.TokenManager;
+import com.first.flash.global.filter.JwtAuthFilter;
 import com.first.flash.global.filter.TokenExceptionFilter;
 import com.first.flash.global.filter.handler.CustomAccessDeniedHandler;
 import com.first.flash.global.filter.handler.CustomAuthenticationEntryPoint;
-import com.first.flash.global.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +35,8 @@ public class SecurityConfig {
         "/flash-climbing-answer-health/**"
     };
     private static final String COMPLETE_REGISTRATION = "/members";
+    private static final String MARKETING_CONSENT = "/members/marketing-consent";
+
 
     private final TokenManager tokenManager;
     private final UserDetailsService userDetailsService;
@@ -60,7 +62,10 @@ public class SecurityConfig {
                    .authorizeHttpRequests(authorize -> authorize
                        .requestMatchers(AUTH_WHITELIST).permitAll()
                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                       .requestMatchers(HttpMethod.PATCH, COMPLETE_REGISTRATION).hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
+                       .requestMatchers(HttpMethod.POST, MARKETING_CONSENT)
+                       .hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
+                       .requestMatchers(HttpMethod.PATCH, COMPLETE_REGISTRATION)
+                       .hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
                        .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("ADMIN", "USER", "WEB")
                        .requestMatchers("/**").hasAnyRole("ADMIN", "USER")
                        .anyRequest().authenticated()
