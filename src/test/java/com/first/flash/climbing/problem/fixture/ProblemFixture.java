@@ -11,7 +11,7 @@ public class ProblemFixture {
 
     public static Problem createDefault() {
         return Problem.createDefault(UUID.randomUUID(), "example.com", "difficultyName",
-            DEFAULT_DIFFICULTY_LEVEL, DEFAULT_GYM_ID, DEFAULT_SECTOR_ID);
+            DEFAULT_DIFFICULTY_LEVEL, DEFAULT_GYM_ID, DEFAULT_SECTOR_ID, "examplesource");
     }
 
 }
