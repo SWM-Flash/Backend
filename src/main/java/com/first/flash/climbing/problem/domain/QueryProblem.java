@@ -48,7 +48,7 @@ public class QueryProblem {
     private String difficultyName;
     private Integer difficultyLevel;
     private Long optionalWeight;
-    private String source;
+    private String imageSource;
     private Long gymId;
     private String gymName;
     private Long sectorId;

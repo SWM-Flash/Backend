@@ -25,7 +25,7 @@ public class ProblemsCreateService {
         UUID generatedUUID = uuidGenerator.generate();
 
         return Problem.createDefault(generatedUUID, createRequestDto.imageUrl(),
-            difficulty.getName(), difficulty.getLevel(), climbingGym.getId(), sector.getId(), createRequestDto.source());
+            difficulty.getName(), difficulty.getLevel(), climbingGym.getId(), sector.getId(), createRequestDto.imageSource());
     }
 
     public QueryProblem createQueryProblem(final ClimbingGym climbingGym, final Sector sector,
@@ -42,7 +42,7 @@ public class ProblemsCreateService {
                            .difficultyName(problem.getDifficultyInfo().getDifficultyName())
                            .difficultyLevel(problem.getDifficultyInfo().getLevel())
                            .optionalWeight(problem.getOptionalWeight())
-                           .source(problem.getSource())
+                           .imageSource(problem.getImageSource())
                            .gymId(problem.getGymId())
                            .gymName(climbingGym.getGymName())
                            .sectorId(problem.getSectorId())

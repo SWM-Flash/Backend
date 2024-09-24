@@ -34,11 +34,11 @@ public class Problem {
     private Long optionalWeight;
     private Long gymId;
     private Long sectorId;
-    private String source;
+    private String imageSource;
 
     public static Problem createDefault(final UUID id, final String imageUrl,
         final String difficultyName, final Integer difficultyLevel, final Long gymId,
-        final Long sectorId, final String source) {
+        final Long sectorId, final String imageSource) {
         return Problem.builder()
                       .id(id)
                       .imageUrl(imageUrl)
@@ -48,7 +48,7 @@ public class Problem {
                       .optionalWeight(DEFAULT_OPTIONAL_WEIGHT)
                       .gymId(gymId)
                       .sectorId(sectorId)
-                      .source(source)
+                      .imageSource(imageSource)
                       .build();
     }
 
