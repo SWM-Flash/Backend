@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class RemovalInfo {
 
-    private static final int FAKE_SECTOR_LIFETIME_DAYS = 30;
+    private static final int FAKE_SECTOR_LIFETIME_DAYS = 60;
 
     private LocalDate removalDate;
     private Boolean isFakeRemovalDate;
