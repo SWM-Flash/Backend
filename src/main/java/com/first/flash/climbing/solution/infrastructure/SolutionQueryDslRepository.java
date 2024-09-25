@@ -37,6 +37,7 @@ public class SolutionQueryDslRepository {
                               .on(solution.problemId.eq(queryProblem.id))
                               .fetchJoin()
                               .where(solution.uploaderDetail.uploaderId.eq(uploaderId))
+                              .orderBy(solution.createdAt.desc())
                               .fetch();
     }
 

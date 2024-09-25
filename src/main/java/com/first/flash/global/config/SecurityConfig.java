@@ -38,7 +38,6 @@ public class SecurityConfig {
     private static final String MARKETING_CONSENT = "/members/marketing-consent";
     private static final String NICKNAME_DUPLICATE = "/members/nickname";
 
-
     private final TokenManager tokenManager;
     private final UserDetailsService userDetailsService;
 
@@ -63,12 +62,9 @@ public class SecurityConfig {
                    .authorizeHttpRequests(authorize -> authorize
                        .requestMatchers(AUTH_WHITELIST).permitAll()
                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                       .requestMatchers(HttpMethod.POST, MARKETING_CONSENT)
-                       .hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
-                       .requestMatchers(HttpMethod.GET, NICKNAME_DUPLICATE)
-                       .hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
-                       .requestMatchers(HttpMethod.PATCH, COMPLETE_REGISTRATION)
-                       .hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
+                       .requestMatchers(HttpMethod.POST, MARKETING_CONSENT).hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
+                       .requestMatchers(HttpMethod.GET, NICKNAME_DUPLICATE).hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
+                       .requestMatchers(HttpMethod.PATCH, COMPLETE_REGISTRATION).hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
                        .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("ADMIN", "USER", "WEB")
                        .requestMatchers("/**").hasAnyRole("ADMIN", "USER")
                        .anyRequest().authenticated()

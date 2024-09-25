@@ -38,7 +38,7 @@ public class SolutionController {
     private final SolutionService solutionService;
     private final SolutionSaveService solutionSaveService;
 
-    @Operation(summary = "해설 조회", description = "본인이 등록한 해설 조회")
+    @Operation(summary = "내 해설 조회", description = "본인이 등록한 해설 조회")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공적으로 해설을 조회함",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = MySolutionsResponseDto.class)))
