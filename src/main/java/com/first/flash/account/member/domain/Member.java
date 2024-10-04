@@ -1,5 +1,6 @@
 package com.first.flash.account.member.domain;
 
+import com.first.flash.global.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,7 +19,7 @@ import lombok.ToString;
 @Builder
 @Getter
 @ToString
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     private UUID id;
