@@ -3,7 +3,6 @@ package com.first.flash.climbing.solution.application;
 import com.first.flash.account.member.application.MemberService;
 import com.first.flash.account.member.domain.Member;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
-import com.first.flash.climbing.solution.application.dto.UnregisteredMemberSolutionCreateRequest;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
@@ -41,19 +40,5 @@ public class SolutionSaveService {
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
         final String instagramId, final String profileImageUrl) {
         solutionRepository.updateUploaderInfo(uploaderId, nickName, instagramId, profileImageUrl);
-    }
-
-    @Transactional
-    public SolutionResponseDto saveUnregisteredMemberSolution(final UUID problemId,
-        final UnregisteredMemberSolutionCreateRequest requestDto) {
-        UUID id = AuthUtil.getId();
-        Member member = memberService.findById(id);
-
-        Solution solution = Solution.of(requestDto.nickName(), requestDto.review(),
-            requestDto.instagramId(), requestDto.videoUrl(), problemId, member.getId(),
-            requestDto.profileImageUrl());
-        Solution savedSolution = solutionRepository.save(solution);
-        Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
-        return SolutionResponseDto.toDto(savedSolution);
     }
 }

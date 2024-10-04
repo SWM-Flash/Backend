@@ -6,7 +6,6 @@ import com.first.flash.climbing.solution.application.dto.MySolutionsResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
-import com.first.flash.climbing.solution.application.dto.UnregisteredMemberSolutionCreateRequest;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -100,30 +99,6 @@ public class SolutionController {
                              .body(
                                  solutionSaveService.saveSolution(problemId,
                                      solutionCreateRequestDto));
-    }
-
-    @Operation(summary = "없는 유저의 영상으로 해설 업로드", description = "없는 유저의 영상으로 해설 업로드")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "성공적으로 해설을 업로드함",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionResponseDto.class))),
-        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
-            content = @Content(mediaType = "application/json", examples = {
-                @ExampleObject(name = "요청값 누락", value = "{\"videoUrl\": \"비디오 URL은 필수입니다.\"}"),
-            })),
-        @ApiResponse(responseCode = "404", description = "문제를 찾을 수 없음",
-            content = @Content(mediaType = "application/json", examples = {
-                @ExampleObject(name = "문제 없음", value = "{\"error\": \"아이디가 0190c558-9063-7050-b4fc-eb421e3236b3인 문제를 찾을 수 없습니다.\"}")
-            }))
-    })
-    @PostMapping("admin/problems/{problemId}/solutions")
-    public ResponseEntity<SolutionResponseDto> createUnregisteredMemberSolution(
-        @PathVariable final UUID problemId,
-        @Valid @RequestBody final UnregisteredMemberSolutionCreateRequest createRequestDto) {
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(
-                                 solutionSaveService.saveUnregisteredMemberSolution(problemId,
-                                     createRequestDto));
     }
 
     @Operation(summary = "해설 수정", description = "특정 해설 정보 수정")
