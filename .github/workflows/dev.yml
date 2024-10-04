@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: checkout code
         uses: actions/checkout@v2
 
       - name: Set up JDK 17
@@ -85,4 +85,4 @@ jobs:
           AWS_REGION: ap-northeast-2
         run: |
           aws elasticbeanstalk create-application-version --application-name flash-application-dev --version-label ${{ github.sha }} --source-bundle S3Bucket=$AWS_S3_BUCKET,S3Key="dev/Dockerrun-${{ github.sha }}.aws.json"
-          aws elasticbeanstalk update-environment --application-name flash-application-dev --environment-name Flash-application-dev-env --version-label ${{ github.sha }}
+          aws elasticbeanstalk update-environment --application-name flash-application-dev --environment-name Flash-application-dev-env-1 --version-label ${{ github.sha }}
