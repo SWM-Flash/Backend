@@ -2,8 +2,8 @@ package com.first.flash.climbing.problem.infrastructure;
 
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.domain.QueryProblemRepository;
-import com.first.flash.climbing.problem.infrastructure.paging.Cursor;
-import com.first.flash.climbing.problem.infrastructure.paging.SortBy;
+import com.first.flash.climbing.problem.infrastructure.paging.ProblemCursor;
+import com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -29,10 +29,10 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
     }
 
     @Override
-    public List<QueryProblem> findAll(final Cursor prevCursor, final SortBy sortBy, final int size,
+    public List<QueryProblem> findAll(final ProblemCursor prevProblemCursor, final ProblemSortBy problemSortBy, final int size,
         final Long gymId, final List<String> difficulty, final List<String> sector,
         final Boolean hasSolution) {
-        return queryProblemQueryDslRepository.findAll(prevCursor, sortBy, size,
+        return queryProblemQueryDslRepository.findAll(prevProblemCursor, problemSortBy, size,
             gymId, difficulty, sector, hasSolution);
     }
 

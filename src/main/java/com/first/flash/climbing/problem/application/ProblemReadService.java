@@ -1,7 +1,7 @@
 package com.first.flash.climbing.problem.application;
 
-import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.DIFFICULTY;
-import static com.first.flash.climbing.problem.infrastructure.paging.SortBy.VIEWS;
+import static com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy.DIFFICULTY;
+import static com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy.VIEWS;
 
 import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
@@ -13,8 +13,8 @@ import com.first.flash.climbing.problem.domain.QueryProblemRepository;
 import com.first.flash.climbing.problem.exception.exceptions.ProblemNotFoundException;
 import com.first.flash.climbing.problem.exception.exceptions.QueryProblemExpiredException;
 import com.first.flash.climbing.problem.exception.exceptions.QueryProblemNotFoundException;
-import com.first.flash.climbing.problem.infrastructure.paging.Cursor;
-import com.first.flash.climbing.problem.infrastructure.paging.SortBy;
+import com.first.flash.climbing.problem.infrastructure.paging.ProblemCursor;
+import com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy;
 import com.first.flash.global.event.Events;
 import java.util.List;
 import java.util.UUID;
@@ -33,14 +33,15 @@ public class ProblemReadService {
     public ProblemsResponseDto findAll(final Long gymId, final String cursor,
         final String sortByRequest, final Integer size,
         final List<String> difficulty, final List<String> sector, final Boolean hasSolution) {
-        Cursor prevCursor = Cursor.decode(cursor);
-        SortBy sortBy = SortBy.from(sortByRequest);
+        ProblemCursor prevProblemCursor = ProblemCursor.decode(cursor);
+        ProblemSortBy problemSortBy = ProblemSortBy.from(sortByRequest);
 
         Events.raise(ClimbingGymIdConfirmRequestedEvent.of(gymId));
 
-        List<QueryProblem> queryProblems = queryProblemRepository.findAll(prevCursor, sortBy, size,
+        List<QueryProblem> queryProblems = queryProblemRepository.findAll(prevProblemCursor,
+            problemSortBy, size,
             gymId, difficulty, sector, hasSolution);
-        String nextCursor = getNextCursor(sortBy, size, queryProblems);
+        String nextCursor = getNextCursor(problemSortBy, size, queryProblems);
         return ProblemsResponseDto.of(queryProblems, nextCursor);
     }
 
@@ -71,13 +72,13 @@ public class ProblemReadService {
         }
     }
 
-    private String getNextCursor(final SortBy sortBy, final Integer size,
+    private String getNextCursor(final ProblemSortBy problemSortBy, final Integer size,
         final List<QueryProblem> queryProblems) {
         if (hasNextCursor(size, queryProblems)) {
             return null;
         }
         QueryProblem lastProblem = queryProblems.get(size - 1);
-        return new Cursor(sortBy, getLastSortValue(lastProblem, sortBy), lastProblem.getId())
+        return new ProblemCursor(problemSortBy, getLastSortValue(lastProblem, problemSortBy), lastProblem.getId())
             .encode();
     }
 
@@ -85,11 +86,11 @@ public class ProblemReadService {
         return queryProblems.size() != size;
     }
 
-    private String getLastSortValue(final QueryProblem lastProblem, final SortBy sortBy) {
-        if (sortBy.equals(DIFFICULTY)) {
+    private String getLastSortValue(final QueryProblem lastProblem, final ProblemSortBy problemSortBy) {
+        if (problemSortBy.equals(DIFFICULTY)) {
             return lastProblem.getDifficultyLevel().toString();
         }
-        if (sortBy.equals(VIEWS)) {
+        if (problemSortBy.equals(VIEWS)) {
             return lastProblem.getViews().toString();
         }
         return lastProblem.getRecommendationValue().toString();
