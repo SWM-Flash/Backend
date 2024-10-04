@@ -52,7 +52,6 @@ public class SecurityConfig {
                        source.registerCorsConfiguration("/**", corsConfiguration);
                        return corsConfiguration;
                    }))
-                   .cors(AbstractHttpConfigurer::disable)
                    .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
                        SessionCreationPolicy.STATELESS))
                    .formLogin(AbstractHttpConfigurer::disable)
