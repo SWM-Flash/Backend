@@ -6,9 +6,14 @@ import static com.first.flash.climbing.solution.domain.QSolution.solution;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
+import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -27,7 +32,9 @@ public class SolutionQueryDslRepository {
                                                            .notIn(memberIds))).fetch();
     }
 
-    public List<MySolutionDto> findByUploaderId(final UUID uploaderId) {
+    public List<MySolutionDto> findByUploaderId(final UUID uploaderId,
+        final SolutionCursor prevSolutionCursor, final int size, final Long gymId,
+        final List<String> difficulty) {
         return jpaQueryFactory.select(Projections.constructor(MySolutionDto.class,
                                   solution.id, queryProblem.gymName, queryProblem.sectorName,
                                   queryProblem.difficultyName, queryProblem.imageUrl, solution.createdAt
@@ -36,8 +43,11 @@ public class SolutionQueryDslRepository {
                               .innerJoin(queryProblem)
                               .on(solution.problemId.eq(queryProblem.id))
                               .fetchJoin()
-                              .where(solution.uploaderDetail.uploaderId.eq(uploaderId))
+                              .where(solution.uploaderDetail.uploaderId.eq(uploaderId),
+                                  inGym(gymId), inDifficulties(difficulty),
+                                  cursorCondition(prevSolutionCursor))
                               .orderBy(solution.createdAt.desc())
+                              .limit(size)
                               .fetch();
     }
 
@@ -63,5 +73,27 @@ public class SolutionQueryDslRepository {
                               .where(solution.id.eq(solutionId))
                               .fetchJoin()
                               .fetchOne();
+    }
+
+    private Predicate cursorCondition(final SolutionCursor prevSolutionCursor) {
+        if (Objects.isNull(prevSolutionCursor) ||
+            Objects.isNull(prevSolutionCursor.cursorValue())) {
+            return null;
+        }
+        return solution.createdAt.before(LocalDateTime.parse(prevSolutionCursor.cursorValue()));
+    }
+
+    private BooleanExpression inGym(final Long gymId) {
+        if (Objects.isNull(gymId)) {
+            return null;
+        }
+        return queryProblem.gymId.eq(gymId);
+    }
+
+    private BooleanExpression inDifficulties(final List<String> difficulty) {
+        if (Objects.isNull(difficulty)) {
+            return null;
+        }
+        return queryProblem.difficultyName.in(difficulty);
     }
 }
