@@ -5,7 +5,7 @@ import java.util.Base64;
 import java.util.Objects;
 import java.util.UUID;
 
-public record Cursor(SortBy sortBy, String cursorValue, UUID lastId) {
+public record ProblemCursor(ProblemSortBy problemSortBy, String cursorValue, UUID lastId) {
 
     private static final String DEFAULT_SEPARATOR = ":";
     private static final int SORT_BY_INDEX = 0;
@@ -19,7 +19,7 @@ public record Cursor(SortBy sortBy, String cursorValue, UUID lastId) {
                      .encodeToString(combined.getBytes());
     }
 
-    public static Cursor decode(final String encoded) {
+    public static ProblemCursor decode(final String encoded) {
         if (Objects.isNull(encoded) || encoded.isEmpty()) {
             return null;
         }
@@ -32,7 +32,7 @@ public record Cursor(SortBy sortBy, String cursorValue, UUID lastId) {
                 throw new IllegalArgumentException();
             }
 
-            return new Cursor(SortBy.from(parts[SORT_BY_INDEX]), parts[CURSOR_VALUE_INDEX],
+            return new ProblemCursor(ProblemSortBy.from(parts[SORT_BY_INDEX]), parts[CURSOR_VALUE_INDEX],
                 UUID.fromString(parts[LAST_ID_INDEX]));
         } catch (RuntimeException exception) {
             throw new InvalidCursorException();
@@ -41,7 +41,7 @@ public record Cursor(SortBy sortBy, String cursorValue, UUID lastId) {
 
     private String combineValues() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(sortBy.getValue())
+        stringBuilder.append(problemSortBy.getValue())
                      .append(DEFAULT_SEPARATOR)
                      .append(cursorValue)
                      .append(DEFAULT_SEPARATOR)

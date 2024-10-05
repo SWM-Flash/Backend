@@ -7,19 +7,19 @@ import com.first.flash.climbing.problem.exception.exceptions.InvalidCursorExcept
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
-class CursorTest {
+class ProblemCursorTest {
 
     @Test
     void 커서_인코딩_디코딩() {
         // given
-        SortBy sortBy = SortBy.DIFFICULTY;
+        ProblemSortBy problemSortBy = ProblemSortBy.DIFFICULTY;
         String value = "10";
         UUID lastId = UUID.randomUUID();
-        Cursor cursor = new Cursor(sortBy, value, lastId);
+        ProblemCursor problemCursor = new ProblemCursor(problemSortBy, value, lastId);
 
         // when
-        String encode = cursor.encode();
-        Cursor decode = Cursor.decode(encode);
+        String encode = problemCursor.encode();
+        ProblemCursor decode = ProblemCursor.decode(encode);
 
         // then
         assertSoftly(softly->{
@@ -27,7 +27,7 @@ class CursorTest {
                   .isNotNull();
             softly.assertThat(decode)
                 .usingRecursiveComparison()
-                .isEqualTo(cursor);
+                .isEqualTo(problemCursor);
         });
     }
 
@@ -37,7 +37,7 @@ class CursorTest {
         String invalidCursor = "invalidCursor";
 
         // when & then
-        assertThatThrownBy(() -> Cursor.decode(invalidCursor))
+        assertThatThrownBy(() -> ProblemCursor.decode(invalidCursor))
             .isInstanceOf(InvalidCursorException.class);
     }
 }

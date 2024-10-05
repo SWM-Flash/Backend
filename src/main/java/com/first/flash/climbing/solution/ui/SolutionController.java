@@ -2,9 +2,9 @@ package com.first.flash.climbing.solution.ui;
 
 import com.first.flash.climbing.solution.application.SolutionSaveService;
 import com.first.flash.climbing.solution.application.SolutionService;
-import com.first.flash.climbing.solution.application.dto.MySolutionsResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
+import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.application.dto.UnregisteredMemberSolutionCreateRequest;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "solutions", description = "해설 관리 API")
@@ -36,17 +38,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SolutionController {
 
+    private final static String DEFAULT_SIZE = "6";
+
     private final SolutionService solutionService;
     private final SolutionSaveService solutionSaveService;
 
     @Operation(summary = "내 해설 조회", description = "본인이 등록한 해설 조회")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공적으로 해설을 조회함",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MySolutionsResponseDto.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionsPageResponseDto.class)))
     })
     @GetMapping("solutions")
-    public ResponseEntity<MySolutionsResponseDto> getMySolutions() {
-        MySolutionsResponseDto response = solutionService.findMySolutions();
+    public ResponseEntity<SolutionsPageResponseDto> getMySolutions(
+        @RequestParam(name = "cursor", required = false) final String cursor,
+        @RequestParam(defaultValue = DEFAULT_SIZE, required = false) final int size,
+        @RequestParam(required = false) final Long gymId,
+        @RequestParam(required = false) final List<String> difficulty
+    ) {
+        SolutionsPageResponseDto response = solutionService.findMySolutions(cursor, size, gymId,
+            difficulty);
         return ResponseEntity.ok(response);
     }
 
