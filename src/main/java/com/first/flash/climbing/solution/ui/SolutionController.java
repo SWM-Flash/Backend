@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SolutionController {
 
-    private final static String DEFAULT_SIZE = "6";
+    private final static String DEFAULT_SIZE = "20";
 
     private final SolutionService solutionService;
     private final SolutionSaveService solutionSaveService;
