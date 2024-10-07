@@ -1,7 +1,7 @@
 package com.first.flash.climbing.problem.domain;
 
-import com.first.flash.climbing.problem.infrastructure.paging.Cursor;
-import com.first.flash.climbing.problem.infrastructure.paging.SortBy;
+import com.first.flash.climbing.problem.infrastructure.paging.ProblemCursor;
+import com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +13,7 @@ public interface QueryProblemRepository {
 
     Optional<QueryProblem> findById(final UUID id);
 
-    List<QueryProblem> findAll(final Cursor preCursor, final SortBy sortBy, final int size,
+    List<QueryProblem> findAll(final ProblemCursor preProblemCursor, final ProblemSortBy problemSortBy, final int size,
         final Long gymId, final List<String> difficulty, final List<String> sector,
         final Boolean hasSolution);
 

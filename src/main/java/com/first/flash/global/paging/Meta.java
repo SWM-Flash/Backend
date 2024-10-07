@@ -1,4 +1,4 @@
-package com.first.flash.climbing.problem.application.dto;
+package com.first.flash.global.paging;
 
 import java.util.Objects;
 
