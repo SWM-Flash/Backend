@@ -31,7 +31,8 @@ public class SecurityConfig {
     private static final String[] AUTH_WHITELIST = {
         "/auth/login",
         "/swagger-ui/*",
-        "/v1/api-docs/**"
+        "/v1/api-docs/**",
+        "/flash-climbing-answer-health/**"
     };
     private static final String COMPLETE_REGISTRATION = "/members";
     private static final String MARKETING_CONSENT = "/members/marketing-consent";
@@ -61,9 +62,12 @@ public class SecurityConfig {
                    .authorizeHttpRequests(authorize -> authorize
                        .requestMatchers(AUTH_WHITELIST).permitAll()
                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                       .requestMatchers(HttpMethod.POST, MARKETING_CONSENT).hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
-                       .requestMatchers(HttpMethod.GET, NICKNAME_DUPLICATE).hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
-                       .requestMatchers(HttpMethod.PATCH, COMPLETE_REGISTRATION).hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
+                       .requestMatchers(HttpMethod.POST, MARKETING_CONSENT)
+                       .hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
+                       .requestMatchers(HttpMethod.GET, NICKNAME_DUPLICATE)
+                       .hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
+                       .requestMatchers(HttpMethod.PATCH, COMPLETE_REGISTRATION)
+                       .hasAnyRole("ADMIN", "USER", "UNREGISTERED_USER")
                        .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("ADMIN", "USER", "WEB")
                        .requestMatchers("/**").hasAnyRole("ADMIN", "USER")
                        .anyRequest().authenticated()
