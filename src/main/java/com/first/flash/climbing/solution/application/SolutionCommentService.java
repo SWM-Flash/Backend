@@ -5,6 +5,7 @@ import com.first.flash.account.member.domain.Member;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentCreateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentCreateResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentResponseDto;
+import com.first.flash.climbing.solution.application.dto.SolutionCommentUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentsResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionComment;
@@ -57,12 +58,12 @@ public class SolutionCommentService {
     }
 
     @Transactional
-    public void updateComment(final Long commentId, final String content) {
+    public void updateComment(final Long commentId, final SolutionCommentUpdateRequestDto request) {
         SolutionComment comment = findById(commentId);
         if (!AuthUtil.isSameId(comment.getCommenterDetail().getCommenterId())) {
             throw new SolutionCommentAccessDeniedException();
         }
-        comment.updateContent(content);
+        comment.updateContent(request.content());
     }
 
     @Transactional
