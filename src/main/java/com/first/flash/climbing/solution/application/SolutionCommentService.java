@@ -7,7 +7,6 @@ import com.first.flash.climbing.solution.application.dto.SolutionCommentCreateRe
 import com.first.flash.climbing.solution.application.dto.SolutionCommentResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentsResponseDto;
-import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionComment;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionCommentAccessDeniedException;
@@ -50,7 +49,8 @@ public class SolutionCommentService {
     }
 
     public SolutionCommentsResponseDto findBySolutionId(final Long solutionId) {
-        List<SolutionComment> comments = solutionCommentRepository.findBySolutionId(solutionId);
+        List<SolutionComment> comments = solutionService.findSolutionById(solutionId)
+                                                        .getComments();
         List<SolutionCommentResponseDto> commentsResponse = comments.stream()
                                                                     .map(
                                                                         SolutionCommentResponseDto::toDto)
