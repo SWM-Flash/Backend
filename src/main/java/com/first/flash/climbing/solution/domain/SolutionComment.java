@@ -1,7 +1,6 @@
 package com.first.flash.climbing.solution.domain;
 
 import com.first.flash.global.domain.BaseEntity;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,7 +31,7 @@ public class SolutionComment extends BaseEntity {
 
     private CommenterDetail commenterDetail;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solution_id", nullable = false)
     private Solution solution;
 
