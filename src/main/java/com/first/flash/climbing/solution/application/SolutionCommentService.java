@@ -43,7 +43,8 @@ public class SolutionCommentService {
 
     public SolutionComment findById(final Long id) {
         return solutionCommentRepository.findById(id)
-                                       .orElseThrow(() -> new SolutionCommentNotFoundException(id));
+                                        .orElseThrow(
+                                            () -> new SolutionCommentNotFoundException(id));
     }
 
     public SolutionCommentsResponseDto findBySolutionId(final Long solutionId) {
@@ -56,13 +57,12 @@ public class SolutionCommentService {
     }
 
     @Transactional
-    public void updateCommenterInfo(final Long commentId, final UUID commenterId, final String nickName,
-        final String profileImageUrl) {
+    public void updateComment(final Long commentId, final String content) {
         SolutionComment comment = findById(commentId);
         if (!AuthUtil.isSameId(comment.getCommenterDetail().getCommenterId())) {
             throw new SolutionCommentAccessDeniedException();
         }
-        solutionCommentRepository.updateCommenterInfo(commenterId, nickName, profileImageUrl);
+        comment.updateContent(content);
     }
 
     @Transactional
@@ -77,5 +77,11 @@ public class SolutionCommentService {
     @Transactional
     public void deleteByCommenterId(final UUID commenterId) {
         solutionCommentRepository.deleteByCommenterId(commenterId);
+    }
+
+    @Transactional
+    public void updateCommenterInfo(final UUID commenterId, final String nickName,
+        final String profileImageUrl) {
+        solutionCommentRepository.updateCommenterInfo(commenterId, nickName, profileImageUrl);
     }
 }
