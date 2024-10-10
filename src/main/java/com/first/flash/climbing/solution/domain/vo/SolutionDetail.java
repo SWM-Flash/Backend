@@ -15,13 +15,15 @@ public class SolutionDetail {
 
     private String review;
     private String videoUrl;
+    private Integer perceivedDifficulty;
 
-    protected SolutionDetail(final String review, final String videoUrl) {
+    protected SolutionDetail(final String review, final String videoUrl, final Integer perceivedDifficulty) {
         this.review = review;
         this.videoUrl = videoUrl;
+        this.perceivedDifficulty = perceivedDifficulty;
     }
 
-    public static SolutionDetail of(final String review, final String videoUrl) {
-        return new SolutionDetail(review, videoUrl);
+    public static SolutionDetail of(final String review, final String videoUrl, final Integer perceivedDifficulty) {
+        return new SolutionDetail(review, videoUrl, perceivedDifficulty);
     }
 }

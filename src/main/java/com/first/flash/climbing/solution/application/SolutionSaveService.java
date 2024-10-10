@@ -4,6 +4,7 @@ import com.first.flash.account.member.application.MemberService;
 import com.first.flash.account.member.domain.Member;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.UnregisteredMemberSolutionCreateRequest;
+import com.first.flash.climbing.solution.domain.PerceivedDifficulty;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
@@ -29,9 +30,11 @@ public class SolutionSaveService {
         UUID id = AuthUtil.getId();
         Member member = memberService.findById(id);
 
+        Integer perceivedDifficulty = createRequestDto.perceivedDifficulty().getValue();
         Solution solution = Solution.of(member.getNickName(), createRequestDto.review(),
             member.getInstagramId(), createRequestDto.videoUrl(), problemId, member.getId(),
-            member.getProfileImageUrl());
+            member.getProfileImageUrl(), perceivedDifficulty);
+
         Solution savedSolution = solutionRepository.save(solution);
         Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
         return SolutionResponseDto.toDto(savedSolution);
@@ -49,9 +52,10 @@ public class SolutionSaveService {
         UUID id = AuthUtil.getId();
         Member member = memberService.findById(id);
 
+        Integer perceivedDifficulty = requestDto.perceivedDifficulty().getValue();
         Solution solution = Solution.of(requestDto.nickName(), requestDto.review(),
             requestDto.instagramId(), requestDto.videoUrl(), problemId, member.getId(),
-            requestDto.profileImageUrl());
+            requestDto.profileImageUrl(), perceivedDifficulty);
         Solution savedSolution = solutionRepository.save(solution);
         Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
         return SolutionResponseDto.toDto(savedSolution);

@@ -34,9 +34,9 @@ public class Solution extends BaseEntity {
 
     protected Solution(final String uploader, final String review, final String instagramId,
         final String videoUrl, final UUID problemId, final UUID uploaderId,
-        final String profileImageUrl) {
+        final String profileImageUrl, final Integer perceivedDifficulty) {
 
-        this.solutionDetail = SolutionDetail.of(review, videoUrl);
+        this.solutionDetail = SolutionDetail.of(review, videoUrl, perceivedDifficulty);
         this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId, profileImageUrl);
         this.optionalWeight = DEFAULT_OPTIONAL_WEIGHT;
         this.problemId = problemId;
@@ -44,10 +44,10 @@ public class Solution extends BaseEntity {
 
     public static Solution of(final String uploader, final String review, final String instagramId,
         final String videoUrl, final UUID problemId, final UUID uploaderId,
-        final String profileImageUrl) {
+        final String profileImageUrl, final Integer perceivedDifficulty) {
 
         return new Solution(uploader, review, instagramId, videoUrl, problemId, uploaderId,
-            profileImageUrl);
+            profileImageUrl, perceivedDifficulty);
     }
 
     public void updateUploaderInfo(final String uploader, final String instagramId,
@@ -57,7 +57,7 @@ public class Solution extends BaseEntity {
         this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId, profileImageUrl);
     }
 
-    public void updateContentInfo(final String review, final String videoUrl) {
-        this.solutionDetail = SolutionDetail.of(review, videoUrl);
+    public void updateContentInfo(final String review, final String videoUrl, final Integer perceivedDifficulty) {
+        this.solutionDetail = SolutionDetail.of(review, videoUrl, perceivedDifficulty);
     }
 }

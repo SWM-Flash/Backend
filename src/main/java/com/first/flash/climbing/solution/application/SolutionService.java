@@ -8,6 +8,7 @@ import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
+import com.first.flash.climbing.solution.domain.PerceivedDifficulty;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
@@ -77,7 +78,8 @@ public class SolutionService {
         UUID uploaderId = solution.getUploaderDetail().getUploaderId();
         validateUploader(uploaderId);
 
-        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl());
+        Integer perceivedDifficulty = requestDto.perceivedDifficulty().getValue();
+        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), perceivedDifficulty);
 
         return SolutionResponseDto.toDto(solution);
     }
