@@ -6,7 +6,9 @@ import com.first.flash.climbing.solution.application.dto.SolutionCommentCreateRe
 import com.first.flash.climbing.solution.application.dto.SolutionCommentUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentsResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,10 +28,11 @@ public class SolutionCommentController {
     @PostMapping("/solutions/{solutionId}/comments")
     public ResponseEntity<SolutionCommentCreateResponseDto> createSolutionComment(
         @PathVariable final Long solutionId,
-        @RequestBody final SolutionCommentCreateRequestDto request) {
+        @RequestBody @Valid final SolutionCommentCreateRequestDto request) {
         SolutionCommentCreateResponseDto comment = solutionCommentService
             .createComment(solutionId, request);
-        return ResponseEntity.ok(comment);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(comment);
     }
 
     @GetMapping("/solutions/{solutionId}/comments")
@@ -43,7 +46,7 @@ public class SolutionCommentController {
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<Void> updateComment(
         @PathVariable final Long commentId,
-        @RequestBody final SolutionCommentUpdateRequestDto content) {
+        @RequestBody @Valid final SolutionCommentUpdateRequestDto content) {
         solutionCommentService.updateComment(commentId, content);
         return ResponseEntity.ok().build();
     }

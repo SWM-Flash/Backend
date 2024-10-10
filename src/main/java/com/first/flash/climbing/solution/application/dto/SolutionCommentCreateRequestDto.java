@@ -1,5 +1,7 @@
 package com.first.flash.climbing.solution.application.dto;
 
-public record SolutionCommentCreateRequestDto(String content) {
+import jakarta.validation.constraints.NotEmpty;
+
+public record SolutionCommentCreateRequestDto(@NotEmpty String content) {
 
 }
