@@ -8,6 +8,8 @@ import com.first.flash.climbing.solution.application.dto.SolutionCommentResponse
 import com.first.flash.climbing.solution.application.dto.SolutionCommentsResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionComment;
+import com.first.flash.climbing.solution.exception.exceptions.SolutionCommentAccessDeniedException;
+import com.first.flash.climbing.solution.exception.exceptions.SolutionCommentNotFoundException;
 import com.first.flash.climbing.solution.infrastructure.SolutionCommentRepository;
 import com.first.flash.global.util.AuthUtil;
 import java.util.List;
@@ -25,6 +27,7 @@ public class SolutionCommentService {
     private final SolutionCommentRepository solutionCommentRepository;
     private final SolutionService solutionService;
 
+    @Transactional
     public SolutionCommentCreateResponseDto createComment(final Long solutionId,
         final SolutionCommentCreateRequestDto requestDto) {
         UUID id = AuthUtil.getId();
@@ -32,10 +35,15 @@ public class SolutionCommentService {
 
         Solution solution = solutionService.findSolutionById(solutionId);
         SolutionComment solutionComment = SolutionComment.of(requestDto.content(),
-            member.getNickName(), member.getId(), solution);
+            member.getNickName(), member.getProfileImageUrl(), member.getId(), solution);
         SolutionComment savedSolutionComment = solutionCommentRepository.save(solutionComment);
 
         return SolutionCommentCreateResponseDto.toDto(savedSolutionComment);
+    }
+
+    public SolutionComment findById(final Long id) {
+        return solutionCommentRepository.findById(id)
+                                       .orElseThrow(() -> new SolutionCommentNotFoundException(id));
     }
 
     public SolutionCommentsResponseDto findBySolutionId(final Long solutionId) {
@@ -45,5 +53,29 @@ public class SolutionCommentService {
                                                                         SolutionCommentResponseDto::toDto)
                                                                     .toList();
         return SolutionCommentsResponseDto.from(commentsResponse);
+    }
+
+    @Transactional
+    public void updateCommenterInfo(final Long commentId, final UUID commenterId, final String nickName,
+        final String profileImageUrl) {
+        SolutionComment comment = findById(commentId);
+        if (!AuthUtil.isSameId(comment.getCommenterDetail().getCommenterId())) {
+            throw new SolutionCommentAccessDeniedException();
+        }
+        solutionCommentRepository.updateCommenterInfo(commenterId, nickName, profileImageUrl);
+    }
+
+    @Transactional
+    public void deleteComment(final Long commentId) {
+        SolutionComment comment = findById(commentId);
+        if (!AuthUtil.isSameId(comment.getCommenterDetail().getCommenterId())) {
+            throw new SolutionCommentAccessDeniedException();
+        }
+        solutionCommentRepository.delete(comment);
+    }
+
+    @Transactional
+    public void deleteByCommenterId(final UUID commenterId) {
+        solutionCommentRepository.deleteByCommenterId(commenterId);
     }
 }
