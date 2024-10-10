@@ -59,13 +59,14 @@ public class SolutionCommentService {
     }
 
     @Transactional
-    public SolutionResponseDto updateComment(final Long commentId, final SolutionCommentUpdateRequestDto request) {
+    public SolutionCommentResponseDto updateComment(final Long commentId,
+        final SolutionCommentUpdateRequestDto request) {
         SolutionComment comment = findById(commentId);
         if (!AuthUtil.isSameId(comment.getCommenterDetail().getCommenterId())) {
             throw new SolutionCommentAccessDeniedException();
         }
         comment.updateContent(request.content());
-        return SolutionResponseDto.toDto(comment.getSolution());
+        return SolutionCommentResponseDto.toDto(comment);
     }
 
     @Transactional

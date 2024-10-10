@@ -3,6 +3,7 @@ package com.first.flash.climbing.solution.ui;
 import com.first.flash.climbing.solution.application.SolutionCommentService;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentCreateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentCreateResponseDto;
+import com.first.flash.climbing.solution.application.dto.SolutionCommentResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentsResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
@@ -90,10 +91,10 @@ public class SolutionCommentController {
             }))
     })
     @PatchMapping("/comments/{commentId}")
-    public ResponseEntity<SolutionResponseDto> updateComment(
+    public ResponseEntity<SolutionCommentResponseDto> updateComment(
         @PathVariable final Long commentId,
         @RequestBody @Valid final SolutionCommentUpdateRequestDto content) {
-        SolutionResponseDto response = solutionCommentService.updateComment(commentId,
+        SolutionCommentResponseDto response = solutionCommentService.updateComment(commentId,
             content);
         return ResponseEntity.status(HttpStatus.OK)
                              .body(response);
