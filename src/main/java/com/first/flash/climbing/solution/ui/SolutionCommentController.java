@@ -5,6 +5,13 @@ import com.first.flash.climbing.solution.application.dto.SolutionCommentCreateRe
 import com.first.flash.climbing.solution.application.dto.SolutionCommentCreateResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentsResponseDto;
+import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +32,19 @@ public class SolutionCommentController {
 
     private final SolutionCommentService solutionCommentService;
 
+    @Operation(summary = "해설 댓글 생성", description = "특정 해설에 대한 댓글 생성")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "성공적으로 댓글 생성",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionCommentCreateRequestDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"error\": \"content는 필수입니다.\"}"),
+            })),
+        @ApiResponse(responseCode = "404", description = "해설을 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "해설 없음", value = "{\"error\": \"아이디가 1인 해설을 찾을 수 없습니다.\"}")
+            }))
+    })
     @PostMapping("/solutions/{solutionId}/comments")
     public ResponseEntity<SolutionCommentCreateResponseDto> createSolutionComment(
         @PathVariable final Long solutionId,
@@ -35,6 +55,15 @@ public class SolutionCommentController {
                              .body(comment);
     }
 
+    @Operation(summary = "댓글 조회", description = "특정 해설에 대한 댓글 조회")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 댓글을 조회함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionCommentsResponseDto.class))),
+        @ApiResponse(responseCode = "404", description = "해설을 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "해설 없음", value = "{\"error\": \"아이디가 1인 해설을 찾을 수 없습니다.\"}")
+            }))
+    })
     @GetMapping("/solutions/{solutionId}/comments")
     public ResponseEntity<SolutionCommentsResponseDto> getSolutionComments(
         @PathVariable final Long solutionId) {
@@ -43,18 +72,50 @@ public class SolutionCommentController {
         return ResponseEntity.ok(comments);
     }
 
+    @Operation(summary = "댓글 수정", description = "내 댓글 수정")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 댓글을 수정함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"error\": \"content는 필수입니다.\"}"),
+            })),
+        @ApiResponse(responseCode = "403", description = "본인의 댓글이 아님",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "수정 권한 없음", value = "{\"error\": \"해당 댓글에 접근할 권한이 없습니다.\"}"),
+            })),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "댓글 없음", value = "{\"error\": \"아이디가 1인 댓글을 찾을 수 없습니다.\"}")
+            }))
+    })
     @PatchMapping("/comments/{commentId}")
-    public ResponseEntity<Void> updateComment(
+    public ResponseEntity<SolutionResponseDto> updateComment(
         @PathVariable final Long commentId,
         @RequestBody @Valid final SolutionCommentUpdateRequestDto content) {
-        solutionCommentService.updateComment(commentId, content);
-        return ResponseEntity.ok().build();
+        SolutionResponseDto response = solutionCommentService.updateComment(commentId,
+            content);
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(response);
     }
 
+    @Operation(summary = "댓글 삭제", description = "특정 댓글 삭제")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "성공적으로 댓글을 삭제함",
+            content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "403", description = "본인의 댓글이 아님",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "삭제 권한 없음", value = "{\"error\": \"해당 댓글에 접근할 권한이 없습니다.\"}"),
+            })),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "댓글 없음", value = "{\"error\": \"아이디가 1인 댓글을 찾을 수 없습니다.\"}")
+            }))
+    })
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(
         @PathVariable final Long commentId) {
         solutionCommentService.deleteComment(commentId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
