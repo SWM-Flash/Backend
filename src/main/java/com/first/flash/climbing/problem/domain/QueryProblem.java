@@ -42,6 +42,7 @@ public class QueryProblem {
     private Integer views;
     private Boolean isExpired;
     private Integer solutionCount;
+    private Integer perceivedDifficulty;
     private Long recommendationValue;
     private Boolean hasSolution;
     private Boolean isFakeRemovalDate;

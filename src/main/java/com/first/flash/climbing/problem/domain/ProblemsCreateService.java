@@ -16,6 +16,7 @@ public class ProblemsCreateService {
     private static final Boolean DEFAULT_HAS_SOLUTION = false;
     private static final Integer INITIAL_SOLUTION_COUNT = 0;
     private static final Long INITIAL_RECOMMENDATION_VALUE = 0L;
+    private static final Integer INITIAL_PERCEIVED_DIFFICULTY_VALUE = 0;
 
     private final UUIDGenerator uuidGenerator;
 
@@ -36,6 +37,7 @@ public class ProblemsCreateService {
                            .views(problem.getViews())
                            .isExpired(problem.getIsExpired())
                            .hasSolution(DEFAULT_HAS_SOLUTION)
+                           .perceivedDifficulty(INITIAL_PERCEIVED_DIFFICULTY_VALUE)
                            .recommendationValue(INITIAL_RECOMMENDATION_VALUE)
                            .solutionCount(INITIAL_SOLUTION_COUNT)
                            .isFakeRemovalDate(sector.getRemovalInfo().getIsFakeRemovalDate())
