@@ -30,25 +30,20 @@ public class SolutionComment extends BaseEntity {
     @Column
     private String content;
 
-    @Column
-    private String commenter;
-
-    @Column
-    private UUID commenterId;
+    private CommenterDetail commenterDetail;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "solution_id", nullable = false)
     private Solution solution;
 
-    protected SolutionComment(final String content, final String commenter, final UUID commenterId, final Solution solution) {
+    protected SolutionComment(final String content, final CommenterDetail commenter, final Solution solution) {
         this.content = content;
-        this.commenter = commenter;
-        this.commenterId = commenterId;
+        this.commenterDetail = commenter;
         this.solution = solution;
     }
 
-    public static SolutionComment of(final String content, final String commenter, final UUID commenterId, final Solution solution) {
-        return new SolutionComment(content, commenter, commenterId, solution);
+    public static SolutionComment of(final String content, final String commenter, final String profileImage, final UUID commenterId, final Solution solution) {
+        return new SolutionComment(content, CommenterDetail.of(commenterId, commenter, profileImage), solution);
     }
 
     public void updateContent(final String content) {
