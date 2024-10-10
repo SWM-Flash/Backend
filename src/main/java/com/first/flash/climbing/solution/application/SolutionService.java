@@ -9,9 +9,11 @@ import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDt
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.PerceivedDifficulty;
+import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
+import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
@@ -80,6 +82,7 @@ public class SolutionService {
 
         Integer perceivedDifficulty = requestDto.perceivedDifficulty().getValue();
         solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), perceivedDifficulty);
+        Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(), perceivedDifficulty));
 
         return SolutionResponseDto.toDto(solution);
     }

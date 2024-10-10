@@ -4,6 +4,7 @@ import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
+import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
 import lombok.RequiredArgsConstructor;
@@ -53,5 +54,11 @@ public class ProblemEventHandler {
     @Transactional
     public void confirmProblemId(final ProblemIdConfirmRequestedEvent event) {
         problemReadService.findProblemById(event.getProblemId());
+    }
+
+    @EventListener
+    @Transactional
+    public void updatePerceivedDifficulty(final PerceivedDifficultySetEvent event) {
+        System.out.println("PerceivedDifficultySetEvent event called!");
     }
 }
