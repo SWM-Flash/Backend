@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.domain;
 
+import com.first.flash.climbing.solution.exception.exceptions.PerceivedDifficultyNotFoundException;
 import lombok.AllArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,6 +29,6 @@ public enum PerceivedDifficulty {
                 return difficulty;
             }
         }
-        throw new IllegalArgumentException("Unknown difficulty: " + label);
+        throw new PerceivedDifficultyNotFoundException(label);
     }
 }
