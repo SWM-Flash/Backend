@@ -78,8 +78,8 @@ public class SolutionService {
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
         validateUploader(solution);
 
-        Integer newPerceivedDifficulty = requestDto.perceivedDifficulty().getValue();
-        Integer oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
+        PerceivedDifficulty newPerceivedDifficulty = requestDto.perceivedDifficulty();
+        PerceivedDifficulty oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
         int difficultyDifference = calculateDifficultyDifference(oldPerceivedDifficulty, newPerceivedDifficulty);
 
         solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), newPerceivedDifficulty);
@@ -99,8 +99,8 @@ public class SolutionService {
         validateUploader(solution);
         solutionRepository.deleteById(id);
 
-        Integer perceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
-        Events.raise(SolutionDeletedEvent.of(solution.getProblemId(), perceivedDifficulty));
+        PerceivedDifficulty perceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
+        Events.raise(SolutionDeletedEvent.of(solution.getProblemId(), perceivedDifficulty.getValue()));
     }
 
     @Transactional
@@ -128,7 +128,7 @@ public class SolutionService {
         }
     }
 
-    private int calculateDifficultyDifference(Integer oldPerceivedDifficulty, Integer newPerceivedDifficulty) {
-        return newPerceivedDifficulty - oldPerceivedDifficulty;
+    private int calculateDifficultyDifference(PerceivedDifficulty oldPerceivedDifficulty, PerceivedDifficulty newPerceivedDifficulty) {
+        return newPerceivedDifficulty.getValue() - oldPerceivedDifficulty.getValue();
     }
 }

@@ -31,11 +31,11 @@ public class SolutionSaveService {
         UUID id = AuthUtil.getId();
         Member member = memberService.findById(id);
 
-        Integer perceivedDifficulty = createRequestDto.perceivedDifficulty().getValue();
+        PerceivedDifficulty perceivedDifficulty = createRequestDto.perceivedDifficulty();
         Solution solution = Solution.of(member.getNickName(), createRequestDto.review(),
             member.getInstagramId(), createRequestDto.videoUrl(), problemId, member.getId(),
             member.getProfileImageUrl(), perceivedDifficulty);
-        Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(), perceivedDifficulty));
+        Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(), perceivedDifficulty.getValue()));
 
         Solution savedSolution = solutionRepository.save(solution);
         Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
@@ -54,13 +54,15 @@ public class SolutionSaveService {
         UUID id = AuthUtil.getId();
         Member member = memberService.findById(id);
 
-        Integer perceivedDifficulty = requestDto.perceivedDifficulty().getValue();
+        PerceivedDifficulty perceivedDifficulty = requestDto.perceivedDifficulty();
         Solution solution = Solution.of(requestDto.nickName(), requestDto.review(),
             requestDto.instagramId(), requestDto.videoUrl(), problemId, member.getId(),
             requestDto.profileImageUrl(), perceivedDifficulty);
+
         Solution savedSolution = solutionRepository.save(solution);
-        Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(), perceivedDifficulty));
+        Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(), perceivedDifficulty.getValue()));
         Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
+
         return SolutionResponseDto.toDto(savedSolution);
     }
 }
