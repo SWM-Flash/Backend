@@ -59,6 +59,6 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void updatePerceivedDifficulty(final PerceivedDifficultySetEvent event) {
-        System.out.println("PerceivedDifficultySetEvent event called!");
+        problemsService.updatePerceivedDifficulty(event.getProblemId(), event.getPerceivedDifficulty());
     }
 }

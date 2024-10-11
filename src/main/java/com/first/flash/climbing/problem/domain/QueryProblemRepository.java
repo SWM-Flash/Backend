@@ -23,4 +23,6 @@ public interface QueryProblemRepository {
 
     void updateQueryProblemInfo(final Long sectorId, final String sectorName,
         final LocalDate settingDate);
+
+    void updatePerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty);
 }

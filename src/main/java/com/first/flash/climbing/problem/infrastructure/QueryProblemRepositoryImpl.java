@@ -51,4 +51,9 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
         final LocalDate settingDate) {
         queryProblemQueryDslRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate);
     }
+
+    @Override
+    public void updatePerceivedDifficulty(UUID problemId, Integer perceivedDifficulty) {
+        queryProblemQueryDslRepository.updatePerceivedDifficulty(problemId, perceivedDifficulty);
+    }
 }

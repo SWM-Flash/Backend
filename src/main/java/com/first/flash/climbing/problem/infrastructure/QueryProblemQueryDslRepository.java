@@ -59,6 +59,13 @@ public class QueryProblemQueryDslRepository {
                     .execute();
     }
 
+    public void updatePerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty) {
+        queryFactory.update(queryProblem)
+                    .set(queryProblem.perceivedDifficulty, queryProblem.perceivedDifficulty.add(perceivedDifficulty))
+                    .where(queryProblem.id.eq(problemId))
+                    .execute();
+    }
+
     private BooleanExpression inGym(final Long gymId) {
         return queryProblem.gymId.eq(gymId);
     }

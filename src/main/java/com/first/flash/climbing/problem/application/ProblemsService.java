@@ -47,4 +47,9 @@ public class ProblemsService {
         final LocalDate settingDate) {
         queryProblemRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate);
     }
+
+    @Transactional
+    public void updatePerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty) {
+        queryProblemRepository.updatePerceivedDifficulty(problemId, perceivedDifficulty);
+    }
 }
