@@ -40,7 +40,7 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void updateProblemDeletedSolutionInfo(final SolutionDeletedEvent event) {
-        problemsService.updateProblemDeletedSolutionInfo(event.getProblemId());
+        problemsService.updateProblemDeletedSolutionInfo(event.getProblemId(), event.getPerceivedDifficulty());
     }
 
     @EventListener

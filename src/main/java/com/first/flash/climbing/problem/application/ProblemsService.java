@@ -37,9 +37,10 @@ public class ProblemsService {
     }
 
     @Transactional
-    public void updateProblemDeletedSolutionInfo(final UUID problemId) {
+    public void updateProblemDeletedSolutionInfo(final UUID problemId, final Integer perceivedDifficulty) {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.decrementSolutionCount();
+        queryProblemRepository.updatePerceivedDifficulty(problemId, perceivedDifficulty);
     }
 
     @Transactional

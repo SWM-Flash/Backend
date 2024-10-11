@@ -98,7 +98,9 @@ public class SolutionService {
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
         validateUploader(solution);
         solutionRepository.deleteById(id);
-        Events.raise(SolutionDeletedEvent.of(solution.getProblemId()));
+
+        Integer perceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty() * -1;
+        Events.raise(SolutionDeletedEvent.of(solution.getProblemId(), perceivedDifficulty));
     }
 
     @Transactional
