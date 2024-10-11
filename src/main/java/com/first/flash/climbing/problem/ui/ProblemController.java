@@ -103,6 +103,19 @@ public class ProblemController {
         return ResponseEntity.ok(problemReadService.viewProblems(problemId));
     }
 
+    @Operation(summary = "문제 체감 난이도 수정", description = "특정 문제의 체감 난이도 수정")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 문제 정보 수정함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetailResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"perceivedDifficulty\": \"변경할 체감 난이도 수치는 필수입니다.\"}")
+            })),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "문제 없음", value = "{\"error\": \"아이디가 0190c558-9063-7050-b4fc-eb421e3236b3인 문제를 찾을 수 없습니다.\"}")
+            }))
+    })
     @PatchMapping("/admin/problems/{problemId}/perceivedDifficulty")
     public ResponseEntity<ProblemDetailResponseDto> changePerceivedDifficulty(
         @PathVariable final UUID problemId,
