@@ -90,6 +90,10 @@ public class QueryProblem {
         perceivedDifficulty -= value;
     }
 
+    public Boolean isHoney() {
+        return perceivedDifficulty < 0;
+    }
+
     private void enableSolution() {
         if (!hasSolution) {
             hasSolution = true;
