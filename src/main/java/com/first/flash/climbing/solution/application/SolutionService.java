@@ -80,9 +80,16 @@ public class SolutionService {
         UUID uploaderId = solution.getUploaderDetail().getUploaderId();
         validateUploader(uploaderId);
 
-        Integer perceivedDifficulty = requestDto.perceivedDifficulty().getValue();
-        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), perceivedDifficulty);
-        Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(), perceivedDifficulty));
+        Integer newPerceivedDifficulty = requestDto.perceivedDifficulty().getValue();
+        Integer oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
+        int difficultyDifference = newPerceivedDifficulty - oldPerceivedDifficulty;
+
+        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), newPerceivedDifficulty);
+
+        Events.raise(PerceivedDifficultySetEvent.of(
+            solution.getProblemId(),
+            difficultyDifference
+        ));
 
         return SolutionResponseDto.toDto(solution);
     }
