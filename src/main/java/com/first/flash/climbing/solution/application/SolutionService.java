@@ -46,10 +46,7 @@ public class SolutionService {
         Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
         List<UUID> blockedMembers = blockService.findBlockedMembers();
         List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId,
-                                                                    blockedMembers)
-                                                                .stream()
-                                                                .map(SolutionResponseDto::toDto)
-                                                                .toList();
+            AuthUtil.getId(), blockedMembers);
 
         return SolutionsResponseDto.of(solutions);
     }
