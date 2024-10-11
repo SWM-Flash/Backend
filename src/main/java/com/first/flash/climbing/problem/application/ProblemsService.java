@@ -50,7 +50,7 @@ public class ProblemsService {
     }
 
     @Transactional
-    public void updatePerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty) {
+    public void addPerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty) {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.addPerceivedDifficulty(perceivedDifficulty);
     }

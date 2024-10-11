@@ -59,6 +59,6 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void updatePerceivedDifficulty(final PerceivedDifficultySetEvent event) {
-        problemsService.updatePerceivedDifficulty(event.getProblemId(), event.getPerceivedDifficulty());
+        problemsService.addPerceivedDifficulty(event.getProblemId(), event.getPerceivedDifficulty());
     }
 }
