@@ -13,17 +13,22 @@ public class SolutionEventHandler {
 
     private final SolutionSaveService solutionSaveService;
     private final SolutionService solutionService;
+    private final SolutionCommentService solutionCommentService;
 
     @EventListener
     @Transactional
     public void updateSolutionInfo(final MemberInfoUpdatedEvent event) {
         solutionSaveService.updateUploaderInfo(event.getMemberId(), event.getNickName(),
             event.getInstagramId(), event.getProfileImageUrl());
+
+        solutionCommentService.updateCommenterInfo(event.getMemberId(), event.getNickName(),
+            event.getProfileImageUrl());
     }
 
     @EventListener
     @Transactional
     public void deleteSolution(final MemberDeletedEvent event) {
         solutionService.deleteByUploaderId(event.getMemberId());
+        solutionCommentService.deleteByCommenterId(event.getMemberId());
     }
 }

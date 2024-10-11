@@ -2,12 +2,12 @@ package com.first.flash.climbing.solution.infrastructure;
 
 import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem;
 import static com.first.flash.climbing.solution.domain.QSolution.solution;
+import static com.first.flash.climbing.solution.domain.QSolutionComment.solutionComment;
 
-import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,12 +24,21 @@ public class SolutionQueryDslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<Solution> findAllExcludedBlockedMembers(final UUID problemId,
-        final List<UUID> memberIds) {
-        return jpaQueryFactory.selectFrom(solution)
+    public List<SolutionResponseDto> findAllExcludedBlockedMembers(final UUID problemId,
+        final UUID memberId, final List<UUID> memberIds) {
+        return jpaQueryFactory.select(Projections.constructor(SolutionResponseDto.class,
+                                  solution.id, solution.uploaderDetail.uploader, solution.solutionDetail.review,
+                                  solution.uploaderDetail.instagramId, solution.solutionDetail.videoUrl,
+                                  solution.uploaderDetail.uploaderId, solution.uploaderDetail.uploaderId.eq(memberId),
+                                  solution.uploaderDetail.profileImageUrl, solutionComment.count()
+                              ))
+                              .from(solution)
+                              .leftJoin(solutionComment)
+                              .on(solution.id.eq(solutionComment.solution.id))
                               .where(solution.problemId.eq(problemId)
-                                                       .and(solution.uploaderDetail.uploaderId
-                                                           .notIn(memberIds))).fetch();
+                                                       .and(notInBlockedMembers(memberIds)))
+                              .groupBy(solution.id)
+                              .fetch();
     }
 
     public List<MySolutionDto> findByUploaderId(final UUID uploaderId,
@@ -37,15 +46,18 @@ public class SolutionQueryDslRepository {
         final List<String> difficulty) {
         return jpaQueryFactory.select(Projections.constructor(MySolutionDto.class,
                                   solution.id, queryProblem.gymName, queryProblem.sectorName,
-                                  queryProblem.difficultyName, queryProblem.imageUrl, solution.createdAt
+                                  queryProblem.difficultyName, queryProblem.imageUrl, solutionComment.count(),
+                                  solution.createdAt
                               ))
                               .from(solution)
                               .innerJoin(queryProblem)
                               .on(solution.problemId.eq(queryProblem.id))
-                              .fetchJoin()
+                              .leftJoin(solutionComment)
+                              .on(solution.id.eq(solutionComment.solution.id))
                               .where(solution.uploaderDetail.uploaderId.eq(uploaderId),
                                   inGym(gymId), inDifficulties(difficulty),
                                   cursorCondition(prevSolutionCursor))
+                              .groupBy(solution.id)
                               .orderBy(solution.createdAt.desc())
                               .limit(size)
                               .fetch();
@@ -71,12 +83,14 @@ public class SolutionQueryDslRepository {
                               .from(solution)
                               .innerJoin(queryProblem)
                               .on(solution.problemId.eq(queryProblem.id))
+                              .leftJoin(solutionComment)
+                              .on(solution.id.eq(solutionComment.solution.id))
                               .where(solution.id.eq(solutionId))
-                              .fetchJoin()
+                              .groupBy(solution.id)
                               .fetchOne();
     }
 
-    private Predicate cursorCondition(final SolutionCursor prevSolutionCursor) {
+    private BooleanExpression cursorCondition(final SolutionCursor prevSolutionCursor) {
         if (Objects.isNull(prevSolutionCursor) ||
             Objects.isNull(prevSolutionCursor.cursorValue())) {
             return null;
@@ -96,5 +110,12 @@ public class SolutionQueryDslRepository {
             return null;
         }
         return queryProblem.difficultyName.in(difficulty);
+    }
+
+    private BooleanExpression notInBlockedMembers(final List<UUID> memberIds) {
+        if (memberIds.isEmpty()) {
+            return null;
+        }
+        return solution.uploaderDetail.uploaderId.notIn(memberIds);
     }
 }
