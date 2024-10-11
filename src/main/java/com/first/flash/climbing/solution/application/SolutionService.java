@@ -76,9 +76,7 @@ public class SolutionService {
 
         Solution solution = solutionRepository.findById(id)
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
-
-        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
-        validateUploader(uploaderId);
+        validateUploader(solution);
 
         Integer newPerceivedDifficulty = requestDto.perceivedDifficulty().getValue();
         Integer oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
@@ -98,8 +96,7 @@ public class SolutionService {
     public void deleteSolution(final Long id) {
         Solution solution = solutionRepository.findById(id)
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
-        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
-        validateUploader(uploaderId);
+        validateUploader(solution);
         solutionRepository.deleteById(id);
         Events.raise(SolutionDeletedEvent.of(solution.getProblemId()));
     }
@@ -122,7 +119,8 @@ public class SolutionService {
         return solutions.size() != size;
     }
 
-    private void validateUploader(final UUID uploaderId) {
+    private void validateUploader(final Solution solution) {
+        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
         if (!AuthUtil.isSameId(uploaderId)) {
             throw new SolutionAccessDeniedException();
         }
