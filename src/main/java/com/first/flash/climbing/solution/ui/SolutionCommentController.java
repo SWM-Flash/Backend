@@ -36,7 +36,7 @@ public class SolutionCommentController {
     @Operation(summary = "해설 댓글 생성", description = "특정 해설에 대한 댓글 생성")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "성공적으로 댓글 생성",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionCommentCreateRequestDto.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionCommentCreateResponseDto.class))),
         @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "요청값 누락", value = "{\"error\": \"content는 필수입니다.\"}"),
