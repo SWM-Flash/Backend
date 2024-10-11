@@ -2,8 +2,10 @@ package com.first.flash.climbing.problem.ui;
 
 import com.first.flash.climbing.problem.application.ProblemReadService;
 import com.first.flash.climbing.problem.application.ProblemsSaveService;
+import com.first.flash.climbing.problem.application.ProblemsService;
 import com.first.flash.climbing.problem.application.dto.ProblemCreateResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
+import com.first.flash.climbing.problem.application.dto.ProblemPerceivedDifficultyRequestDto;
 import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.dto.ProblemCreateRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +39,7 @@ public class ProblemController {
 
     private final ProblemsSaveService problemsSaveService;
     private final ProblemReadService problemReadService;
+    private final ProblemsService problemsService;
 
     @Operation(summary = "문제 생성", description = "특정 섹터에 문제 생성")
     @ApiResponses(value = {
@@ -97,5 +101,12 @@ public class ProblemController {
     public ResponseEntity<ProblemDetailResponseDto> findProblemById(
         @PathVariable final UUID problemId) {
         return ResponseEntity.ok(problemReadService.viewProblems(problemId));
+    }
+
+    @PatchMapping("/admin/problems/{problemId}/perceivedDifficulty")
+    public ResponseEntity<ProblemDetailResponseDto> changePerceivedDifficulty(
+        @PathVariable final UUID problemId,
+        @Valid @RequestBody final ProblemPerceivedDifficultyRequestDto requestDto) {
+        return ResponseEntity.ok(problemsService.setPerceivedDifficulty(problemId, requestDto.perceivedDifficulty()));
     }
 }

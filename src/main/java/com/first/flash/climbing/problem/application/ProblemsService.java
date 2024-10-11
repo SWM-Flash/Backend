@@ -1,5 +1,6 @@
 package com.first.flash.climbing.problem.application;
 
+import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.domain.QueryProblemRepository;
@@ -53,5 +54,12 @@ public class ProblemsService {
     public void addPerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty) {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.addPerceivedDifficulty(perceivedDifficulty);
+    }
+
+    @Transactional
+    public ProblemDetailResponseDto setPerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty) {
+        QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
+        queryProblem.setPerceivedDifficulty(perceivedDifficulty);
+        return ProblemDetailResponseDto.of(queryProblem);
     }
 }
