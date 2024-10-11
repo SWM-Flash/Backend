@@ -6,7 +6,7 @@ import com.first.flash.climbing.solution.application.dto.SolutionCommentCreateRe
 import com.first.flash.climbing.solution.application.dto.SolutionCommentResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentsResponseDto;
-import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

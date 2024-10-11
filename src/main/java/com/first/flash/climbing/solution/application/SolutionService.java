@@ -15,6 +15,7 @@ import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeni
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
