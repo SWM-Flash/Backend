@@ -2,6 +2,7 @@ package com.first.flash.climbing.solution.domain;
 
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,8 @@ public interface SolutionRepository {
 
     Optional<Solution> findById(final Long id);
 
-    List<Solution> findAllByProblemId(final UUID problemId, final List<UUID> blockedMembers);
+    List<SolutionResponseDto> findAllByProblemId(final UUID problemId, final UUID memberId,
+        final List<UUID> blockedMembers);
 
     void deleteById(final Long id);
 

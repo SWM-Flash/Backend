@@ -2,8 +2,8 @@ package com.first.flash.climbing.solution.ui;
 
 import com.first.flash.climbing.solution.application.SolutionSaveService;
 import com.first.flash.climbing.solution.application.SolutionService;
-import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
+import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.application.dto.UnregisteredMemberSolutionCreateRequest;
@@ -92,7 +92,7 @@ public class SolutionController {
     @Operation(summary = "해설 업로드", description = "특정 문제에 대한 해설 업로드")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "성공적으로 해설을 업로드함",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionResponseDto.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionWriteResponseDto.class))),
         @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "요청값 누락", value = "{\"videoUrl\": \"비디오 URL은 필수입니다.\"}"),
@@ -103,7 +103,7 @@ public class SolutionController {
             }))
     })
     @PostMapping("problems/{problemId}/solutions")
-    public ResponseEntity<SolutionResponseDto> createSolution(@PathVariable final UUID problemId,
+    public ResponseEntity<SolutionWriteResponseDto> createSolution(@PathVariable final UUID problemId,
         @Valid @RequestBody final SolutionCreateRequestDto solutionCreateRequestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -115,7 +115,7 @@ public class SolutionController {
     @Operation(summary = "없는 유저의 영상으로 해설 업로드", description = "없는 유저의 영상으로 해설 업로드")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "성공적으로 해설을 업로드함",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionResponseDto.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionWriteResponseDto.class))),
         @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "요청값 누락", value = "{\"videoUrl\": \"비디오 URL은 필수입니다.\"}"),
@@ -126,7 +126,7 @@ public class SolutionController {
             }))
     })
     @PostMapping("admin/problems/{problemId}/solutions")
-    public ResponseEntity<SolutionResponseDto> createUnregisteredMemberSolution(
+    public ResponseEntity<SolutionWriteResponseDto> createUnregisteredMemberSolution(
         @PathVariable final UUID problemId,
         @Valid @RequestBody final UnregisteredMemberSolutionCreateRequest createRequestDto) {
 
@@ -139,7 +139,7 @@ public class SolutionController {
     @Operation(summary = "해설 수정", description = "특정 해설 정보 수정")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공적으로 해설을 수정함",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionResponseDto.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionWriteResponseDto.class))),
         @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "요청값 누락", value = "{\"videoUrl\": \"비디오 URL은 필수입니다.\"}"),
@@ -154,7 +154,7 @@ public class SolutionController {
             }))
     })
     @PatchMapping("/solutions/{solutionId}")
-    public ResponseEntity<SolutionResponseDto> updateSolution(@PathVariable Long solutionId,
+    public ResponseEntity<SolutionWriteResponseDto> updateSolution(@PathVariable Long solutionId,
         @Valid @RequestBody final SolutionUpdateRequestDto solutionUpdateRequestDto) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(
