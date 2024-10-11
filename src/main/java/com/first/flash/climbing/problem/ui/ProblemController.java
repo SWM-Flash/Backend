@@ -82,10 +82,11 @@ public class ProblemController {
         @RequestParam(defaultValue = DEFAULT_SIZE, required = false) final int size,
         @RequestParam(required = false) final List<String> difficulty,
         @RequestParam(required = false) final List<String> sector,
-        @RequestParam(name = "has-solution", required = false) final Boolean hasSolution) {
+        @RequestParam(name = "has-solution", required = false) final Boolean hasSolution,
+        @RequestParam(name = "is-honey", required = false) final Boolean isHoney) {
         return ResponseEntity.ok(
             problemReadService.findAll(gymId, cursor, sortBy, size, difficulty, sector,
-                hasSolution));
+                hasSolution, isHoney));
     }
 
     @Operation(summary = "문제 단건 조회", description = "특정 문제의 정보 조회")

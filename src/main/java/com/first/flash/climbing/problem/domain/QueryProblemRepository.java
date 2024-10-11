@@ -15,7 +15,7 @@ public interface QueryProblemRepository {
 
     List<QueryProblem> findAll(final ProblemCursor preProblemCursor, final ProblemSortBy problemSortBy, final int size,
         final Long gymId, final List<String> difficulty, final List<String> sector,
-        final Boolean hasSolution);
+        final Boolean hasSolution, final Boolean isHoney);
 
     void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate);
 
