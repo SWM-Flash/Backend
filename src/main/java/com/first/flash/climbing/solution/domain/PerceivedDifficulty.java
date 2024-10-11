@@ -31,4 +31,13 @@ public enum PerceivedDifficulty {
         }
         throw new PerceivedDifficultyNotFoundException(label);
     }
+
+    public static PerceivedDifficulty fromValue(int value) {
+        for (PerceivedDifficulty difficulty : values()) {
+            if (difficulty.value == value) {
+                return difficulty;
+            }
+        }
+        throw new IllegalArgumentException("Unknown value: " + value);
+    }
 }

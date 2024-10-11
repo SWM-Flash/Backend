@@ -64,7 +64,8 @@ public class SolutionQueryDslRepository {
     public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
         return jpaQueryFactory.select(Projections.constructor(DetailSolutionDto.class,
                                   solution.id, solution.solutionDetail.videoUrl, queryProblem.gymName,
-                                  queryProblem.sectorName, solution.solutionDetail.review, queryProblem.difficultyName,
+                                  queryProblem.sectorName, solution.solutionDetail.review,
+                                  queryProblem.difficultyName, solution.solutionDetail.perceivedDifficulty,
                                   queryProblem.removalDate, queryProblem.settingDate, solution.createdAt
                               ))
                               .from(solution)
