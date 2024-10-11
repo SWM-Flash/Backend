@@ -80,7 +80,7 @@ public class SolutionService {
 
         Integer newPerceivedDifficulty = requestDto.perceivedDifficulty().getValue();
         Integer oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
-        int difficultyDifference = calculateDifficultyDifference(newPerceivedDifficulty, oldPerceivedDifficulty);
+        int difficultyDifference = calculateDifficultyDifference(oldPerceivedDifficulty, newPerceivedDifficulty);
 
         solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), newPerceivedDifficulty);
 
@@ -99,7 +99,7 @@ public class SolutionService {
         validateUploader(solution);
         solutionRepository.deleteById(id);
 
-        Integer perceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty() * -1;
+        Integer perceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
         Events.raise(SolutionDeletedEvent.of(solution.getProblemId(), perceivedDifficulty));
     }
 

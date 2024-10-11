@@ -80,6 +80,14 @@ public class QueryProblem {
         calculateRecommendationValue();
     }
 
+    public void addPerceivedDifficulty(final Integer value) {
+        perceivedDifficulty += value;
+    }
+
+    public void subtractPerceivedDifficulty(final Integer value) {
+        perceivedDifficulty -= value;
+    }
+
     private void enableSolution() {
         if (!hasSolution) {
             hasSolution = true;

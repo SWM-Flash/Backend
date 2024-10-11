@@ -40,7 +40,7 @@ public class ProblemsService {
     public void updateProblemDeletedSolutionInfo(final UUID problemId, final Integer perceivedDifficulty) {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.decrementSolutionCount();
-        queryProblemRepository.updatePerceivedDifficulty(problemId, perceivedDifficulty);
+        queryProblem.subtractPerceivedDifficulty(perceivedDifficulty);
     }
 
     @Transactional
@@ -51,6 +51,7 @@ public class ProblemsService {
 
     @Transactional
     public void updatePerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty) {
-        queryProblemRepository.updatePerceivedDifficulty(problemId, perceivedDifficulty);
+        QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
+        queryProblem.addPerceivedDifficulty(perceivedDifficulty);
     }
 }
