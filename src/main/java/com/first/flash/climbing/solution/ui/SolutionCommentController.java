@@ -93,9 +93,9 @@ public class SolutionCommentController {
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<SolutionCommentResponseDto> updateComment(
         @PathVariable final Long commentId,
-        @RequestBody @Valid final SolutionCommentUpdateRequestDto content) {
+        @RequestBody @Valid final SolutionCommentUpdateRequestDto request) {
         SolutionCommentResponseDto response = solutionCommentService.updateComment(commentId,
-            content);
+            request);
         return ResponseEntity.status(HttpStatus.OK)
                              .body(response);
     }

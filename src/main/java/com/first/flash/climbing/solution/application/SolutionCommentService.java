@@ -30,12 +30,12 @@ public class SolutionCommentService {
 
     @Transactional
     public SolutionCommentCreateResponseDto createComment(final Long solutionId,
-        final SolutionCommentCreateRequestDto requestDto) {
+        final SolutionCommentCreateRequestDto request) {
         UUID id = AuthUtil.getId();
         Member member = memberService.findById(id);
 
         Solution solution = solutionService.findSolutionById(solutionId);
-        SolutionComment solutionComment = SolutionComment.of(requestDto.content(),
+        SolutionComment solutionComment = SolutionComment.of(request.content(),
             member.getNickName(), member.getProfileImageUrl(), member.getId(), solution);
         SolutionComment savedSolutionComment = solutionCommentRepository.save(solutionComment);
 
