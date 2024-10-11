@@ -3,9 +3,8 @@ package com.first.flash.climbing.solution.application;
 import com.first.flash.account.member.application.BlockService;
 import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
-import com.first.flash.climbing.solution.application.dto.MySolutionsResponseDto;
-import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
+import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
 import com.first.flash.climbing.solution.domain.Solution;
@@ -15,6 +14,7 @@ import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeni
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
@@ -46,10 +46,7 @@ public class SolutionService {
         Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
         List<UUID> blockedMembers = blockService.findBlockedMembers();
         List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId,
-                                                                    blockedMembers)
-                                                                .stream()
-                                                                .map(SolutionResponseDto::toDto)
-                                                                .toList();
+            AuthUtil.getId(), blockedMembers);
 
         return SolutionsResponseDto.of(solutions);
     }
@@ -68,7 +65,7 @@ public class SolutionService {
     }
 
     @Transactional
-    public SolutionResponseDto updateContent(final Long id,
+    public SolutionWriteResponseDto updateContent(final Long id,
         final SolutionUpdateRequestDto requestDto) {
 
         Solution solution = solutionRepository.findById(id)
@@ -79,7 +76,7 @@ public class SolutionService {
 
         solution.updateContentInfo(requestDto.review(), requestDto.videoUrl());
 
-        return SolutionResponseDto.toDto(solution);
+        return SolutionWriteResponseDto.toDto(solution);
     }
 
     @Transactional

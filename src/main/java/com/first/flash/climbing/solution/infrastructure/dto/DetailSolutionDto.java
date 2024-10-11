@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record DetailSolutionDto(Long solutionId, String videoUrl, String gymName, String sectorName,
-                                String review, String difficultyName, LocalDate removalDate,
+                                String review, String difficultyName, Long commentsCount, LocalDate removalDate,
                                 LocalDate settingDate, LocalDateTime uploadedAt) {
 
 }

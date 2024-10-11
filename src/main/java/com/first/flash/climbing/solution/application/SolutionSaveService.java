@@ -2,7 +2,7 @@ package com.first.flash.climbing.solution.application;
 
 import com.first.flash.account.member.application.MemberService;
 import com.first.flash.account.member.domain.Member;
-import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.UnregisteredMemberSolutionCreateRequest;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
@@ -24,7 +24,7 @@ public class SolutionSaveService {
     private final SolutionRepository solutionRepository;
 
     @Transactional
-    public SolutionResponseDto saveSolution(final UUID problemId,
+    public SolutionWriteResponseDto saveSolution(final UUID problemId,
         final SolutionCreateRequestDto createRequestDto) {
         UUID id = AuthUtil.getId();
         Member member = memberService.findById(id);
@@ -34,7 +34,7 @@ public class SolutionSaveService {
             member.getProfileImageUrl());
         Solution savedSolution = solutionRepository.save(solution);
         Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
-        return SolutionResponseDto.toDto(savedSolution);
+        return SolutionWriteResponseDto.toDto(savedSolution);
     }
 
     @Transactional
@@ -44,7 +44,7 @@ public class SolutionSaveService {
     }
 
     @Transactional
-    public SolutionResponseDto saveUnregisteredMemberSolution(final UUID problemId,
+    public SolutionWriteResponseDto saveUnregisteredMemberSolution(final UUID problemId,
         final UnregisteredMemberSolutionCreateRequest requestDto) {
         UUID id = AuthUtil.getId();
         Member member = memberService.findById(id);
@@ -54,6 +54,6 @@ public class SolutionSaveService {
             requestDto.profileImageUrl());
         Solution savedSolution = solutionRepository.save(solution);
         Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
-        return SolutionResponseDto.toDto(savedSolution);
+        return SolutionWriteResponseDto.toDto(savedSolution);
     }
 }

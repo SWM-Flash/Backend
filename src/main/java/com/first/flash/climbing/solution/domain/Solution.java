@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class Solution extends BaseEntity {
     private Long optionalWeight;
     @OneToMany(mappedBy = "solution", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<SolutionComment> comments;
+    private List<SolutionComment> comments = new ArrayList<>();
 
     protected Solution(final String uploader, final String review, final String instagramId,
         final String videoUrl, final UUID problemId, final UUID uploaderId,
