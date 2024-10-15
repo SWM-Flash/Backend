@@ -31,8 +31,8 @@ public class ProblemReadService {
     private final ProblemRepository problemRepository;
 
     public ProblemsResponseDto findAll(final Long gymId, final String cursor,
-        final String sortByRequest, final Integer size,
-        final List<String> difficulty, final List<String> sector, final Boolean hasSolution) {
+        final String sortByRequest, final Integer size, final List<String> difficulty,
+        final List<String> sector, final Boolean hasSolution, final Boolean isHoney) {
         ProblemCursor prevProblemCursor = ProblemCursor.decode(cursor);
         ProblemSortBy problemSortBy = ProblemSortBy.from(sortByRequest);
 
@@ -40,7 +40,7 @@ public class ProblemReadService {
 
         List<QueryProblem> queryProblems = queryProblemRepository.findAll(prevProblemCursor,
             problemSortBy, size,
-            gymId, difficulty, sector, hasSolution);
+            gymId, difficulty, sector, hasSolution, isHoney);
         String nextCursor = getNextCursor(problemSortBy, size, queryProblems);
         return ProblemsResponseDto.of(queryProblems, nextCursor);
     }

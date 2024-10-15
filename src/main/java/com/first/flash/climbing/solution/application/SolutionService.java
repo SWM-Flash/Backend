@@ -7,14 +7,18 @@ import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDt
 import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
+import com.first.flash.climbing.solution.domain.PerceivedDifficulty;
+import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
@@ -71,11 +75,18 @@ public class SolutionService {
 
         Solution solution = solutionRepository.findById(id)
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
+        validateUploader(solution);
 
-        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
-        validateUploader(uploaderId);
+        PerceivedDifficulty newPerceivedDifficulty = requestDto.perceivedDifficulty();
+        PerceivedDifficulty oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
+        int difficultyDifference = newPerceivedDifficulty.calculateDifferenceFrom(oldPerceivedDifficulty);
 
-        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl());
+        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), newPerceivedDifficulty);
+
+        Events.raise(PerceivedDifficultySetEvent.of(
+            solution.getProblemId(),
+            difficultyDifference
+        ));
 
         return SolutionWriteResponseDto.toDto(solution);
     }
@@ -84,10 +95,11 @@ public class SolutionService {
     public void deleteSolution(final Long id) {
         Solution solution = solutionRepository.findById(id)
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
-        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
-        validateUploader(uploaderId);
+        validateUploader(solution);
         solutionRepository.deleteById(id);
-        Events.raise(SolutionDeletedEvent.of(solution.getProblemId()));
+
+        PerceivedDifficulty perceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
+        Events.raise(SolutionDeletedEvent.of(solution.getProblemId(), perceivedDifficulty.getValue()));
     }
 
     @Transactional
@@ -108,7 +120,8 @@ public class SolutionService {
         return solutions.size() != size;
     }
 
-    private void validateUploader(final UUID uploaderId) {
+    private void validateUploader(final Solution solution) {
+        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
         if (!AuthUtil.isSameId(uploaderId)) {
             throw new SolutionAccessDeniedException();
         }

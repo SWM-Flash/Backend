@@ -2,8 +2,10 @@ package com.first.flash.climbing.problem.ui;
 
 import com.first.flash.climbing.problem.application.ProblemReadService;
 import com.first.flash.climbing.problem.application.ProblemsSaveService;
+import com.first.flash.climbing.problem.application.ProblemsService;
 import com.first.flash.climbing.problem.application.dto.ProblemCreateResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
+import com.first.flash.climbing.problem.application.dto.ProblemPerceivedDifficultyRequestDto;
 import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.dto.ProblemCreateRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +39,7 @@ public class ProblemController {
 
     private final ProblemsSaveService problemsSaveService;
     private final ProblemReadService problemReadService;
+    private final ProblemsService problemsService;
 
     @Operation(summary = "문제 생성", description = "특정 섹터에 문제 생성")
     @ApiResponses(value = {
@@ -78,10 +82,11 @@ public class ProblemController {
         @RequestParam(defaultValue = DEFAULT_SIZE, required = false) final int size,
         @RequestParam(required = false) final List<String> difficulty,
         @RequestParam(required = false) final List<String> sector,
-        @RequestParam(name = "has-solution", required = false) final Boolean hasSolution) {
+        @RequestParam(name = "has-solution", required = false) final Boolean hasSolution,
+        @RequestParam(name = "is-honey", required = false) final Boolean isHoney) {
         return ResponseEntity.ok(
             problemReadService.findAll(gymId, cursor, sortBy, size, difficulty, sector,
-                hasSolution));
+                hasSolution, isHoney));
     }
 
     @Operation(summary = "문제 단건 조회", description = "특정 문제의 정보 조회")
@@ -97,5 +102,25 @@ public class ProblemController {
     public ResponseEntity<ProblemDetailResponseDto> findProblemById(
         @PathVariable final UUID problemId) {
         return ResponseEntity.ok(problemReadService.viewProblems(problemId));
+    }
+
+    @Operation(summary = "문제 체감 난이도 수정", description = "특정 문제의 체감 난이도 수정")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 문제 정보 수정함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetailResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"perceivedDifficulty\": \"변경할 체감 난이도 수치는 필수입니다.\"}")
+            })),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "문제 없음", value = "{\"error\": \"아이디가 0190c558-9063-7050-b4fc-eb421e3236b3인 문제를 찾을 수 없습니다.\"}")
+            }))
+    })
+    @PatchMapping("/admin/problems/{problemId}/perceivedDifficulty")
+    public ResponseEntity<ProblemDetailResponseDto> changePerceivedDifficulty(
+        @PathVariable final UUID problemId,
+        @Valid @RequestBody final ProblemPerceivedDifficultyRequestDto requestDto) {
+        return ResponseEntity.ok(problemsService.setPerceivedDifficulty(problemId, requestDto.perceivedDifficulty()));
     }
 }

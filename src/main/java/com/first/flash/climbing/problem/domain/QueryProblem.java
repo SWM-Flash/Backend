@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -42,6 +43,8 @@ public class QueryProblem {
     private Integer views;
     private Boolean isExpired;
     private Integer solutionCount;
+    @Setter
+    private Integer perceivedDifficulty;
     private Long recommendationValue;
     private Boolean hasSolution;
     private Boolean isFakeRemovalDate;
@@ -77,6 +80,18 @@ public class QueryProblem {
             hasSolution = false;
         }
         calculateRecommendationValue();
+    }
+
+    public void addPerceivedDifficulty(final Integer value) {
+        perceivedDifficulty += value;
+    }
+
+    public void subtractPerceivedDifficulty(final Integer value) {
+        perceivedDifficulty -= value;
+    }
+
+    public Boolean isHoney() {
+        return perceivedDifficulty < 0;
     }
 
     private void enableSolution() {

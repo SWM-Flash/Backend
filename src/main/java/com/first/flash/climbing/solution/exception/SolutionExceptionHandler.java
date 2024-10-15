@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.exception;
 
+import com.first.flash.climbing.solution.exception.exceptions.PerceivedDifficultyNotFoundException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionCommentAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionCommentNotFoundException;
@@ -37,10 +38,17 @@ public class SolutionExceptionHandler {
         return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
     }
 
+    @ExceptionHandler(PerceivedDifficultyNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handlePerceivedDifficultyNotFoundException(
+        final PerceivedDifficultyNotFoundException exception) {
+        return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
+    }
+
     private ResponseEntity<ErrorResponseDto> getResponseWithStatus(final HttpStatus httpStatus,
         final RuntimeException exception) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage());
         return ResponseEntity.status(httpStatus)
                              .body(errorResponse);
     }
+
 }

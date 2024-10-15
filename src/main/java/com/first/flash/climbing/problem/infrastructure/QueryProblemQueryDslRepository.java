@@ -25,11 +25,11 @@ public class QueryProblemQueryDslRepository {
 
     public List<QueryProblem> findAll(final ProblemCursor prevProblemCursor, final ProblemSortBy problemSortBy, final int size,
         final Long gymId, final List<String> difficulty, final List<String> sector,
-        final Boolean hasSolution) {
+        final Boolean hasSolution, final Boolean isHoney) {
         return queryFactory
             .selectFrom(queryProblem)
             .where(notExpired(), cursorCondition(prevProblemCursor), inGym(gymId), inSectors(sector),
-                inDifficulties(difficulty), hasSolution(hasSolution))
+                inDifficulties(difficulty), hasSolution(hasSolution), isHoneyCondition(isHoney))
             .orderBy(sortItem(problemSortBy), queryProblem.id.desc())
             .limit(size)
             .fetch();
@@ -61,6 +61,13 @@ public class QueryProblemQueryDslRepository {
 
     private BooleanExpression inGym(final Long gymId) {
         return queryProblem.gymId.eq(gymId);
+    }
+
+    private BooleanExpression isHoneyCondition(final Boolean isHoney) {
+        if (Boolean.TRUE.equals(isHoney)) {
+            return queryProblem.perceivedDifficulty.lt(0);
+        }
+        return null;
     }
 
     private BooleanExpression cursorCondition(final ProblemCursor prevProblemCursor) {
