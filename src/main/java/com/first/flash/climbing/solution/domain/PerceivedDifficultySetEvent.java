@@ -7,13 +7,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SolutionDeletedEvent extends Event {
+public class PerceivedDifficultySetEvent extends Event {
 
     private UUID problemId;
     private Integer perceivedDifficulty;
 
-    public static SolutionDeletedEvent of(final UUID problemId, final Integer perceivedDifficulty) {
-        return new SolutionDeletedEvent(problemId, perceivedDifficulty);
+    public static PerceivedDifficultySetEvent of(final UUID problemId, final Integer perceivedDifficulty) {
+        return new PerceivedDifficultySetEvent(problemId, perceivedDifficulty);
     }
-
 }
