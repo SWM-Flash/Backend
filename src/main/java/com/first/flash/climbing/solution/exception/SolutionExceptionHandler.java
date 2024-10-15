@@ -38,6 +38,12 @@ public class SolutionExceptionHandler {
         return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
     }
 
+    @ExceptionHandler(PerceivedDifficultyNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handlePerceivedDifficultyNotFoundException(
+        final PerceivedDifficultyNotFoundException exception) {
+        return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
+    }
+
     private ResponseEntity<ErrorResponseDto> getResponseWithStatus(final HttpStatus httpStatus,
         final RuntimeException exception) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage());
@@ -45,11 +51,4 @@ public class SolutionExceptionHandler {
                              .body(errorResponse);
     }
 
-    @ExceptionHandler(PerceivedDifficultyNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handlePerceivedDifficultyNotFoundException(
-        final PerceivedDifficultyNotFoundException exception) {
-        ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                             .body(errorResponse);
-    }
 }
