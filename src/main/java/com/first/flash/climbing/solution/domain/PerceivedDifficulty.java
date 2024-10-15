@@ -40,4 +40,8 @@ public enum PerceivedDifficulty {
         }
         throw new IllegalArgumentException("Unknown value: " + value);
     }
+
+    public int calculateDifferenceFrom(PerceivedDifficulty other) {
+        return this.value - other.value;
+    }
 }

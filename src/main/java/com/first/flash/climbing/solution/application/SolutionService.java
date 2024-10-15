@@ -77,7 +77,7 @@ public class SolutionService {
 
         PerceivedDifficulty newPerceivedDifficulty = requestDto.perceivedDifficulty();
         PerceivedDifficulty oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
-        int difficultyDifference = calculateDifficultyDifference(oldPerceivedDifficulty, newPerceivedDifficulty);
+        int difficultyDifference = newPerceivedDifficulty.calculateDifferenceFrom(oldPerceivedDifficulty);
 
         solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), newPerceivedDifficulty);
 
@@ -123,9 +123,5 @@ public class SolutionService {
         if (!AuthUtil.isSameId(uploaderId)) {
             throw new SolutionAccessDeniedException();
         }
-    }
-
-    private int calculateDifficultyDifference(PerceivedDifficulty oldPerceivedDifficulty, PerceivedDifficulty newPerceivedDifficulty) {
-        return newPerceivedDifficulty.getValue() - oldPerceivedDifficulty.getValue();
     }
 }
