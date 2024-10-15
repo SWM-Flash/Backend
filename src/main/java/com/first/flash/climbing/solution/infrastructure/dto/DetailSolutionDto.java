@@ -5,6 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record DetailSolutionDto(Long solutionId, String videoUrl, String gymName, String sectorName,
-                                String review, String difficultyName, PerceivedDifficulty perceivedDifficulty, LocalDate removalDate,
-                                LocalDate settingDate, LocalDateTime uploadedAt) {
+                                String review, String difficultyName, Long commentsCount, PerceivedDifficulty perceivedDifficulty,
+                                LocalDate removalDate, LocalDate settingDate, LocalDateTime uploadedAt) {
 }
