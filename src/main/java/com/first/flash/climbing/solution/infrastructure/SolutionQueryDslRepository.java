@@ -6,7 +6,7 @@ import static com.first.flash.climbing.solution.domain.QSolutionComment.solution
 
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
-import com.first.flash.climbing.solution.infrastructure.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -24,13 +24,13 @@ public class SolutionQueryDslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<SolutionResponseDto> findAllExcludedBlockedMembers(final UUID problemId,
-        final UUID memberId, final List<UUID> memberIds) {
-        return jpaQueryFactory.select(Projections.constructor(SolutionResponseDto.class,
+    public List<SolutionRepositoryResponseDto> findAllExcludedBlockedMembers(final UUID problemId,
+        final List<UUID> memberIds) {
+        return jpaQueryFactory.select(Projections.constructor(SolutionRepositoryResponseDto.class,
                                   solution.id, solution.uploaderDetail.uploader, solution.solutionDetail.review,
                                   solution.uploaderDetail.instagramId, solution.solutionDetail.videoUrl,
-                                  solution.uploaderDetail.uploaderId, solution.uploaderDetail.uploaderId.eq(memberId),
-                                  solution.uploaderDetail.profileImageUrl, solutionComment.count()
+                                  solution.uploaderDetail.uploaderId, solution.uploaderDetail.profileImageUrl,
+                                  solutionComment.count()
                               ))
                               .from(solution)
                               .leftJoin(solutionComment)
