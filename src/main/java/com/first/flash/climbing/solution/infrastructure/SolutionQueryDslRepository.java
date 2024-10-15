@@ -76,9 +76,10 @@ public class SolutionQueryDslRepository {
     public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
         return jpaQueryFactory.select(Projections.constructor(DetailSolutionDto.class,
                                   solution.id, solution.solutionDetail.videoUrl, queryProblem.gymName,
-                                  queryProblem.sectorName, solution.solutionDetail.review, queryProblem.difficultyName,
-                                  solutionComment.count(), queryProblem.removalDate, queryProblem.settingDate,
-                                  solution.createdAt))
+                                  queryProblem.sectorName, solution.solutionDetail.review,
+                                  queryProblem.difficultyName, solutionComment.count(), solution.solutionDetail.perceivedDifficulty,
+                                  queryProblem.removalDate, queryProblem.settingDate, solution.createdAt
+                              ))
                               .from(solution)
                               .innerJoin(queryProblem)
                               .on(solution.problemId.eq(queryProblem.id))

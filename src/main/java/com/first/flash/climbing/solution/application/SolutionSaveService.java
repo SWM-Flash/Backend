@@ -4,6 +4,8 @@ import com.first.flash.account.member.application.MemberService;
 import com.first.flash.account.member.domain.Member;
 import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.UnregisteredMemberSolutionCreateRequest;
+import com.first.flash.climbing.solution.domain.PerceivedDifficulty;
+import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
@@ -29,9 +31,12 @@ public class SolutionSaveService {
         UUID id = AuthUtil.getId();
         Member member = memberService.findById(id);
 
+        PerceivedDifficulty perceivedDifficulty = createRequestDto.perceivedDifficulty();
         Solution solution = Solution.of(member.getNickName(), createRequestDto.review(),
             member.getInstagramId(), createRequestDto.videoUrl(), problemId, member.getId(),
-            member.getProfileImageUrl());
+            member.getProfileImageUrl(), perceivedDifficulty);
+        Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(), perceivedDifficulty.getValue()));
+
         Solution savedSolution = solutionRepository.save(solution);
         Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
         return SolutionWriteResponseDto.toDto(savedSolution);
@@ -49,10 +54,13 @@ public class SolutionSaveService {
         UUID id = AuthUtil.getId();
         Member member = memberService.findById(id);
 
+        PerceivedDifficulty perceivedDifficulty = requestDto.perceivedDifficulty();
         Solution solution = Solution.of(requestDto.nickName(), requestDto.review(),
             requestDto.instagramId(), requestDto.videoUrl(), problemId, member.getId(),
-            requestDto.profileImageUrl());
+            requestDto.profileImageUrl(), perceivedDifficulty);
+
         Solution savedSolution = solutionRepository.save(solution);
+        Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(), perceivedDifficulty.getValue()));
         Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
         return SolutionWriteResponseDto.toDto(savedSolution);
     }

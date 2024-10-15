@@ -31,9 +31,9 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
     @Override
     public List<QueryProblem> findAll(final ProblemCursor prevProblemCursor, final ProblemSortBy problemSortBy, final int size,
         final Long gymId, final List<String> difficulty, final List<String> sector,
-        final Boolean hasSolution) {
+        final Boolean hasSolution, final Boolean isHoney) {
         return queryProblemQueryDslRepository.findAll(prevProblemCursor, problemSortBy, size,
-            gymId, difficulty, sector, hasSolution);
+            gymId, difficulty, sector, hasSolution, isHoney);
     }
 
     @Override
