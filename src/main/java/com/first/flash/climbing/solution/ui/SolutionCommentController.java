@@ -6,7 +6,7 @@ import com.first.flash.climbing.solution.application.dto.SolutionCommentCreateRe
 import com.first.flash.climbing.solution.application.dto.SolutionCommentResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionCommentsResponseDto;
-import com.first.flash.climbing.solution.infrastructure.dto.SolutionResponseDto;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -76,7 +76,7 @@ public class SolutionCommentController {
     @Operation(summary = "댓글 수정", description = "내 댓글 수정")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공적으로 댓글을 수정함",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionResponseDto.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionRepositoryResponseDto.class))),
         @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "요청값 누락", value = "{\"error\": \"content는 필수입니다.\"}"),
