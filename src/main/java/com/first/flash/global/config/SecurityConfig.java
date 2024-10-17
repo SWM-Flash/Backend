@@ -32,7 +32,8 @@ public class SecurityConfig {
         "/auth/login",
         "/swagger-ui/*",
         "/v1/api-docs/**",
-        "/flash-climbing-answer-health/**"
+        "/flash-climbing-answer-health/**",
+        "/versions"
     };
     private static final String COMPLETE_REGISTRATION = "/members";
     private static final String MARKETING_CONSENT = "/members/marketing-consent";
