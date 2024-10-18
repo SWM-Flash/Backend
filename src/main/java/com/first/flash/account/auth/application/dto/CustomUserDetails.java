@@ -8,11 +8,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public record CustomUserDetails(UUID id, Role role) implements UserDetails {
+public record CustomUserDetails(UUID id, Role role, String nickName) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
+    }
+
+    public String getNickName() {
+        return nickName;
     }
 
     @Override
