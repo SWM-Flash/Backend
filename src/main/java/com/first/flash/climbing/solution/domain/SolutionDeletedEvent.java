@@ -10,9 +10,10 @@ import lombok.Getter;
 public class SolutionDeletedEvent extends Event {
 
     private UUID problemId;
+    private Integer perceivedDifficulty;
 
-    public static SolutionDeletedEvent of(final UUID problemId) {
-        return new SolutionDeletedEvent(problemId);
+    public static SolutionDeletedEvent of(final UUID problemId, final Integer perceivedDifficulty) {
+        return new SolutionDeletedEvent(problemId, perceivedDifficulty);
     }
 
 }

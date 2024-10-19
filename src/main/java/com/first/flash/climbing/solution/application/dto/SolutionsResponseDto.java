@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.application.dto;
 
+import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
 import java.util.List;
 
 public record SolutionsResponseDto(List<SolutionResponseDto> solutions,

@@ -4,6 +4,7 @@ import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import java.util.List;
 import java.util.Optional;
@@ -29,11 +30,8 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public List<Solution> findAllByProblemId(final UUID problemId,
+    public List<SolutionRepositoryResponseDto> findAllByProblemId(final UUID problemId,
         final List<UUID> blockedMembers) {
-        if (blockedMembers.isEmpty()) {
-            return solutionJpaRepository.findByProblemId(problemId);
-        }
         return solutionQueryDslRepository.findAllExcludedBlockedMembers(
             problemId, blockedMembers);
     }
@@ -61,7 +59,8 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public List<MySolutionDto> findMySolutions(final UUID myId, final SolutionCursor prevSolutionCursor,
+    public List<MySolutionDto> findMySolutions(final UUID myId,
+        final SolutionCursor prevSolutionCursor,
         final int size, final Long gymId, final List<String> difficulty) {
         return solutionQueryDslRepository.findByUploaderId(myId, prevSolutionCursor, size, gymId,
             difficulty);

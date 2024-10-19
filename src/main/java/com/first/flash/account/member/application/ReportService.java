@@ -25,8 +25,9 @@ public class ReportService {
         UUID reporterId = AuthUtil.getId();
         Member reporter = memberService.findById(reporterId);
         MemberReport memberReport = MemberReport.reportContent(request.reason(), reporter,
-            reportedContentId);
-        reportRepository.save(memberReport);
-        return MemberReportResponse.toDto(reportedContentId, request.reason());
+            reportedContentId, request.contentType());
+        MemberReport savedReport = reportRepository.save(memberReport);
+        return MemberReportResponse.toDto(savedReport.getReportedContentId(),
+            savedReport.getContentType(), savedReport.getReason());
     }
 }

@@ -3,14 +3,16 @@ package com.first.flash.climbing.solution.application;
 import com.first.flash.account.member.application.BlockService;
 import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
-import com.first.flash.climbing.solution.application.dto.MySolutionsResponseDto;
-import com.first.flash.climbing.solution.application.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
+import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
+import com.first.flash.climbing.solution.domain.PerceivedDifficulty;
+import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
+import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
@@ -46,11 +48,9 @@ public class SolutionService {
         Events.raise(ProblemIdConfirmRequestedEvent.of(problemId));
         List<UUID> blockedMembers = blockService.findBlockedMembers();
         List<SolutionResponseDto> solutions = solutionRepository.findAllByProblemId(problemId,
-                                                                    blockedMembers)
-                                                                .stream()
-                                                                .map(SolutionResponseDto::toDto)
+                                                                    blockedMembers).stream()
+                                                                .map(SolutionResponseDto::from)
                                                                 .toList();
-
         return SolutionsResponseDto.of(solutions);
     }
 
@@ -68,28 +68,36 @@ public class SolutionService {
     }
 
     @Transactional
-    public SolutionResponseDto updateContent(final Long id,
+    public SolutionWriteResponseDto updateContent(final Long id,
         final SolutionUpdateRequestDto requestDto) {
 
         Solution solution = solutionRepository.findById(id)
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
+        validateUploader(solution);
 
-        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
-        validateUploader(uploaderId);
+        PerceivedDifficulty newPerceivedDifficulty = requestDto.perceivedDifficulty();
+        PerceivedDifficulty oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
+        int difficultyDifference = newPerceivedDifficulty.calculateDifferenceFrom(oldPerceivedDifficulty);
 
-        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl());
+        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), newPerceivedDifficulty);
 
-        return SolutionResponseDto.toDto(solution);
+        Events.raise(PerceivedDifficultySetEvent.of(
+            solution.getProblemId(),
+            difficultyDifference
+        ));
+
+        return SolutionWriteResponseDto.toDto(solution);
     }
 
     @Transactional
     public void deleteSolution(final Long id) {
         Solution solution = solutionRepository.findById(id)
                                               .orElseThrow(() -> new SolutionNotFoundException(id));
-        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
-        validateUploader(uploaderId);
+        validateUploader(solution);
         solutionRepository.deleteById(id);
-        Events.raise(SolutionDeletedEvent.of(solution.getProblemId()));
+
+        PerceivedDifficulty perceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
+        Events.raise(SolutionDeletedEvent.of(solution.getProblemId(), perceivedDifficulty.getValue()));
     }
 
     @Transactional
@@ -110,7 +118,8 @@ public class SolutionService {
         return solutions.size() != size;
     }
 
-    private void validateUploader(final UUID uploaderId) {
+    private void validateUploader(final Solution solution) {
+        UUID uploaderId = solution.getUploaderDetail().getUploaderId();
         if (!AuthUtil.isSameId(uploaderId)) {
             throw new SolutionAccessDeniedException();
         }
