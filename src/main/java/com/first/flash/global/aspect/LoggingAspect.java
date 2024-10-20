@@ -1,7 +1,10 @@
 package com.first.flash.global.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.first.flash.account.auth.application.dto.CustomUserDetails;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -28,6 +31,12 @@ public class LoggingAspect {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ThreadLocal<Map<String, Object>> logContext = ThreadLocal.withInitial(
         HashMap::new);
+
+    @PostConstruct
+    public void setUp() {
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // ISO-8601 형식으로 출력
+    }
 
     @AfterReturning(pointcut = "execution(* com.first.flash.account.auth.application.CustomUserDetailsService.loadUserByUsername(..))", returning = "userDetails")
     public void logUserDetails(final CustomUserDetails userDetails) {
