@@ -104,7 +104,7 @@ public class LoggingAspect {
         }
     }
 
-    @AfterReturning(pointcut = "execution(* com.first.flash..*ExceptionHandler.*(..))", returning = "exception")
+    @AfterReturning(pointcut = "com.first.flash.global.aspect.PointCuts.allExceptionHandler()", returning = "exception")
     public void logException(final Object exception) {
         Map<String, Object> logData = logContext.get();
         logData.put("type", "error");
