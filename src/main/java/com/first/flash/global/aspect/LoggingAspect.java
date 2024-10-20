@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -105,18 +104,22 @@ public class LoggingAspect {
         }
     }
 
-    @AfterThrowing(pointcut = "execution(* com.first.flash..*ExceptionHandler.*(..))", throwing = "exception")
-    public void logException(final RuntimeException exception) {
+    @AfterReturning(pointcut = "execution(* com.first.flash..*ExceptionHandler.*(..))", returning = "exception")
+    public void logException(final Object exception) {
         Map<String, Object> logData = logContext.get();
-
         logData.put("type", "error");
-        logData.put("error class", exception.getClass().getSimpleName());
-        logData.put("error message", exception.getMessage());
+
+        if (exception instanceof ResponseEntity<?> exceptionResponse) {
+            logData.put("error status", exceptionResponse.getStatusCode().value());
+            logData.put("error body", exceptionResponse.getBody());
+        } else {
+            logData.put("error", exception);
+        }
 
         try {
-            log.error(objectMapper.writeValueAsString(logData));
+            log.info(objectMapper.writeValueAsString(logData));
         } catch (Exception e) {
-            log.error("Error converting log with exception to JSON", e);
+            log.error("Error converting log to JSON", e);
         } finally {
             logContext.remove();
         }
