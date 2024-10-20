@@ -6,7 +6,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.first.flash.account.auth.application.dto.CustomUserDetails;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -54,34 +52,34 @@ public class LoggingAspect {
         logContext.set(logData);
     }
 
-    @Before("com.first.flash.global.aspect.PointCuts.allService() || com.first.flash.global.aspect.PointCuts.allRepository()")
-    public void logMethodDetails(final JoinPoint joinPoint) {
-        if (log.isDebugEnabled()) {
-            MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-            Method method = signature.getMethod();
-            String className = joinPoint.getTarget().getClass().getSimpleName();
-
-            Map<String, Object> logData = logContext.get();
-            logData.put(className + " method", method.getName());
-
-            Object[] args = joinPoint.getArgs();
-            if (args.length > 0) {
-                logData.put("method param", args);
-            } else {
-                logData.put("method params", "no params");
-            }
-            logContext.set(logData);
-        }
-    }
-
-    @AfterReturning(pointcut = "com.first.flash.global.aspect.PointCuts.allService() || com.first.flash.global.aspect.PointCuts.allRepository()", returning = "result")
-    public void logMethodReturn(final JoinPoint joinPoint, final Object result) {
-        if (log.isDebugEnabled()) {
-            Map<String, Object> logData = logContext.get();
-            logData.put("method return value", result);
-            logContext.set(logData);
-        }
-    }
+//    @Before("com.first.flash.global.aspect.PointCuts.allService() || com.first.flash.global.aspect.PointCuts.allRepository()")
+//    public void logMethodDetails(final JoinPoint joinPoint) {
+//        if (log.isDebugEnabled()) {
+//            String key = generateLogKey(joinPoint);
+//
+//            Map<String, Object> methodDetails = new HashMap<>();
+//            Object[] args = joinPoint.getArgs();
+//            if (args.length > 0) {
+//                methodDetails.put("params", args);
+//            } else {
+//                methodDetails.put("params", "no params");
+//            }
+//
+//            updateLogContext(key, methodDetails);
+//        }
+//    }
+//
+//    @AfterReturning(pointcut = "com.first.flash.global.aspect.PointCuts.allService() || com.first.flash.global.aspect.PointCuts.allRepository()", returning = "result")
+//    public void logMethodReturn(final JoinPoint joinPoint, final Object result) {
+//        if (log.isDebugEnabled()) {
+//            String key = generateLogKey(joinPoint);
+//
+//            Map<String, Object> methodDetails = new HashMap<>();
+//            methodDetails.put("returnValue", result);
+//
+//            updateLogContext(key, methodDetails);
+//        }
+//    }
 
     @AfterReturning(pointcut = "com.first.flash.global.aspect.PointCuts.allController()", returning = "result")
     public void logResponse(final Object result) {
@@ -124,4 +122,25 @@ public class LoggingAspect {
             logContext.remove();
         }
     }
+
+//    private String generateLogKey(final JoinPoint joinPoint) {
+//        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+//        String className = joinPoint.getTarget().getClass().getSimpleName();
+//        String methodName = signature.getMethod().getName();
+//        return className + "." + methodName;
+//    }
+//
+//    private void updateLogContext(final String key, final Map<String, Object> methodDetails) {
+//        Map<String, Object> logData = logContext.get();
+//
+//        if (logData.containsKey(key)) {
+//            Map<String, Object> existingDetails = (Map<String, Object>) logData.get(key);
+//            existingDetails.putAll(methodDetails);
+//            logData.put(key, existingDetails);
+//        } else {
+//            logData.put(key, methodDetails);
+//        }
+//
+//        logContext.set(logData);
+//    }
 }
