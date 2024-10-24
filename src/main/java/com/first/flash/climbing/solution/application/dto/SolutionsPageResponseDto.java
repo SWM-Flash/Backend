@@ -11,6 +11,6 @@ public record SolutionsPageResponseDto(List<MySolutionDto> mySolutions, Meta met
         if (solutions.isEmpty()) {
             return new SolutionsPageResponseDto(List.of(), null);
         }
-        return new SolutionsPageResponseDto(solutions, Meta.of(nextCursor, solutions.size()));
+        return new SolutionsPageResponseDto(solutions, Meta.from(nextCursor));
     }
 }
