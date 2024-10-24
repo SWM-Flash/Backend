@@ -42,7 +42,7 @@ public class ClimbingGymService {
         List<String> sectorNames = findSectorNamesById(id);
         List<String> difficultyNames = getDifficultyNames(climbingGym);
         return new ClimbingGymDetailResponseDto(climbingGym.getGymName(),
-            climbingGym.getMapImageUrl(),
+            climbingGym.getMapImageUrl(), climbingGym.getCalendarImageUrl(),
             difficultyNames, sectorNames);
     }
 

@@ -30,6 +30,7 @@ public class ClimbingGym {
     private String gymName;
     private String thumbnailUrl;
     private String mapImageUrl;
+    private String calendarImageUrl;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "DIFFICULTY",
@@ -39,17 +40,18 @@ public class ClimbingGym {
     private List<Difficulty> difficulties;
 
     public ClimbingGym(final String gymName, final String thumbnailUrl, final String mapImageUrl,
-        final List<Difficulty> difficulties) {
+        final String calendarImageUrl, final List<Difficulty> difficulties) {
         this.gymName = gymName;
         this.thumbnailUrl = thumbnailUrl;
         this.mapImageUrl = mapImageUrl;
         this.difficulties = difficulties;
+        this.calendarImageUrl = calendarImageUrl;
     }
 
     public Difficulty getDifficultyByName(final String difficultyName) {
         return difficulties.stream()
-            .filter(difficulty -> difficulty.hasSameName(difficultyName))
-            .findAny()
-            .orElseThrow(() -> new DifficultyNotFoundException(difficultyName));
+                           .filter(difficulty -> difficulty.hasSameName(difficultyName))
+                           .findAny()
+                           .orElseThrow(() -> new DifficultyNotFoundException(difficultyName));
     }
 }

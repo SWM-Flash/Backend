@@ -19,7 +19,8 @@ public class SolutionEventHandler {
     @Transactional
     public void updateSolutionInfo(final MemberInfoUpdatedEvent event) {
         solutionSaveService.updateUploaderInfo(event.getMemberId(), event.getNickName(),
-            event.getInstagramId(), event.getProfileImageUrl());
+            event.getInstagramId(), event.getProfileImageUrl(), event.getHeight(), event.getReach(),
+            event.getGender());
 
         solutionCommentService.updateCommenterInfo(event.getMemberId(), event.getNickName(),
             event.getProfileImageUrl());
