@@ -23,22 +23,22 @@ public class UploaderDetail {
     private String uploader;
     private String instagramId;
     private String profileImageUrl;
-    private Double height;
-    private Double reach;
+    private Double uploaderHeight;
+    private Double uploaderReach;
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private Gender uploaderGender;
 
     protected UploaderDetail(final UUID uploaderId, final String uploader,
-        final String instagramId, final String profileImageUrl, final Double height,
-        final Double reach,
-        final Gender gender) {
+        final String instagramId, final String profileImageUrl, final Double uploaderHeight,
+        final Double uploaderReach,
+        final Gender uploaderGender) {
         this.uploaderId = uploaderId;
         this.uploader = uploader;
         this.instagramId = instagramId;
         this.profileImageUrl = profileImageUrl;
-        this.height = height;
-        this.reach = reach;
-        this.gender = gender;
+        this.uploaderHeight = uploaderHeight;
+        this.uploaderReach = uploaderReach;
+        this.uploaderGender = uploaderGender;
     }
 
     public static UploaderDetail of(final UUID uploaderId, final String uploader,

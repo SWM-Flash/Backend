@@ -43,12 +43,12 @@ public class Solution extends BaseEntity {
     protected Solution(final String uploader, final String review, final String instagramId,
         final String videoUrl, final UUID problemId, final UUID uploaderId,
         final String profileImageUrl, final PerceivedDifficulty perceivedDifficulty,
-        final Double height,
-        final Double reach, final Gender gender) {
+        final Double uploaderHeight,
+        final Double uploaderReach, final Gender uploaderGender) {
 
         this.solutionDetail = SolutionDetail.of(review, videoUrl, perceivedDifficulty);
         this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId, profileImageUrl,
-            height, reach, gender);
+            uploaderHeight, uploaderReach, uploaderGender);
         this.optionalWeight = DEFAULT_OPTIONAL_WEIGHT;
         this.problemId = problemId;
     }
@@ -56,10 +56,10 @@ public class Solution extends BaseEntity {
     public static Solution of(final String uploader, final String review, final String instagramId,
         final String videoUrl, final UUID problemId, final UUID uploaderId,
         final String profileImageUrl, final PerceivedDifficulty perceivedDifficulty,
-        final Double height, final Double reach, final Gender gender) {
+        final Double uploaderHeight, final Double uploaderReach, final Gender uploaderGender) {
 
         return new Solution(uploader, review, instagramId, videoUrl, problemId, uploaderId,
-            profileImageUrl, perceivedDifficulty, height, reach, gender);
+            profileImageUrl, perceivedDifficulty, uploaderHeight, uploaderReach, uploaderGender);
     }
 
     public void updateContentInfo(final String review, final String videoUrl,

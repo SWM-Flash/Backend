@@ -47,9 +47,10 @@ public class SolutionSaveService {
 
     @Transactional
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
-        final String instagramId, final String profileImageUrl, final Double height,
-        final Double reach, final Gender gender) {
-        solutionRepository.updateUploaderInfo(uploaderId, nickName, instagramId, profileImageUrl, height, reach, gender);
+        final String instagramId, final String profileImageUrl, final Double uploaderHeight,
+        final Double uploaderReach, final Gender uploaderGender) {
+        solutionRepository.updateUploaderInfo(uploaderId, nickName, instagramId, profileImageUrl,
+            uploaderHeight, uploaderReach, uploaderGender);
     }
 
     @Transactional

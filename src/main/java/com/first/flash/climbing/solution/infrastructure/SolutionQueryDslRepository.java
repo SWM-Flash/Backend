@@ -1,6 +1,5 @@
 package com.first.flash.climbing.solution.infrastructure;
 
-import static com.first.flash.account.member.domain.QMember.member;
 import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem;
 import static com.first.flash.climbing.solution.domain.QSolution.solution;
 import static com.first.flash.climbing.solution.domain.QSolutionComment.solutionComment;
@@ -67,15 +66,15 @@ public class SolutionQueryDslRepository {
     }
 
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
-        final String instagramId, final String profileImageUrl, final Double height,
-        final Double reach, final Gender gender) {
+        final String instagramId, final String profileImageUrl, final Double uploaderHeight,
+        final Double uploaderReach, final Gender uploaderGender) {
         jpaQueryFactory.update(solution)
                        .set(solution.uploaderDetail.uploader, nickName)
                        .set(solution.uploaderDetail.instagramId, instagramId)
                        .set(solution.uploaderDetail.profileImageUrl, profileImageUrl)
-                       .set(solution.uploaderDetail.height, height)
-                       .set(solution.uploaderDetail.reach, reach)
-                       .set(solution.uploaderDetail.gender, gender)
+                       .set(solution.uploaderDetail.height, uploaderHeight)
+                       .set(solution.uploaderDetail.reach, uploaderReach)
+                       .set(solution.uploaderDetail.gender, uploaderGender)
                        .where(solution.uploaderDetail.uploaderId.eq(uploaderId))
                        .execute();
     }

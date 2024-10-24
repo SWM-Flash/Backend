@@ -44,10 +44,10 @@ public class SolutionRepositoryImpl implements SolutionRepository {
 
     @Override
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
-        final String instagramId, final String profileImageUrl, final Double height,
-        final Double reach, final Gender gender) {
+        final String instagramId, final String profileImageUrl, final Double uploaderHeight,
+        final Double uploaderReach, final Gender uploaderGender) {
         solutionQueryDslRepository.updateUploaderInfo(uploaderId, nickName, instagramId,
-            profileImageUrl, height, reach, gender);
+            profileImageUrl, uploaderHeight, uploaderReach, uploaderGender);
     }
 
     @Override
