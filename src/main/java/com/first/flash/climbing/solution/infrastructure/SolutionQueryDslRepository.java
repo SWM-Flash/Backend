@@ -31,14 +31,13 @@ public class SolutionQueryDslRepository {
         return jpaQueryFactory.select(Projections.constructor(SolutionRepositoryResponseDto.class,
                                   solution.id, solution.uploaderDetail.uploader, solution.solutionDetail.review,
                                   solution.uploaderDetail.instagramId, solution.solutionDetail.videoUrl,
-                                  solution.uploaderDetail.uploaderId, member.height, member.reach, member.gender,
+                                  solution.uploaderDetail.uploaderId, solution.uploaderDetail.height,
+                                  solution.uploaderDetail.reach, solution.uploaderDetail.gender,
                                   solution.uploaderDetail.profileImageUrl, solutionComment.count()
                               ))
                               .from(solution)
                               .leftJoin(solutionComment)
                               .on(solution.id.eq(solutionComment.solution.id))
-                              .leftJoin(member)
-                              .on(solution.uploaderDetail.uploaderId.eq(member.id))
                               .where(solution.problemId.eq(problemId)
                                                        .and(notInBlockedMembers(memberIds)))
                               .groupBy(solution.id)
