@@ -1,6 +1,7 @@
 package com.first.flash.climbing.solution.application;
 
 import com.first.flash.account.member.application.MemberService;
+import com.first.flash.account.member.domain.Gender;
 import com.first.flash.account.member.domain.Member;
 import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.UnregisteredMemberSolutionCreateRequest;
@@ -44,8 +45,9 @@ public class SolutionSaveService {
 
     @Transactional
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
-        final String instagramId, final String profileImageUrl) {
-        solutionRepository.updateUploaderInfo(uploaderId, nickName, instagramId, profileImageUrl);
+        final String instagramId, final String profileImageUrl, final Double height,
+        final Double reach, final Gender gender) {
+        solutionRepository.updateUploaderInfo(uploaderId, nickName, instagramId, profileImageUrl, height, reach, gender);
     }
 
     @Transactional
