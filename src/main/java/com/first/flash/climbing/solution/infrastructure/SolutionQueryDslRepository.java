@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.infrastructure;
 
+import static com.first.flash.account.member.domain.QMember.member;
 import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem;
 import static com.first.flash.climbing.solution.domain.QSolution.solution;
 import static com.first.flash.climbing.solution.domain.QSolutionComment.solutionComment;
@@ -29,12 +30,14 @@ public class SolutionQueryDslRepository {
         return jpaQueryFactory.select(Projections.constructor(SolutionRepositoryResponseDto.class,
                                   solution.id, solution.uploaderDetail.uploader, solution.solutionDetail.review,
                                   solution.uploaderDetail.instagramId, solution.solutionDetail.videoUrl,
-                                  solution.uploaderDetail.uploaderId, solution.uploaderDetail.profileImageUrl,
-                                  solutionComment.count()
+                                  solution.uploaderDetail.uploaderId, member.height, member.reach, member.gender,
+                                  solution.uploaderDetail.profileImageUrl, solutionComment.count()
                               ))
                               .from(solution)
                               .leftJoin(solutionComment)
                               .on(solution.id.eq(solutionComment.solution.id))
+                              .leftJoin(member)
+                              .on(solution.uploaderDetail.uploaderId.eq(member.id))
                               .where(solution.problemId.eq(problemId)
                                                        .and(notInBlockedMembers(memberIds)))
                               .groupBy(solution.id)
@@ -77,7 +80,8 @@ public class SolutionQueryDslRepository {
         return jpaQueryFactory.select(Projections.constructor(DetailSolutionDto.class,
                                   solution.id, solution.solutionDetail.videoUrl, queryProblem.gymName,
                                   queryProblem.sectorName, solution.solutionDetail.review,
-                                  queryProblem.difficultyName, solutionComment.count(), solution.solutionDetail.perceivedDifficulty,
+                                  queryProblem.difficultyName, solutionComment.count(),
+                                  solution.solutionDetail.perceivedDifficulty,
                                   queryProblem.removalDate, queryProblem.settingDate, solution.createdAt
                               ))
                               .from(solution)
