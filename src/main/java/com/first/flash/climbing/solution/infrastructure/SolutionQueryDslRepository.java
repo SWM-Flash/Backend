@@ -30,8 +30,8 @@ public class SolutionQueryDslRepository {
         return jpaQueryFactory.select(Projections.constructor(SolutionRepositoryResponseDto.class,
                                   solution.id, solution.uploaderDetail.uploader, solution.solutionDetail.review,
                                   solution.uploaderDetail.instagramId, solution.solutionDetail.videoUrl,
-                                  solution.uploaderDetail.uploaderId, solution.uploaderDetail.height,
-                                  solution.uploaderDetail.reach, solution.uploaderDetail.gender,
+                                  solution.uploaderDetail.uploaderId, solution.uploaderDetail.uploaderHeight,
+                                  solution.uploaderDetail.uploaderReach, solution.uploaderDetail.uploaderGender,
                                   solution.uploaderDetail.profileImageUrl, solutionComment.count()
                               ))
                               .from(solution)
@@ -72,9 +72,9 @@ public class SolutionQueryDslRepository {
                        .set(solution.uploaderDetail.uploader, nickName)
                        .set(solution.uploaderDetail.instagramId, instagramId)
                        .set(solution.uploaderDetail.profileImageUrl, profileImageUrl)
-                       .set(solution.uploaderDetail.height, uploaderHeight)
-                       .set(solution.uploaderDetail.reach, uploaderReach)
-                       .set(solution.uploaderDetail.gender, uploaderGender)
+                       .set(solution.uploaderDetail.uploaderHeight, uploaderHeight)
+                       .set(solution.uploaderDetail.uploaderReach, uploaderReach)
+                       .set(solution.uploaderDetail.uploaderGender, uploaderGender)
                        .where(solution.uploaderDetail.uploaderId.eq(uploaderId))
                        .execute();
     }
