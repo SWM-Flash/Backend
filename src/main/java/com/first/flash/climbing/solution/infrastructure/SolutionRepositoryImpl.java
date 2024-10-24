@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.infrastructure;
 
+import com.first.flash.account.member.domain.Gender;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
@@ -43,9 +44,10 @@ public class SolutionRepositoryImpl implements SolutionRepository {
 
     @Override
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
-        final String instagramId, final String profileImageUrl) {
+        final String instagramId, final String profileImageUrl, final Double uploaderHeight,
+        final Double uploaderReach, final Gender uploaderGender) {
         solutionQueryDslRepository.updateUploaderInfo(uploaderId, nickName, instagramId,
-            profileImageUrl);
+            profileImageUrl, uploaderHeight, uploaderReach, uploaderGender);
     }
 
     @Override

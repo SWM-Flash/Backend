@@ -4,6 +4,7 @@ import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem
 import static com.first.flash.climbing.solution.domain.QSolution.solution;
 import static com.first.flash.climbing.solution.domain.QSolutionComment.solutionComment;
 
+import com.first.flash.account.member.domain.Gender;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
@@ -29,8 +30,9 @@ public class SolutionQueryDslRepository {
         return jpaQueryFactory.select(Projections.constructor(SolutionRepositoryResponseDto.class,
                                   solution.id, solution.uploaderDetail.uploader, solution.solutionDetail.review,
                                   solution.uploaderDetail.instagramId, solution.solutionDetail.videoUrl,
-                                  solution.uploaderDetail.uploaderId, solution.uploaderDetail.profileImageUrl,
-                                  solutionComment.count()
+                                  solution.uploaderDetail.uploaderId, solution.uploaderDetail.uploaderHeight,
+                                  solution.uploaderDetail.uploaderReach, solution.uploaderDetail.uploaderGender,
+                                  solution.uploaderDetail.profileImageUrl, solutionComment.count()
                               ))
                               .from(solution)
                               .leftJoin(solutionComment)
@@ -64,11 +66,15 @@ public class SolutionQueryDslRepository {
     }
 
     public void updateUploaderInfo(final UUID uploaderId, final String nickName,
-        final String instagramId, final String profileImageUrl) {
+        final String instagramId, final String profileImageUrl, final Double uploaderHeight,
+        final Double uploaderReach, final Gender uploaderGender) {
         jpaQueryFactory.update(solution)
                        .set(solution.uploaderDetail.uploader, nickName)
                        .set(solution.uploaderDetail.instagramId, instagramId)
                        .set(solution.uploaderDetail.profileImageUrl, profileImageUrl)
+                       .set(solution.uploaderDetail.uploaderHeight, uploaderHeight)
+                       .set(solution.uploaderDetail.uploaderReach, uploaderReach)
+                       .set(solution.uploaderDetail.uploaderGender, uploaderGender)
                        .where(solution.uploaderDetail.uploaderId.eq(uploaderId))
                        .execute();
     }
@@ -77,7 +83,8 @@ public class SolutionQueryDslRepository {
         return jpaQueryFactory.select(Projections.constructor(DetailSolutionDto.class,
                                   solution.id, solution.solutionDetail.videoUrl, queryProblem.gymName,
                                   queryProblem.sectorName, solution.solutionDetail.review,
-                                  queryProblem.difficultyName, solutionComment.count(), solution.solutionDetail.perceivedDifficulty,
+                                  queryProblem.difficultyName, solutionComment.count(),
+                                  solution.solutionDetail.perceivedDifficulty,
                                   queryProblem.removalDate, queryProblem.settingDate, solution.createdAt
                               ))
                               .from(solution)

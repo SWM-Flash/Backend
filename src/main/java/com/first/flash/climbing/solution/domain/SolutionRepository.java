@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.domain;
 
+import com.first.flash.account.member.domain.Gender;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
@@ -20,7 +21,8 @@ public interface SolutionRepository {
     void deleteById(final Long id);
 
     void updateUploaderInfo(final UUID uploaderId, final String nickName, final String instagramId,
-        final String profileImageUrl);
+        final String profileImageUrl, final Double uploaderHeight,
+        final Double uploaderReach, final Gender uploaderGender);
 
     DetailSolutionDto findDetailSolutionById(final Long solutionId);
 
