@@ -13,6 +13,6 @@ public record ProblemsResponseDto(List<ProblemResponseDto> problems, Meta meta) 
         }
         return new ProblemsResponseDto(queryProblems.stream()
                                                     .map(ProblemResponseDto::toDto)
-                                                    .toList(), Meta.from(nextCursor));
+                                                    .toList(), Meta.of(nextCursor, queryProblems.size()));
     }
 }
