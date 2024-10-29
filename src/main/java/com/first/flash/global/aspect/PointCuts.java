@@ -16,8 +16,11 @@ public class PointCuts {
     public void allRepository() {
     }
 
+    @Pointcut("execution(* com.first.flash..*ExceptionHandler.*(..))")
+    public void allExceptionHandler() {
+    }
+
     @Pointcut("execution(* com.first.flash.climbing..*Controller.*(..))")
     public void verifiedControllers() {
-
     }
 }

@@ -19,6 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String id) throws UsernameNotFoundException {
         Member foundMember = memberService.findById(UUID.fromString(id));
-        return new CustomUserDetails(foundMember.getId(), foundMember.getRole());
+        return new CustomUserDetails(foundMember.getId(), foundMember.getRole(),
+            foundMember.getNickName());
     }
 }
