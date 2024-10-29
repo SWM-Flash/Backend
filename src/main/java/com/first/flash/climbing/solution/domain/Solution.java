@@ -1,5 +1,6 @@
 package com.first.flash.climbing.solution.domain;
 
+import com.first.flash.account.member.domain.Gender;
 import com.first.flash.climbing.solution.domain.vo.SolutionDetail;
 import com.first.flash.climbing.solution.domain.vo.UploaderDetail;
 import com.first.flash.global.domain.BaseEntity;
@@ -41,30 +42,28 @@ public class Solution extends BaseEntity {
 
     protected Solution(final String uploader, final String review, final String instagramId,
         final String videoUrl, final UUID problemId, final UUID uploaderId,
-        final String profileImageUrl, final PerceivedDifficulty perceivedDifficulty) {
+        final String profileImageUrl, final PerceivedDifficulty perceivedDifficulty,
+        final Double uploaderHeight,
+        final Double uploaderReach, final Gender uploaderGender) {
 
         this.solutionDetail = SolutionDetail.of(review, videoUrl, perceivedDifficulty);
-        this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId, profileImageUrl);
+        this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId, profileImageUrl,
+            uploaderHeight, uploaderReach, uploaderGender);
         this.optionalWeight = DEFAULT_OPTIONAL_WEIGHT;
         this.problemId = problemId;
     }
 
     public static Solution of(final String uploader, final String review, final String instagramId,
         final String videoUrl, final UUID problemId, final UUID uploaderId,
-        final String profileImageUrl, final PerceivedDifficulty perceivedDifficulty) {
+        final String profileImageUrl, final PerceivedDifficulty perceivedDifficulty,
+        final Double uploaderHeight, final Double uploaderReach, final Gender uploaderGender) {
 
         return new Solution(uploader, review, instagramId, videoUrl, problemId, uploaderId,
-            profileImageUrl, perceivedDifficulty);
+            profileImageUrl, perceivedDifficulty, uploaderHeight, uploaderReach, uploaderGender);
     }
 
-    public void updateUploaderInfo(final String uploader, final String instagramId,
-        final String profileImageUrl) {
-        UUID uploaderId = this.uploaderDetail.getUploaderId();
-
-        this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId, profileImageUrl);
-    }
-
-    public void updateContentInfo(final String review, final String videoUrl, final PerceivedDifficulty perceivedDifficulty) {
+    public void updateContentInfo(final String review, final String videoUrl,
+        final PerceivedDifficulty perceivedDifficulty) {
         this.solutionDetail = SolutionDetail.of(review, videoUrl, perceivedDifficulty);
     }
 }

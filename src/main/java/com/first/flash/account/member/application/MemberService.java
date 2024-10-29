@@ -49,7 +49,8 @@ public class MemberService {
             request.gender(), request.reach(), request.profileImageUrl());
 
         Events.raise(MemberInfoUpdatedEvent.of(member.getId(), member.getNickName(),
-            member.getInstagramId(), member.getProfileImageUrl()));
+            member.getInstagramId(), member.getProfileImageUrl(), member.getHeight(),
+            member.getReach(), member.getGender()));
 
         return MemberCompleteRegistrationResponse.toDto(member);
     }

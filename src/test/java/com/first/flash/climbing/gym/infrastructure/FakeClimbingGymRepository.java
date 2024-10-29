@@ -16,7 +16,7 @@ public class FakeClimbingGymRepository implements ClimbingGymRepository {
     @Override
     public ClimbingGym save(final ClimbingGym gym) {
         ClimbingGym savedGym = new ClimbingGym(id++, gym.getGymName(), gym.getThumbnailUrl(),
-            gym.getMapImageUrl(), gym.getDifficulties());
+            gym.getMapImageUrl(), "example image", gym.getDifficulties());
 
         db.put(savedGym.getId(), savedGym);
         return savedGym;

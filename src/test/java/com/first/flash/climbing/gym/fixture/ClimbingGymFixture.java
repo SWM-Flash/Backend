@@ -8,12 +8,12 @@ import java.util.List;
 public class ClimbingGymFixture {
 
     public static ClimbingGym createDefaultGym() {
-        return new ClimbingGym("test gym", "example.com", "example.com",
+        return new ClimbingGym("test gym", "example.com", "example.com", "example.com",
             List.of(new Difficulty("빨강", 1)));
     }
 
     public static ClimbingGymCreateRequestDto createDefaultGymCreateRequestDto() {
         return new ClimbingGymCreateRequestDto("test gym", "example.com", "example.com",
-            List.of(new Difficulty("빨강", 1)));
+            "example.com", List.of(new Difficulty("빨강", 1)));
     }
 }
