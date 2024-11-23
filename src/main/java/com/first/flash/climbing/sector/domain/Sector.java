@@ -23,30 +23,34 @@ public class Sector {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String selectedImageUrl;
     private SectorName sectorName;
     private LocalDate settingDate;
     private RemovalInfo removalInfo;
     private Long gymId;
 
     protected Sector(final SectorName sectorName, final LocalDate settingDate,
-        final RemovalInfo removalInfo, final Long gymId) {
+        final RemovalInfo removalInfo, final Long gymId, final String selectedImageUrl) {
         this.sectorName = sectorName;
         this.settingDate = settingDate;
         this.removalInfo = removalInfo;
+        this.selectedImageUrl = selectedImageUrl;
         this.gymId = gymId;
     }
 
     public static Sector createExceptRemovalDate(final String sectorName,
-        final String adminSectorName, final LocalDate settingDate, final Long gymId) {
+        final String adminSectorName, final LocalDate settingDate, final Long gymId,
+        final String selectedImageUrl) {
         return new Sector(SectorName.of(sectorName, adminSectorName), settingDate,
-            RemovalInfo.createBySettingDate(settingDate), gymId);
+            RemovalInfo.createBySettingDate(settingDate), gymId, selectedImageUrl);
     }
 
     public static Sector createDefault(final String sectorName, final String adminSectorName,
-        final LocalDate settingDate, final LocalDate removalDate, final Long gymId) {
+        final LocalDate settingDate, final LocalDate removalDate, final Long gymId,
+        final String selectedImageUrl) {
         validateRemovalDate(settingDate, removalDate);
         return new Sector(SectorName.of(sectorName, adminSectorName), settingDate,
-            RemovalInfo.createDefault(removalDate), gymId);
+            RemovalInfo.createDefault(removalDate), gymId, selectedImageUrl);
     }
 
     public LocalDate getRemovalDate() {
@@ -59,11 +63,13 @@ public class Sector {
     }
 
     public void updateSector(final String sectorName, final String adminSectorName,
-        final LocalDate settingDate, final LocalDate removalDate, final Long gymId) {
+        final LocalDate settingDate, final LocalDate removalDate, final Long gymId,
+        final String selectedImageUrl) {
         validateRemovalDate(settingDate, removalDate);
         this.sectorName = SectorName.of(sectorName, adminSectorName);
         this.settingDate = settingDate;
         this.removalInfo = RemovalInfo.createDefault(removalDate);
+        this.selectedImageUrl = selectedImageUrl;
         this.gymId = gymId;
     }
 
