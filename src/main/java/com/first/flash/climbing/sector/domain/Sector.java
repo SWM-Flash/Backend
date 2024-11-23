@@ -23,10 +23,10 @@ public class Sector {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String selectedImageUrl;
     private SectorName sectorName;
     private LocalDate settingDate;
     private RemovalInfo removalInfo;
+    private String selectedImageUrl;
     private Long gymId;
 
     protected Sector(final SectorName sectorName, final LocalDate settingDate,
