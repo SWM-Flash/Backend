@@ -1,6 +1,7 @@
 package com.first.flash.climbing.problem.application;
 
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
+import com.first.flash.climbing.sector.application.SectorFixedInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
@@ -48,6 +49,12 @@ public class ProblemEventHandler {
     public void updateQueryProblemInfo(final SectorInfoUpdatedEvent event) {
         problemsService.updateQueryProblemInfo(event.getId(), event.getSectorName(),
             event.getSettingDate());
+    }
+
+    @EventListener
+    @Transactional
+    public void updateQueryProblemFixedInfo(final SectorFixedInfoUpdatedEvent event) {
+        problemsService.updateQueryProblemFixedInfo(event.getSectorIds(), event.getSectorName());
     }
 
     @EventListener

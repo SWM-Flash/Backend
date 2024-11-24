@@ -62,4 +62,8 @@ public class ProblemsService {
         queryProblem.setPerceivedDifficulty(perceivedDifficulty);
         return ProblemDetailResponseDto.of(queryProblem);
     }
+
+    public void updateQueryProblemFixedInfo(final List<Long> sectorIds, final String sectorName) {
+        queryProblemRepository.updateSectorNameBySectorIds(sectorIds, sectorName);
+    }
 }
