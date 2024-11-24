@@ -1,6 +1,7 @@
 package com.first.flash.climbing.sector.application;
 
 import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
+import com.first.flash.climbing.sector.application.dto.SectorInfosDetailResponseDto;
 import com.first.flash.climbing.sector.infrastructure.dto.UpdateSectorsDto;
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
@@ -105,6 +106,16 @@ public class SectorService {
                 SectorDetailResponseDto::toDto)
             .toList();
         return new SectorsDetailResponseDto(sectorsResponse);
+    }
+
+    public SectorInfosDetailResponseDto findAllSectorInfos() {
+        List<SectorInfoDetailResponseDto> sectorInfosResponse = sectorInfoRepository
+            .findAll()
+            .stream()
+            .map(
+                SectorInfoDetailResponseDto::toDto)
+            .toList();
+        return new SectorInfosDetailResponseDto(sectorInfosResponse);
     }
 
     private Sector createSector(final SectorInfo sectorInfo,
