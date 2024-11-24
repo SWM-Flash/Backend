@@ -2,6 +2,7 @@ package com.first.flash.climbing.sector.application;
 
 import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
 import com.first.flash.climbing.sector.application.dto.SectorInfosDetailResponseDto;
+import com.first.flash.climbing.sector.domain.SectorFixedInfoUpdatedEvent;
 import com.first.flash.climbing.sector.infrastructure.dto.UpdateSectorsDto;
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;

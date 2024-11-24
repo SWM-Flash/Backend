@@ -1,6 +1,5 @@
-package com.first.flash.climbing.sector.application;
+package com.first.flash.climbing.sector.domain;
 
-import com.first.flash.climbing.sector.domain.SectorInfo;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

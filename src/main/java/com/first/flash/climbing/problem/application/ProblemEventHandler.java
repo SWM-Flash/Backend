@@ -1,7 +1,7 @@
 package com.first.flash.climbing.problem.application;
 
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
-import com.first.flash.climbing.sector.application.SectorFixedInfoUpdatedEvent;
+import com.first.flash.climbing.sector.domain.SectorFixedInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
