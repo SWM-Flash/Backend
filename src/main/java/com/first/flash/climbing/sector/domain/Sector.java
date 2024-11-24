@@ -31,41 +31,44 @@ public class Sector {
     private RemovalInfo removalInfo;
     private String selectedImageUrl;
     private Long gymId;
+    private Long sectorInfoId;
 
     protected Sector(final SectorName sectorName, final LocalDate settingDate,
-        final RemovalInfo removalInfo, final Long gymId, final String selectedImageUrl) {
+        final RemovalInfo removalInfo, final Long gymId, final String selectedImageUrl,
+        final Long sectorInfoId) {
         this.sectorName = sectorName;
         this.settingDate = settingDate;
         this.removalInfo = removalInfo;
         this.selectedImageUrl = selectedImageUrl;
         this.gymId = gymId;
+        this.sectorInfoId = sectorInfoId;
     }
 
     public static Sector of(final SectorName sectorName, final LocalDate settingDate,
         final LocalDate removalDate, final Long gymId,
-        final String selectedImageUrl) {
+        final String selectedImageUrl, final Long sectorInfoId) {
         if (hasNoRemovalDate(removalDate)) {
             return createExceptRemovalDate(sectorName.getName(), sectorName.getAdminName(),
-                settingDate, gymId, selectedImageUrl);
+                settingDate, gymId, selectedImageUrl, sectorInfoId);
         }
 
         return createDefault(sectorName.getName(), sectorName.getAdminName(), settingDate,
-            removalDate, gymId, selectedImageUrl);
+            removalDate, gymId, selectedImageUrl, sectorInfoId);
     }
 
     public static Sector createExceptRemovalDate(final String sectorName,
         final String adminSectorName, final LocalDate settingDate, final Long gymId,
-        final String selectedImageUrl) {
+        final String selectedImageUrl, final Long sectorInfoId) {
         return new Sector(SectorName.of(sectorName, adminSectorName), settingDate,
-            RemovalInfo.createBySettingDate(settingDate), gymId, selectedImageUrl);
+            RemovalInfo.createBySettingDate(settingDate), gymId, selectedImageUrl, sectorInfoId);
     }
 
     public static Sector createDefault(final String sectorName, final String adminSectorName,
         final LocalDate settingDate, final LocalDate removalDate, final Long gymId,
-        final String selectedImageUrl) {
+        final String selectedImageUrl, final Long sectorInfoId) {
         validateRemovalDate(settingDate, removalDate);
         return new Sector(SectorName.of(sectorName, adminSectorName), settingDate,
-            RemovalInfo.createDefault(removalDate), gymId, selectedImageUrl);
+            RemovalInfo.createDefault(removalDate), gymId, selectedImageUrl, sectorInfoId);
     }
 
     public LocalDate getRemovalDate() {
@@ -78,14 +81,16 @@ public class Sector {
     }
 
     public void updateSector(final String sectorName, final String adminSectorName,
-        final LocalDate settingDate, final LocalDate removalDate, final Long gymId,
-        final String selectedImageUrl) {
+        final LocalDate settingDate, final LocalDate removalDate, final String selectedImageUrl) {
         validateRemovalDate(settingDate, removalDate);
         this.sectorName = SectorName.of(sectorName, adminSectorName);
         this.settingDate = settingDate;
-        this.removalInfo = RemovalInfo.createDefault(removalDate);
+        this.removalInfo = RemovalInfo.createByNewRemovalDate(removalDate);
         this.selectedImageUrl = selectedImageUrl;
-        this.gymId = gymId;
+    }
+
+    public boolean isExpired() {
+        return removalInfo.getIsExpired();
     }
 
     private static void validateRemovalDate(final LocalDate settingDate,
