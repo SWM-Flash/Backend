@@ -8,7 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -17,6 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 @ToString
 public class Sector {
 
@@ -36,6 +39,18 @@ public class Sector {
         this.removalInfo = removalInfo;
         this.selectedImageUrl = selectedImageUrl;
         this.gymId = gymId;
+    }
+
+    public static Sector of(final SectorName sectorName, final LocalDate settingDate,
+        final LocalDate removalDate, final Long gymId,
+        final String selectedImageUrl) {
+        if (hasNoRemovalDate(removalDate)) {
+            return createExceptRemovalDate(sectorName.getName(), sectorName.getAdminName(),
+                settingDate, gymId, selectedImageUrl);
+        }
+
+        return createDefault(sectorName.getName(), sectorName.getAdminName(), settingDate,
+            removalDate, gymId, selectedImageUrl);
     }
 
     public static Sector createExceptRemovalDate(final String sectorName,
@@ -78,5 +93,9 @@ public class Sector {
         if (removalDate.isBefore(settingDate)) {
             throw new InvalidRemovalDateException();
         }
+    }
+
+    private static boolean hasNoRemovalDate(final LocalDate removalDate) {
+        return Objects.isNull(removalDate);
     }
 }
