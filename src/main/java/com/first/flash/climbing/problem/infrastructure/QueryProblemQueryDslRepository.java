@@ -23,12 +23,14 @@ public class QueryProblemQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<QueryProblem> findAll(final ProblemCursor prevProblemCursor, final ProblemSortBy problemSortBy, final int size,
+    public List<QueryProblem> findAll(final ProblemCursor prevProblemCursor,
+        final ProblemSortBy problemSortBy, final int size,
         final Long gymId, final List<String> difficulty, final List<String> sector,
         final Boolean hasSolution, final Boolean isHoney) {
         return queryFactory
             .selectFrom(queryProblem)
-            .where(notExpired(), cursorCondition(prevProblemCursor), inGym(gymId), inSectors(sector),
+            .where(notExpired(), cursorCondition(prevProblemCursor), inGym(gymId),
+                inSectors(sector),
                 inDifficulties(difficulty), hasSolution(hasSolution), isHoneyCondition(isHoney))
             .orderBy(sortItem(problemSortBy), queryProblem.id.desc())
             .limit(size)
@@ -132,5 +134,12 @@ public class QueryProblemQueryDslRepository {
             return null;
         }
         return queryProblem.hasSolution.eq(hasSolution);
+    }
+
+    public void updateSectorNameBySectorIds(final List<Long> sectorIds, final String sectorName) {
+        queryFactory.update(queryProblem)
+                    .set(queryProblem.sectorName, sectorName)
+                    .where(queryProblem.sectorId.in(sectorIds))
+                    .execute();
     }
 }

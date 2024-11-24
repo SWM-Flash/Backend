@@ -23,4 +23,6 @@ public interface QueryProblemRepository {
 
     void updateQueryProblemInfo(final Long sectorId, final String sectorName,
         final LocalDate settingDate);
+
+    void updateSectorNameBySectorIds(final List<Long> sectorIds, final String sectorName);
 }
