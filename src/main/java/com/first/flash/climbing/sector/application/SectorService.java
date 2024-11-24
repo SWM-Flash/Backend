@@ -1,6 +1,7 @@
 package com.first.flash.climbing.sector.application;
 
 import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
+import com.first.flash.climbing.sector.infrastructure.dto.UpdateSectorsDto;
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorInfoCreateRequestDto;
@@ -70,13 +71,25 @@ public class SectorService {
         final Long sectorId,
         final SectorUpdateRequestDto updateRequestDto) {
         Sector foundSector = findById(sectorId);
-//        foundSector.updateSector(updateRequestDto.sectorName(), updateRequestDto.adminSectorName(),
-//            updateRequestDto.settingDate(),
-//            updateRequestDto.removalDate(), updateRequestDto.gymId());
+        foundSector.updateSector(updateRequestDto.sectorName(), updateRequestDto.adminSectorName(),
+            updateRequestDto.settingDate(), updateRequestDto.removalDate(),
+            updateRequestDto.selectedImageUrl());
         Events.raise(SectorInfoUpdatedEvent.of(foundSector.getId(), updateRequestDto.sectorName(),
-            updateRequestDto.settingDate()));
-        Events.raise(ClimbingGymIdConfirmRequestedEvent.of(updateRequestDto.gymId()));
+            updateRequestDto.settingDate(), foundSector.isExpired()));
         return SectorDetailResponseDto.toDto(foundSector);
+    }
+
+    @Transactional
+    public SectorInfoDetailResponseDto updateSectorInfo(final Long sectorInfoId,
+        final SectorInfoCreateRequestDto updateRequestDto) {
+        SectorInfo sectorInfo = findSectorInfoById(sectorInfoId);
+        sectorInfo.updateSectorInfo(updateRequestDto.name(), updateRequestDto.adminName(),
+            updateRequestDto.selectedImageUrl());
+        UpdateSectorsDto updateSectorsDto = UpdateSectorsDto.toDto(sectorInfo);
+        sectorRepository.updateSectors(sectorInfoId, updateSectorsDto);
+        List<Long> sectorIds = sectorRepository.findSectorIdsBySectorInfoId(sectorInfoId);
+        Events.raise(SectorFixedInfoUpdatedEvent.of(sectorIds, sectorInfo));
+        return SectorInfoDetailResponseDto.toDto(sectorInfo);
     }
 
     public Sector findById(final Long id) {
@@ -98,7 +111,7 @@ public class SectorService {
         final SectorCreateRequestDto createRequestDto) {
         return Sector.of(sectorInfo.getSectorName(), createRequestDto.settingDate(),
             createRequestDto.removalDate(), sectorInfo.getGymId(),
-            sectorInfo.getSelectedImageUrl());
+            sectorInfo.getSelectedImageUrl(), sectorInfo.getId());
     }
 
     private SectorInfo findSectorInfoById(final Long sectorInfoId) {
