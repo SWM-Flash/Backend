@@ -15,11 +15,11 @@ import com.first.flash.climbing.sector.domain.SectorInfoRepository;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRepository;
+import com.first.flash.climbing.sector.exception.exceptions.SectorInfoNotFoundException;
 import com.first.flash.climbing.sector.exception.exceptions.SectorNotFoundException;
 import com.first.flash.global.event.Events;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,15 +33,13 @@ public class SectorService {
     private final SectorInfoRepository sectorInfoRepository;
 
     @Transactional
-    public SectorDetailResponseDto saveSector(final Long gymId,
+    public SectorDetailResponseDto saveSector(final Long sectorInfoId,
         final SectorCreateRequestDto createRequestDto) {
-
-        Sector sector = createSectorByDto(gymId, createRequestDto);
-        Events.raise(ClimbingGymIdConfirmRequestedEvent.of(gymId));
-
+        SectorInfo sectorInfo = findSectorInfoById(sectorInfoId);
+        Sector sector = createSector(sectorInfo, createRequestDto);
         return SectorDetailResponseDto.toDto(sectorRepository.save(sector));
     }
-    
+
     @Transactional
     public SectorInfoDetailResponseDto saveSectorInfo(final Long gymId,
         final SectorInfoCreateRequestDto createRequestDto) {
@@ -96,21 +94,16 @@ public class SectorService {
         return new SectorsDetailResponseDto(sectorsResponse);
     }
 
-    private Sector createSectorByDto(final Long gymId,
+    private Sector createSector(final SectorInfo sectorInfo,
         final SectorCreateRequestDto createRequestDto) {
-        if (hasNoRemovalDate(createRequestDto)) {
-//            return Sector.createExceptRemovalDate(createRequestDto.name(),
-//                createRequestDto.adminName(), createRequestDto.settingDate(), gymId);
-            return null;
-        }
-
-//        return Sector.createDefault(createRequestDto.name(),
-//            createRequestDto.adminName(), createRequestDto.settingDate(),
-//            createRequestDto.removalDate(), gymId);
-        return null;
+        return Sector.of(sectorInfo.getSectorName(), createRequestDto.settingDate(),
+            createRequestDto.removalDate(), sectorInfo.getGymId(),
+            sectorInfo.getSelectedImageUrl());
     }
 
-    private static boolean hasNoRemovalDate(final SectorCreateRequestDto createRequestDto) {
-        return Objects.isNull(createRequestDto.removalDate());
+    private SectorInfo findSectorInfoById(final Long sectorInfoId) {
+        return sectorInfoRepository.findById(sectorInfoId)
+                                   .orElseThrow(
+                                       () -> new SectorInfoNotFoundException(sectorInfoId));
     }
 }
