@@ -3,6 +3,8 @@ package com.first.flash.climbing.sector.ui;
 import com.first.flash.climbing.sector.application.SectorService;
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
+import com.first.flash.climbing.sector.application.dto.SectorInfoCreateRequestDto;
+import com.first.flash.climbing.sector.application.dto.SectorInfoDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorsDetailResponseDto;
@@ -44,6 +46,27 @@ public class SectorController {
         return ResponseEntity.ok(sectorService.findAllSectors());
     }
 
+    @Operation(summary = "섹터 고정 정보 생성", description = "특정 클라이밍장의 새로운 섹터 고정 정보 생성")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "성공적으로 섹터를 생성함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SectorInfoDetailResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"name\": \"섹터 이름은 필수입니다.\"}"),
+            })),
+        @ApiResponse(responseCode = "404", description = "클라이밍장을 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "클라이밍장 없음", value = "{\"error\": \"아이디가 1인 클라이밍장을 찾을 수 없습니다.\"}")
+            }))
+    })
+    @PostMapping("admin/gyms/{gymId}/sectorInfos")
+    public ResponseEntity<SectorInfoDetailResponseDto> createSectorInfo(
+        @PathVariable final Long gymId,
+        @Valid @RequestBody final SectorInfoCreateRequestDto sectorInfoCreateRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(sectorService.saveSectorInfo(gymId, sectorInfoCreateRequestDto));
+    }
+
     @Operation(summary = "섹터 갱신(생성)", description = "특정 클라이밍장에 새로운 섹터 생성")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "성공적으로 섹터를 생성함",
@@ -58,11 +81,11 @@ public class SectorController {
                 @ExampleObject(name = "클라이밍장 없음", value = "{\"error\": \"아이디가 1인 클라이밍장을 찾을 수 없습니다.\"}")
             }))
     })
-    @PostMapping("admin/gyms/{gymId}/sectors")
-    public ResponseEntity<SectorDetailResponseDto> createSector(@PathVariable final Long gymId,
+    @PostMapping("admin/sectorInfos/{sectorInfoId}")
+    public ResponseEntity<SectorDetailResponseDto> createSector(@PathVariable final Long sectorInfoId,
         @Valid @RequestBody final SectorCreateRequestDto sectorCreateRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(sectorService.saveSector(gymId, sectorCreateRequestDto));
+                             .body(sectorService.saveSector(sectorInfoId, sectorCreateRequestDto));
     }
 
     @Operation(summary = "섹터 탈거일 수정", description = "특정 섹터의 탈거일 정보 수정")
