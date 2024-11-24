@@ -82,7 +82,8 @@ public class SectorController {
             }))
     })
     @PostMapping("admin/sectorInfos/{sectorInfoId}")
-    public ResponseEntity<SectorDetailResponseDto> createSector(@PathVariable final Long sectorInfoId,
+    public ResponseEntity<SectorDetailResponseDto> createSector(
+        @PathVariable final Long sectorInfoId,
         @Valid @RequestBody final SectorCreateRequestDto sectorCreateRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(sectorService.saveSector(sectorInfoId, sectorCreateRequestDto));
@@ -123,7 +124,6 @@ public class SectorController {
         @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "섹터 없음", value = "{\"error\": \"아이디가 1인 섹터를 찾을 수 없습니다.\"}"),
-                @ExampleObject(name = "클라이밍장 없음", value = "{\"error\": \"아이디가 1인 클라이밍장을 찾을 수 없습니다.\"}")
             }))
     })
     @PutMapping("admin/sectors/{sectorId}")
@@ -131,5 +131,25 @@ public class SectorController {
         @PathVariable final Long sectorId,
         @Valid @RequestBody final SectorUpdateRequestDto updateRequestDto) {
         return ResponseEntity.ok(sectorService.updateSector(sectorId, updateRequestDto));
+    }
+
+    @Operation(summary = "섹터 전체 수정", description = "특정 섹터의 정보 수정")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 섹터 정보 수정함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SectorInfoDetailResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"name\": \"섹터 이름은 필수입니다.\"}"),
+            })),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "섹터 없음", value = "{\"error\": \"아이디가 1인 섹터 정보를 찾을 수 없습니다.\"}"),
+            }))
+    })
+    @PutMapping("admin/sectorInfos/{sectorInfoId}")
+    public ResponseEntity<SectorInfoDetailResponseDto> updateSectorInfo(
+        @PathVariable final Long sectorInfoId,
+        @Valid @RequestBody final SectorInfoCreateRequestDto updateRequestDto) {
+        return ResponseEntity.ok(sectorService.updateSectorInfo(sectorInfoId, updateRequestDto));
     }
 }
