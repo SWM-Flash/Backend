@@ -37,9 +37,8 @@ public class SectorInfo {
     }
 
     public void updateSectorInfo(final String sectorName, final String adminSectorName,
-        final Long gymId, final String selectedImageUrl) {
+        final String selectedImageUrl) {
         this.sectorName = SectorName.of(sectorName, adminSectorName);
         this.selectedImageUrl = selectedImageUrl;
-        this.gymId = gymId;
     }
 }
