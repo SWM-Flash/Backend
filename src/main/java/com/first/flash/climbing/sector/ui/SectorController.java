@@ -52,7 +52,7 @@ public class SectorController {
         @ApiResponse(responseCode = "200", description = "성공적으로 섹터를 조회",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = SectorInfosDetailResponseDto.class))),
     })
-    @GetMapping("sectors")
+    @GetMapping("sectorInfos")
     public ResponseEntity<SectorInfosDetailResponseDto> findAllSectorInfos() {
         return ResponseEntity.ok(sectorService.findAllSectorInfos());
     }
