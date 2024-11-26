@@ -17,7 +17,7 @@ public interface QueryProblemRepository {
         final Long gymId, final List<String> difficulty, final List<String> sector,
         final Boolean hasSolution, final Boolean isHoney);
 
-    void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate);
+    void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate, final boolean isExpired);
 
     void expireProblemsBySectorIds(final List<Long> expiredSectorsIds);
 

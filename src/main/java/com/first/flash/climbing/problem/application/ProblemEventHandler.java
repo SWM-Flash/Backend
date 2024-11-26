@@ -23,7 +23,8 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void changeRemovalDate(final SectorRemovalDateUpdatedEvent event) {
-        problemsService.changeRemovalDate(event.getSectorId(), event.getRemovalDate());
+        problemsService.changeRemovalDate(event.getSectorId(), event.getRemovalDate(),
+            event.isExpired());
     }
 
     @EventListener
@@ -41,7 +42,8 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void updateProblemDeletedSolutionInfo(final SolutionDeletedEvent event) {
-        problemsService.updateProblemDeletedSolutionInfo(event.getProblemId(), event.getPerceivedDifficulty());
+        problemsService.updateProblemDeletedSolutionInfo(event.getProblemId(),
+            event.getPerceivedDifficulty());
     }
 
     @EventListener
@@ -66,6 +68,7 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void updatePerceivedDifficulty(final PerceivedDifficultySetEvent event) {
-        problemsService.addPerceivedDifficulty(event.getProblemId(), event.getPerceivedDifficulty());
+        problemsService.addPerceivedDifficulty(event.getProblemId(),
+            event.getPerceivedDifficulty());
     }
 }

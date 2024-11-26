@@ -37,9 +37,11 @@ public class QueryProblemQueryDslRepository {
             .fetch();
     }
 
-    public void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate) {
+    public void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate,
+        final boolean isExpired) {
         queryFactory.update(queryProblem)
                     .set(queryProblem.removalDate, removalDate)
+                    .set(queryProblem.isExpired, isExpired)
                     .set(queryProblem.isFakeRemovalDate, false)
                     .where(queryProblem.sectorId.eq(sectorId))
                     .execute();

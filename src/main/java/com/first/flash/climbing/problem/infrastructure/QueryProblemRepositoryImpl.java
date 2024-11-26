@@ -38,8 +38,8 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
     }
 
     @Override
-    public void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate) {
-        queryProblemQueryDslRepository.updateRemovalDateBySectorId(sectorId, removalDate);
+    public void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate, final boolean isExpired) {
+        queryProblemQueryDslRepository.updateRemovalDateBySectorId(sectorId, removalDate, isExpired);
     }
 
     @Override

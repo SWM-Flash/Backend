@@ -21,8 +21,8 @@ public class ProblemsService {
     private final ProblemReadService problemReadService;
 
     @Transactional
-    public void changeRemovalDate(final Long sectorId, final LocalDate removalDate) {
-        queryProblemRepository.updateRemovalDateBySectorId(sectorId, removalDate);
+    public void changeRemovalDate(final Long sectorId, final LocalDate removalDate, final boolean isExpired) {
+        queryProblemRepository.updateRemovalDateBySectorId(sectorId, removalDate, isExpired);
     }
 
     @Transactional
