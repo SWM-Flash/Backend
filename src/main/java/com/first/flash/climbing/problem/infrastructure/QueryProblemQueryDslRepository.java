@@ -53,10 +53,11 @@ public class QueryProblemQueryDslRepository {
     }
 
     public void updateQueryProblemInfo(final Long sectorId, final String sectorName,
-        final LocalDate settingDate) {
+        final LocalDate settingDate, final boolean isExpired) {
         queryFactory.update(queryProblem)
                     .set(queryProblem.sectorName, sectorName)
                     .set(queryProblem.settingDate, settingDate)
+                    .set(queryProblem.isExpired, isExpired)
                     .where(queryProblem.sectorId.eq(sectorId))
                     .execute();
     }

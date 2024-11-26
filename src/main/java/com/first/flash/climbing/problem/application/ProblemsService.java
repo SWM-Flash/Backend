@@ -38,7 +38,8 @@ public class ProblemsService {
     }
 
     @Transactional
-    public void updateProblemDeletedSolutionInfo(final UUID problemId, final Integer perceivedDifficulty) {
+    public void updateProblemDeletedSolutionInfo(final UUID problemId,
+        final Integer perceivedDifficulty) {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.decrementSolutionCount();
         queryProblem.subtractPerceivedDifficulty(perceivedDifficulty);
@@ -46,8 +47,8 @@ public class ProblemsService {
 
     @Transactional
     public void updateQueryProblemInfo(final Long sectorId, final String sectorName,
-        final LocalDate settingDate) {
-        queryProblemRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate);
+        final LocalDate settingDate, final boolean isExpired) {
+        queryProblemRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate, isExpired);
     }
 
     @Transactional
@@ -57,7 +58,8 @@ public class ProblemsService {
     }
 
     @Transactional
-    public ProblemDetailResponseDto setPerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty) {
+    public ProblemDetailResponseDto setPerceivedDifficulty(final UUID problemId,
+        final Integer perceivedDifficulty) {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.setPerceivedDifficulty(perceivedDifficulty);
         return ProblemDetailResponseDto.of(queryProblem);

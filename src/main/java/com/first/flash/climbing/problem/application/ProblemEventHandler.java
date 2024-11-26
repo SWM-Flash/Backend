@@ -48,7 +48,7 @@ public class ProblemEventHandler {
     @Transactional
     public void updateQueryProblemInfo(final SectorInfoUpdatedEvent event) {
         problemsService.updateQueryProblemInfo(event.getId(), event.getSectorName(),
-            event.getSettingDate());
+            event.getSettingDate(), event.isExpired());
     }
 
     @EventListener

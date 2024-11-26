@@ -22,7 +22,7 @@ public interface QueryProblemRepository {
     void expireProblemsBySectorIds(final List<Long> expiredSectorsIds);
 
     void updateQueryProblemInfo(final Long sectorId, final String sectorName,
-        final LocalDate settingDate);
+        final LocalDate settingDate, final boolean isExpired);
 
     void updateSectorNameBySectorIds(final List<Long> sectorIds, final String sectorName);
 }

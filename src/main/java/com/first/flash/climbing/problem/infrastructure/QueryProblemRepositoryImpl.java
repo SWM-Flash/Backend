@@ -29,7 +29,8 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
     }
 
     @Override
-    public List<QueryProblem> findAll(final ProblemCursor prevProblemCursor, final ProblemSortBy problemSortBy, final int size,
+    public List<QueryProblem> findAll(final ProblemCursor prevProblemCursor,
+        final ProblemSortBy problemSortBy, final int size,
         final Long gymId, final List<String> difficulty, final List<String> sector,
         final Boolean hasSolution, final Boolean isHoney) {
         return queryProblemQueryDslRepository.findAll(prevProblemCursor, problemSortBy, size,
@@ -48,8 +49,9 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
 
     @Override
     public void updateQueryProblemInfo(final Long sectorId, final String sectorName,
-        final LocalDate settingDate) {
-        queryProblemQueryDslRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate);
+        final LocalDate settingDate, final boolean isExpired) {
+        queryProblemQueryDslRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate,
+            isExpired);
     }
 
     @Override
