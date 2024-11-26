@@ -77,7 +77,7 @@ public class Sector {
 
     public void updateRemovalDate(final LocalDate removalDate) {
         validateRemovalDate(settingDate, removalDate);
-        removalInfo = RemovalInfo.createDefault(removalDate);
+        removalInfo = RemovalInfo.createByNewRemovalDate(removalDate);
     }
 
     public void updateSector(final String sectorName, final String adminSectorName,

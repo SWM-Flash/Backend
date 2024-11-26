@@ -58,7 +58,7 @@ public class SectorService {
         Sector sector = findById(sectorId);
         LocalDate removalDate = sectorUpdateRemovalDateRequestDto.removalDate();
         sector.updateRemovalDate(removalDate);
-        Events.raise(SectorRemovalDateUpdatedEvent.of(sectorId, removalDate));
+        Events.raise(SectorRemovalDateUpdatedEvent.of(sectorId, removalDate, sector.isExpired()));
         return SectorDetailResponseDto.toDto(sector);
     }
 
