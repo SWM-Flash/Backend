@@ -1,5 +1,6 @@
 package com.first.flash.climbing.gym.application;
 
+import com.first.flash.climbing.favorite.application.MemberFavoriteGymService;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymDetailResponseDto;
@@ -9,7 +10,9 @@ import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
 import com.first.flash.climbing.gym.infrastructure.dto.SectorInfoResponseDto;
+import com.first.flash.global.util.AuthUtil;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClimbingGymService {
 
     private final ClimbingGymRepository climbingGymRepository;
+    private final MemberFavoriteGymService memberFavoriteGymService;
 
     @Transactional
     public ClimbingGymCreateResponseDto save(final ClimbingGymCreateRequestDto createRequestDto) {
@@ -33,8 +37,13 @@ public class ClimbingGymService {
     }
 
     public List<ClimbingGymResponseDto> findAllClimbingGyms() {
+        UUID memberId = AuthUtil.getId();
+        List<Long> favoriteGymIds = memberFavoriteGymService.findFavoriteGymIdsByMemberId(memberId);
+        climbingGymRepository.findAll();
         return climbingGymRepository.findAll().stream()
-                                    .map(ClimbingGymResponseDto::toDto)
+                                    .map(
+                                        gym -> (ClimbingGymResponseDto)
+                                            ClimbingGymResponseDto.toDto(gym, favoriteGymIds))
                                     .toList();
     }
 
