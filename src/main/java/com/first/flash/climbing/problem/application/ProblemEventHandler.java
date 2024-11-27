@@ -1,6 +1,7 @@
 package com.first.flash.climbing.problem.application;
 
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
+import com.first.flash.climbing.sector.domain.SectorFixedInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
@@ -22,7 +23,8 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void changeRemovalDate(final SectorRemovalDateUpdatedEvent event) {
-        problemsService.changeRemovalDate(event.getSectorId(), event.getRemovalDate());
+        problemsService.changeRemovalDate(event.getSectorId(), event.getRemovalDate(),
+            event.isExpired());
     }
 
     @EventListener
@@ -40,14 +42,21 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void updateProblemDeletedSolutionInfo(final SolutionDeletedEvent event) {
-        problemsService.updateProblemDeletedSolutionInfo(event.getProblemId(), event.getPerceivedDifficulty());
+        problemsService.updateProblemDeletedSolutionInfo(event.getProblemId(),
+            event.getPerceivedDifficulty());
     }
 
     @EventListener
     @Transactional
     public void updateQueryProblemInfo(final SectorInfoUpdatedEvent event) {
         problemsService.updateQueryProblemInfo(event.getId(), event.getSectorName(),
-            event.getSettingDate());
+            event.getSettingDate(), event.isExpired());
+    }
+
+    @EventListener
+    @Transactional
+    public void updateQueryProblemFixedInfo(final SectorFixedInfoUpdatedEvent event) {
+        problemsService.updateQueryProblemFixedInfo(event.getSectorIds(), event.getSectorName());
     }
 
     @EventListener
@@ -59,6 +68,7 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void updatePerceivedDifficulty(final PerceivedDifficultySetEvent event) {
-        problemsService.addPerceivedDifficulty(event.getProblemId(), event.getPerceivedDifficulty());
+        problemsService.addPerceivedDifficulty(event.getProblemId(),
+            event.getPerceivedDifficulty());
     }
 }

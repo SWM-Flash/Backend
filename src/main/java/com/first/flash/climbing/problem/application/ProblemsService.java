@@ -21,8 +21,8 @@ public class ProblemsService {
     private final ProblemReadService problemReadService;
 
     @Transactional
-    public void changeRemovalDate(final Long sectorId, final LocalDate removalDate) {
-        queryProblemRepository.updateRemovalDateBySectorId(sectorId, removalDate);
+    public void changeRemovalDate(final Long sectorId, final LocalDate removalDate, final boolean isExpired) {
+        queryProblemRepository.updateRemovalDateBySectorId(sectorId, removalDate, isExpired);
     }
 
     @Transactional
@@ -38,7 +38,8 @@ public class ProblemsService {
     }
 
     @Transactional
-    public void updateProblemDeletedSolutionInfo(final UUID problemId, final Integer perceivedDifficulty) {
+    public void updateProblemDeletedSolutionInfo(final UUID problemId,
+        final Integer perceivedDifficulty) {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.decrementSolutionCount();
         queryProblem.subtractPerceivedDifficulty(perceivedDifficulty);
@@ -46,8 +47,8 @@ public class ProblemsService {
 
     @Transactional
     public void updateQueryProblemInfo(final Long sectorId, final String sectorName,
-        final LocalDate settingDate) {
-        queryProblemRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate);
+        final LocalDate settingDate, final boolean isExpired) {
+        queryProblemRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate, isExpired);
     }
 
     @Transactional
@@ -57,9 +58,14 @@ public class ProblemsService {
     }
 
     @Transactional
-    public ProblemDetailResponseDto setPerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty) {
+    public ProblemDetailResponseDto setPerceivedDifficulty(final UUID problemId,
+        final Integer perceivedDifficulty) {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.setPerceivedDifficulty(perceivedDifficulty);
         return ProblemDetailResponseDto.of(queryProblem);
+    }
+
+    public void updateQueryProblemFixedInfo(final List<Long> sectorIds, final String sectorName) {
+        queryProblemRepository.updateSectorNameBySectorIds(sectorIds, sectorName);
     }
 }

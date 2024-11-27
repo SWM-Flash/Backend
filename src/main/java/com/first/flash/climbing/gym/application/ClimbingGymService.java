@@ -8,6 +8,7 @@ import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
+import com.first.flash.climbing.gym.infrastructure.dto.SectorInfoResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,14 +40,14 @@ public class ClimbingGymService {
 
     public ClimbingGymDetailResponseDto findClimbingGymDetail(final Long id) {
         ClimbingGym climbingGym = findClimbingGymById(id);
-        List<String> sectorNames = findSectorNamesById(id);
+        List<SectorInfoResponseDto> sectorNames = findSectorNamesById(id);
         List<String> difficultyNames = getDifficultyNames(climbingGym);
         return new ClimbingGymDetailResponseDto(climbingGym.getGymName(),
             climbingGym.getMapImageUrl(), climbingGym.getCalendarImageUrl(),
             difficultyNames, sectorNames);
     }
 
-    private List<String> findSectorNamesById(final Long id) {
+    private List<SectorInfoResponseDto> findSectorNamesById(final Long id) {
         return climbingGymRepository.findGymSectorNamesById(id);
     }
 

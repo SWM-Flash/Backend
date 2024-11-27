@@ -1,5 +1,6 @@
 package com.first.flash.climbing.gym.domian;
 
+import com.first.flash.climbing.gym.infrastructure.dto.SectorInfoResponseDto;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,5 +12,5 @@ public interface ClimbingGymRepository {
 
     List<ClimbingGym> findAll();
 
-    List<String> findGymSectorNamesById(final Long id);
+    List<SectorInfoResponseDto> findGymSectorNamesById(final Long id);
 }

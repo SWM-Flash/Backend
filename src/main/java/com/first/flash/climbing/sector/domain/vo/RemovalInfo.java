@@ -35,4 +35,11 @@ public class RemovalInfo {
     public static RemovalInfo createDefault(final LocalDate removalDate) {
         return new RemovalInfo(removalDate, false, false);
     }
+
+    public static RemovalInfo createByNewRemovalDate(final LocalDate removalDate) {
+        if (removalDate.isBefore(LocalDate.now())) {
+            return new RemovalInfo(removalDate, false, true);
+        }
+        return new RemovalInfo(removalDate, false, false);
+    }
 }
