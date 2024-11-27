@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,6 +27,7 @@ public class MemberFavoriteGymController {
         @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
             content = @Content(mediaType = "application/json"))
     })
+    @PutMapping("/favorites/{gymId}")
     public ResponseEntity<MemberFavoriteGymResponseDto> toggleMemberFavoriteGym(
         @PathVariable final Long gymId) {
         return ResponseEntity.status(HttpStatus.OK)
