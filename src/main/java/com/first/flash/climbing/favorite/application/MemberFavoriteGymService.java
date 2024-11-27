@@ -3,6 +3,8 @@ package com.first.flash.climbing.favorite.application;
 import com.first.flash.climbing.favorite.application.dto.MemberFavoriteGymResponseDto;
 import com.first.flash.climbing.favorite.domain.MemberFavoriteGym;
 import com.first.flash.climbing.favorite.domain.MemberFavoriteGymRepository;
+import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
+import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,7 @@ public class MemberFavoriteGymService {
     private final MemberFavoriteGymRepository memberFavoriteGymRepository;
 
     public MemberFavoriteGymResponseDto toggleMemberFavoriteGym(final Long gymId) {
+        Events.raise(ClimbingGymIdConfirmRequestedEvent.of(gymId));
         UUID memberId = AuthUtil.getId();
         Optional<MemberFavoriteGym> favoriteGym = memberFavoriteGymRepository.findByMemberIdAndGymId(memberId, gymId);
 
