@@ -4,7 +4,7 @@ import com.first.flash.climbing.favorite.application.MemberFavoriteGymService;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymDetailResponseDto;
-import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
+import com.first.flash.climbing.gym.infrastructure.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
@@ -39,12 +39,7 @@ public class ClimbingGymService {
     public List<ClimbingGymResponseDto> findAllClimbingGyms() {
         UUID memberId = AuthUtil.getId();
         List<Long> favoriteGymIds = memberFavoriteGymService.findFavoriteGymIdsByMemberId(memberId);
-        climbingGymRepository.findAll();
-        return climbingGymRepository.findAll().stream()
-                                    .map(
-                                        gym -> (ClimbingGymResponseDto)
-                                            ClimbingGymResponseDto.toDto(gym, favoriteGymIds))
-                                    .toList();
+        return climbingGymRepository.findAllWithFavorites(favoriteGymIds);
     }
 
     public ClimbingGymDetailResponseDto findClimbingGymDetail(final Long id) {
