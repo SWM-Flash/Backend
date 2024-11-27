@@ -28,4 +28,15 @@ public class MemberFavoriteGymRepositoryImpl implements MemberFavoriteGymReposit
     public List<MemberFavoriteGym> findByMemberId(final UUID memberId) {
         return memberFavoriteGymJpaRepository.findByMemberId(memberId);
     }
+
+    @Override
+    public Optional<MemberFavoriteGym> findByMemberIdAndGymId(final UUID memberId,
+        final Long gymId) {
+        return memberFavoriteGymJpaRepository.findByMemberIdAndGymId(memberId, gymId);
+    }
+
+    @Override
+    public void delete(final MemberFavoriteGym memberFavoriteGym) {
+        memberFavoriteGymJpaRepository.delete(memberFavoriteGym);
+    }
 }

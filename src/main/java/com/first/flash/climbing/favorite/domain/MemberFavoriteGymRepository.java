@@ -11,4 +11,8 @@ public interface MemberFavoriteGymRepository {
     Optional<MemberFavoriteGym> findById(final Long id);
 
     List<MemberFavoriteGym> findByMemberId(final UUID memberId);
+
+    Optional<MemberFavoriteGym> findByMemberIdAndGymId(final UUID memberId, final Long gymId);
+
+    void delete(final MemberFavoriteGym memberFavoriteGym);
 }

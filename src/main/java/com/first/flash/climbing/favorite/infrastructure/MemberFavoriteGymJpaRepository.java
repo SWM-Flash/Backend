@@ -1,7 +1,6 @@
 package com.first.flash.climbing.favorite.infrastructure;
 
 import com.first.flash.climbing.favorite.domain.MemberFavoriteGym;
-import com.first.flash.climbing.favorite.domain.MemberFavoriteGymRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,4 +13,8 @@ public interface MemberFavoriteGymJpaRepository extends JpaRepository<MemberFavo
     Optional<MemberFavoriteGym> findById(final Long id);
 
     List<MemberFavoriteGym> findByMemberId(final UUID memberId);
+
+    Optional<MemberFavoriteGym> findByMemberIdAndGymId(final UUID memberId, final Long gymId);
+
+    void delete(final MemberFavoriteGym memberFavoriteGym);
 }
