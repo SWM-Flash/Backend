@@ -4,7 +4,7 @@ import com.first.flash.climbing.gym.application.ClimbingGymService;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymDetailResponseDto;
-import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
+import com.first.flash.climbing.gym.infrastructure.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyLevelException;
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyNameException;

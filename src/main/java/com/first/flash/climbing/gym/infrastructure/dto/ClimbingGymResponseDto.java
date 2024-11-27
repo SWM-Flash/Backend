@@ -1,4 +1,4 @@
-package com.first.flash.climbing.gym.application.dto;
+package com.first.flash.climbing.gym.infrastructure.dto;
 
 import com.first.flash.climbing.gym.domian.ClimbingGym;
 import java.util.List;
