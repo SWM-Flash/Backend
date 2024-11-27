@@ -2,6 +2,8 @@ package com.first.flash.climbing.favorite.domain;
 
 import com.first.flash.global.domain.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.util.UUID;
 import lombok.Getter;
@@ -15,6 +17,7 @@ import lombok.ToString;
 public class MemberFavoriteGym extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private UUID memberId;
     private Long gymId;
