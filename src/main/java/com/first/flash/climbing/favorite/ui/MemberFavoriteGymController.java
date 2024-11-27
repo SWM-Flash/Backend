@@ -29,6 +29,6 @@ public class MemberFavoriteGymController {
     public ResponseEntity<MemberFavoriteGymResponseDto> toggleMemberFavoriteGym(
         @PathVariable final Long gymId) {
         return ResponseEntity.status(HttpStatus.OK)
-                             .body(memberFavoriteGymService.save(gymId));
+                             .body(memberFavoriteGymService.toggleMemberFavoriteGym(gymId));
     }
 }

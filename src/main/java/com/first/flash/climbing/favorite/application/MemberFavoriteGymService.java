@@ -16,7 +16,7 @@ public class MemberFavoriteGymService {
 
     private final MemberFavoriteGymRepository memberFavoriteGymRepository;
 
-    public MemberFavoriteGymResponseDto saveMemberFavoriteGym(final Long gymId) {
+    public MemberFavoriteGymResponseDto toggleMemberFavoriteGym(final Long gymId) {
         UUID memberId = AuthUtil.getId();
         Optional<MemberFavoriteGym> favoriteGym = memberFavoriteGymRepository.findByMemberIdAndGymId(memberId, gymId);
 
