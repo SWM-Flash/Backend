@@ -1,12 +1,11 @@
 package com.first.flash.climbing.favorite.application.dto;
 
-import com.first.flash.climbing.favorite.domain.MemberFavoriteGym;
-import java.util.UUID;
+public record MemberFavoriteGymResponseDto(String message) {
 
-public record MemberFavoriteGymResponseDto(Long id, Long gymId, UUID memberId) {
-
-    public static MemberFavoriteGymResponseDto toDto(final MemberFavoriteGym memberFavoriteGym) {
-        return new MemberFavoriteGymResponseDto(memberFavoriteGym.getId(),
-            memberFavoriteGym.getGymId(), memberFavoriteGym.getMemberId());
+    public static MemberFavoriteGymResponseDto toDtoByStatus(final boolean present) {
+        if (present) {
+            return new MemberFavoriteGymResponseDto("즐겨찾기에서 제거되었습니다.");
+        }
+        return new MemberFavoriteGymResponseDto("즐겨찾기에 추가되었습니다.");
     }
 }

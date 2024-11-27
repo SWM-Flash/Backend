@@ -5,6 +5,7 @@ import com.first.flash.climbing.favorite.domain.MemberFavoriteGym;
 import com.first.flash.climbing.favorite.domain.MemberFavoriteGymRepository;
 import com.first.flash.global.util.AuthUtil;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,15 @@ public class MemberFavoriteGymService {
 
     public MemberFavoriteGymResponseDto saveMemberFavoriteGym(final Long gymId) {
         UUID memberId = AuthUtil.getId();
-        MemberFavoriteGym memberFavoriteGym = MemberFavoriteGym.createDefault(memberId, gymId);
-        MemberFavoriteGym savedMemberFavoriteGym = memberFavoriteGymRepository.save(
-            memberFavoriteGym);
-        return MemberFavoriteGymResponseDto.toDto(savedMemberFavoriteGym);
+        Optional<MemberFavoriteGym> favoriteGym = memberFavoriteGymRepository.findByMemberIdAndGymId(memberId, gymId);
+
+        if (favoriteGym.isPresent()) {
+            memberFavoriteGymRepository.delete(favoriteGym.get());
+        } else {
+            MemberFavoriteGym memberFavoriteGym = MemberFavoriteGym.createDefault(memberId, gymId);
+            memberFavoriteGymRepository.save(memberFavoriteGym);
+        }
+        return MemberFavoriteGymResponseDto.toDtoByStatus(favoriteGym.isPresent());
     }
 
     public List<Long> findFavoriteGymIdsByMemberId(final UUID memberId) {
