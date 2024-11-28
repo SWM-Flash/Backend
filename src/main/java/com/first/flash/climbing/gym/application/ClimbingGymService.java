@@ -1,15 +1,18 @@
 package com.first.flash.climbing.gym.application;
 
+import com.first.flash.climbing.favorite.application.MemberFavoriteGymService;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymDetailResponseDto;
-import com.first.flash.climbing.gym.application.dto.ClimbingGymResponseDto;
+import com.first.flash.climbing.gym.infrastructure.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
 import com.first.flash.climbing.gym.infrastructure.dto.SectorInfoResponseDto;
+import com.first.flash.global.util.AuthUtil;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClimbingGymService {
 
     private final ClimbingGymRepository climbingGymRepository;
+    private final MemberFavoriteGymService memberFavoriteGymService;
 
     @Transactional
     public ClimbingGymCreateResponseDto save(final ClimbingGymCreateRequestDto createRequestDto) {
@@ -33,9 +37,9 @@ public class ClimbingGymService {
     }
 
     public List<ClimbingGymResponseDto> findAllClimbingGyms() {
-        return climbingGymRepository.findAll().stream()
-                                    .map(ClimbingGymResponseDto::toDto)
-                                    .toList();
+        UUID memberId = AuthUtil.getId();
+        List<Long> favoriteGymIds = memberFavoriteGymService.findFavoriteGymIdsByMemberId(memberId);
+        return climbingGymRepository.findAllWithFavorites(favoriteGymIds);
     }
 
     public ClimbingGymDetailResponseDto findClimbingGymDetail(final Long id) {
