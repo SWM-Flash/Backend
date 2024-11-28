@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class SectorTest {
 
+    private static final String DEFAULT_SECTOR_IMAGE = "example image url";
     private static final Long DEFAULT_GYM_ID = 1L;
 
     @Test
@@ -18,7 +19,7 @@ class SectorTest {
 
         // when & then
         assertThatThrownBy(() -> Sector.createDefault("test", "test", settingDate,
-            settingDate.minusDays(1), DEFAULT_GYM_ID))
+            settingDate.minusDays(1), DEFAULT_GYM_ID, DEFAULT_SECTOR_IMAGE))
             .isInstanceOf(InvalidRemovalDateException.class);
     }
 
@@ -27,7 +28,7 @@ class SectorTest {
         // given
         LocalDate settingDate = LocalDate.now();
         Sector sector = Sector.createExceptRemovalDate("test", "test", settingDate,
-            DEFAULT_GYM_ID);
+            DEFAULT_GYM_ID, DEFAULT_SECTOR_IMAGE);
 
         // when
         sector.updateRemovalDate(settingDate.plusDays(1));
@@ -42,7 +43,7 @@ class SectorTest {
         // given
         LocalDate settingDate = LocalDate.now();
         Sector sector = Sector.createExceptRemovalDate("test", "test", settingDate,
-            DEFAULT_GYM_ID);
+            DEFAULT_GYM_ID, DEFAULT_SECTOR_IMAGE);
 
         // when & then
         assertThatThrownBy(() -> sector.updateRemovalDate(settingDate.minusDays(1)))

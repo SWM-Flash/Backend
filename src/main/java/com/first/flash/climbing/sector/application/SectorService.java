@@ -1,21 +1,28 @@
 package com.first.flash.climbing.sector.application;
 
 import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
+import com.first.flash.climbing.sector.application.dto.SectorInfosDetailResponseDto;
+import com.first.flash.climbing.sector.domain.SectorFixedInfoUpdatedEvent;
+import com.first.flash.climbing.sector.infrastructure.dto.UpdateSectorsDto;
 import com.first.flash.climbing.sector.application.dto.SectorCreateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorDetailResponseDto;
+import com.first.flash.climbing.sector.application.dto.SectorInfoCreateRequestDto;
+import com.first.flash.climbing.sector.application.dto.SectorInfoDetailResponseDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRemovalDateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorUpdateRequestDto;
 import com.first.flash.climbing.sector.application.dto.SectorsDetailResponseDto;
 import com.first.flash.climbing.sector.domain.Sector;
 import com.first.flash.climbing.sector.domain.SectorExpiredEvent;
+import com.first.flash.climbing.sector.domain.SectorInfo;
+import com.first.flash.climbing.sector.domain.SectorInfoRepository;
 import com.first.flash.climbing.sector.domain.SectorInfoUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
 import com.first.flash.climbing.sector.domain.SectorRepository;
+import com.first.flash.climbing.sector.exception.exceptions.SectorInfoNotFoundException;
 import com.first.flash.climbing.sector.exception.exceptions.SectorNotFoundException;
 import com.first.flash.global.event.Events;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,15 +33,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class SectorService {
 
     private final SectorRepository sectorRepository;
+    private final SectorInfoRepository sectorInfoRepository;
 
     @Transactional
-    public SectorDetailResponseDto saveSector(final Long gymId,
+    public SectorDetailResponseDto saveSector(final Long sectorInfoId,
         final SectorCreateRequestDto createRequestDto) {
-
-        Sector sector = createSectorByDto(gymId, createRequestDto);
-        Events.raise(ClimbingGymIdConfirmRequestedEvent.of(gymId));
-
+        SectorInfo sectorInfo = findSectorInfoById(sectorInfoId);
+        Sector sector = createSector(sectorInfo, createRequestDto);
         return SectorDetailResponseDto.toDto(sectorRepository.save(sector));
+    }
+
+    @Transactional
+    public SectorInfoDetailResponseDto saveSectorInfo(final Long gymId,
+        final SectorInfoCreateRequestDto createRequestDto) {
+        SectorInfo sectorInfo = SectorInfo.createDefault(createRequestDto.name(),
+            createRequestDto.adminName(), gymId, createRequestDto.selectedImageUrl());
+        Events.raise(ClimbingGymIdConfirmRequestedEvent.of(gymId));
+        return SectorInfoDetailResponseDto.toDto(sectorInfoRepository.save(sectorInfo));
     }
 
     @Transactional
@@ -43,7 +58,7 @@ public class SectorService {
         Sector sector = findById(sectorId);
         LocalDate removalDate = sectorUpdateRemovalDateRequestDto.removalDate();
         sector.updateRemovalDate(removalDate);
-        Events.raise(SectorRemovalDateUpdatedEvent.of(sectorId, removalDate));
+        Events.raise(SectorRemovalDateUpdatedEvent.of(sectorId, removalDate, sector.isExpired()));
         return SectorDetailResponseDto.toDto(sector);
     }
 
@@ -59,12 +74,24 @@ public class SectorService {
         final SectorUpdateRequestDto updateRequestDto) {
         Sector foundSector = findById(sectorId);
         foundSector.updateSector(updateRequestDto.sectorName(), updateRequestDto.adminSectorName(),
-            updateRequestDto.settingDate(),
-            updateRequestDto.removalDate(), updateRequestDto.gymId());
+            updateRequestDto.settingDate(), updateRequestDto.removalDate(),
+            updateRequestDto.selectedImageUrl());
         Events.raise(SectorInfoUpdatedEvent.of(foundSector.getId(), updateRequestDto.sectorName(),
-            updateRequestDto.settingDate()));
-        Events.raise(ClimbingGymIdConfirmRequestedEvent.of(updateRequestDto.gymId()));
+            updateRequestDto.settingDate(), foundSector.isExpired()));
         return SectorDetailResponseDto.toDto(foundSector);
+    }
+
+    @Transactional
+    public SectorInfoDetailResponseDto updateSectorInfo(final Long sectorInfoId,
+        final SectorInfoCreateRequestDto updateRequestDto) {
+        SectorInfo sectorInfo = findSectorInfoById(sectorInfoId);
+        sectorInfo.updateSectorInfo(updateRequestDto.name(), updateRequestDto.adminName(),
+            updateRequestDto.selectedImageUrl());
+        UpdateSectorsDto updateSectorsDto = UpdateSectorsDto.toDto(sectorInfo);
+        sectorRepository.updateSectors(sectorInfoId, updateSectorsDto);
+        List<Long> sectorIds = sectorRepository.findSectorIdsBySectorInfoId(sectorInfoId);
+        Events.raise(SectorFixedInfoUpdatedEvent.of(sectorIds, sectorInfo));
+        return SectorInfoDetailResponseDto.toDto(sectorInfo);
     }
 
     public Sector findById(final Long id) {
@@ -82,19 +109,26 @@ public class SectorService {
         return new SectorsDetailResponseDto(sectorsResponse);
     }
 
-    private Sector createSectorByDto(final Long gymId,
-        final SectorCreateRequestDto createRequestDto) {
-        if (hasNoRemovalDate(createRequestDto)) {
-            return Sector.createExceptRemovalDate(createRequestDto.name(),
-                createRequestDto.adminName(), createRequestDto.settingDate(), gymId);
-        }
-
-        return Sector.createDefault(createRequestDto.name(),
-            createRequestDto.adminName(), createRequestDto.settingDate(),
-            createRequestDto.removalDate(), gymId);
+    public SectorInfosDetailResponseDto findAllSectorInfos() {
+        List<SectorInfoDetailResponseDto> sectorInfosResponse = sectorInfoRepository
+            .findAll()
+            .stream()
+            .map(
+                SectorInfoDetailResponseDto::toDto)
+            .toList();
+        return new SectorInfosDetailResponseDto(sectorInfosResponse);
     }
 
-    private static boolean hasNoRemovalDate(final SectorCreateRequestDto createRequestDto) {
-        return Objects.isNull(createRequestDto.removalDate());
+    private Sector createSector(final SectorInfo sectorInfo,
+        final SectorCreateRequestDto createRequestDto) {
+        return Sector.of(sectorInfo.getSectorName(), createRequestDto.settingDate(),
+            createRequestDto.removalDate(), sectorInfo.getGymId(),
+            sectorInfo.getSelectedImageUrl(), sectorInfo.getId());
+    }
+
+    private SectorInfo findSectorInfoById(final Long sectorInfoId) {
+        return sectorInfoRepository.findById(sectorInfoId)
+                                   .orElseThrow(
+                                       () -> new SectorInfoNotFoundException(sectorInfoId));
     }
 }

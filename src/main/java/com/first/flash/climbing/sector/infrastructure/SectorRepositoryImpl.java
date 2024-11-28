@@ -2,6 +2,7 @@ package com.first.flash.climbing.sector.infrastructure;
 
 import com.first.flash.climbing.sector.domain.Sector;
 import com.first.flash.climbing.sector.domain.SectorRepository;
+import com.first.flash.climbing.sector.infrastructure.dto.UpdateSectorsDto;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,16 @@ public class SectorRepositoryImpl implements SectorRepository {
     @Override
     public List<Sector> findAll() {
         return sectorJpaRepository.findAll();
+    }
+
+    @Override
+    public void updateSectors(final Long sectorInfoId,
+        final UpdateSectorsDto updateSectorsDto) {
+        sectorQueryDslRepository.updateSectors(sectorInfoId, updateSectorsDto);
+    }
+
+    @Override
+    public List<Long> findSectorIdsBySectorInfoId(final Long sectorInfoId) {
+        return sectorQueryDslRepository.findSectorIdsBySectorInfoId(sectorInfoId);
     }
 }

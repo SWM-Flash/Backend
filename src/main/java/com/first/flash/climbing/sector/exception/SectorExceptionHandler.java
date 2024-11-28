@@ -1,6 +1,7 @@
 package com.first.flash.climbing.sector.exception;
 
 import com.first.flash.climbing.sector.exception.exceptions.InvalidRemovalDateException;
+import com.first.flash.climbing.sector.exception.exceptions.SectorInfoNotFoundException;
 import com.first.flash.climbing.sector.exception.exceptions.SectorNotFoundException;
 import com.first.flash.global.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,12 @@ public class SectorExceptionHandler {
     @ExceptionHandler(SectorNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleSectorNotFoundException(
         final SectorNotFoundException exception) {
+        return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
+    }
+
+    @ExceptionHandler(SectorInfoNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleSectorInfoNotFoundException(
+        final SectorInfoNotFoundException exception) {
         return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
     }
 

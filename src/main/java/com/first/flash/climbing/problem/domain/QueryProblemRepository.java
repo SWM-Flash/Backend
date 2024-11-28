@@ -17,10 +17,12 @@ public interface QueryProblemRepository {
         final Long gymId, final List<String> difficulty, final List<String> sector,
         final Boolean hasSolution, final Boolean isHoney);
 
-    void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate);
+    void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate, final boolean isExpired);
 
     void expireProblemsBySectorIds(final List<Long> expiredSectorsIds);
 
     void updateQueryProblemInfo(final Long sectorId, final String sectorName,
-        final LocalDate settingDate);
+        final LocalDate settingDate, final boolean isExpired);
+
+    void updateSectorNameBySectorIds(final List<Long> sectorIds, final String sectorName);
 }
