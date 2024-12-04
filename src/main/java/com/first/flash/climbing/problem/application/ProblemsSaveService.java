@@ -2,6 +2,8 @@ package com.first.flash.climbing.problem.application;
 
 import com.first.flash.climbing.gym.application.ClimbingGymService;
 import com.first.flash.climbing.gym.domian.ClimbingGym;
+import com.first.flash.climbing.hold.application.HoldService;
+import com.first.flash.climbing.hold.domain.Hold;
 import com.first.flash.climbing.problem.application.dto.ProblemCreateResponseDto;
 import com.first.flash.climbing.problem.domain.Problem;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
@@ -24,6 +26,7 @@ public class ProblemsSaveService {
     private final QueryProblemRepository queryProblemRepository;
     private final ClimbingGymService climbingGymService;
     private final SectorService sectorService;
+    private final HoldService holdService;
     private final ProblemsCreateService problemsCreateService;
 
     @Transactional
@@ -31,10 +34,11 @@ public class ProblemsSaveService {
         final ProblemCreateRequestDto createRequestDto) {
         ClimbingGym climbingGym = climbingGymService.findClimbingGymById(gymId);
         Sector sector = sectorService.findById(sectorId);
+        Hold hold = holdService.findById(createRequestDto.holdId());
         Problem problem = problemsCreateService.createProblem(climbingGym, sector,
             createRequestDto);
         QueryProblem queryProblem = problemsCreateService.createQueryProblem(climbingGym,
-            sector, problem);
+            sector, problem, hold);
         problemRepository.save(problem);
         queryProblemRepository.save(queryProblem);
         return ProblemCreateResponseDto.toDto(problem);

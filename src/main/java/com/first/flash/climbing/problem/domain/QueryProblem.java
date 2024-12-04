@@ -58,6 +58,10 @@ public class QueryProblem {
     private String sectorName;
     private LocalDate settingDate;
     private LocalDate removalDate;
+    private Long thumbnailSolutionId;
+    private Long holdId;
+    private String holdColorName;
+    private String holdColorCode;
 
     public boolean isExpired() {
         return isExpired;

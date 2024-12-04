@@ -35,10 +35,12 @@ public class Problem {
     private Long gymId;
     private Long sectorId;
     private String imageSource;
+    private Long thumbnailSolutionId;
+    private Long holdId;
 
     public static Problem createDefault(final UUID id, final String imageUrl,
         final String difficultyName, final Integer difficultyLevel, final Long gymId,
-        final Long sectorId, final String imageSource) {
+        final Long sectorId, final String imageSource, final Long thumbnailSolutionId, final Long holdId) {
         return Problem.builder()
                       .id(id)
                       .imageUrl(imageUrl)
@@ -49,6 +51,8 @@ public class Problem {
                       .gymId(gymId)
                       .sectorId(sectorId)
                       .imageSource(imageSource)
+                      .thumbnailSolutionId(thumbnailSolutionId)
+                      .holdId(holdId)
                       .build();
     }
 
