@@ -1,6 +1,7 @@
 package com.first.flash.climbing.problem.application;
 
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
+import com.first.flash.climbing.problem.domain.Problem;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.domain.QueryProblemRepository;
@@ -29,6 +30,16 @@ public class ProblemsService {
     public void expireProblems(final List<Long> expiredSectorsIds) {
         queryProblemRepository.expireProblemsBySectorIds(expiredSectorsIds);
         problemRepository.expireProblemsBySectorIds(expiredSectorsIds);
+    }
+    
+    @Transactional
+    public void changeThumbnailInfo(final UUID problemId, final Long solutionId, 
+        final String thumbnailImageUrl, final String uploader) {
+        Problem problem = problemReadService.findProblemById(problemId);
+        QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
+
+        problem.setThumbnailInfo(solutionId, thumbnailImageUrl, uploader);
+        queryProblem.setThumbnailInfo(solutionId, thumbnailImageUrl, uploader);
     }
 
     @Transactional

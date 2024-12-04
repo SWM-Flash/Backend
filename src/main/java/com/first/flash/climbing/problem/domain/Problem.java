@@ -63,4 +63,11 @@ public class Problem {
     public boolean isExpired() {
         return isExpired;
     }
+
+    public void setThumbnailInfo(final Long thumbnailSolutionId, final String imageUrl,
+        final String imageSource) {
+        this.thumbnailSolutionId = thumbnailSolutionId;
+        this.imageUrl = imageUrl;
+        this.imageSource = imageSource;
+    }
 }

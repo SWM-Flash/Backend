@@ -42,7 +42,10 @@ public class SolutionSaveService {
             perceivedDifficulty.getValue()));
 
         Solution savedSolution = solutionRepository.save(solution);
-        Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
+        Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId(), savedSolution.getId(),
+            savedSolution.getSolutionDetail().getThumbnailImageUrl(),
+            savedSolution.getUploaderDetail().getInstagramId()));
+
         return SolutionWriteResponseDto.toDto(savedSolution);
     }
 
@@ -70,7 +73,9 @@ public class SolutionSaveService {
         Solution savedSolution = solutionRepository.save(solution);
         Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(),
             perceivedDifficulty.getValue()));
-        Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId()));
+        Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId(), savedSolution.getId(),
+            savedSolution.getSolutionDetail().getThumbnailImageUrl(),
+            savedSolution.getUploaderDetail().getInstagramId()));
         return SolutionWriteResponseDto.toDto(savedSolution);
     }
 }

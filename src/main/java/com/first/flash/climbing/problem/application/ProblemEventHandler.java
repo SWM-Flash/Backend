@@ -36,6 +36,8 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void updateProblemSolutionInfo(final SolutionSavedEvent event) {
+        problemsService.changeThumbnailInfo(event.getProblemId(), event.getSolutionId(),
+            event.getThumbnailImageUrl(), event.getUploader());
         problemsService.updateProblemSolutionInfo(event.getProblemId());
     }
 

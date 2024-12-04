@@ -98,6 +98,13 @@ public class QueryProblem {
         return perceivedDifficulty < 0;
     }
 
+    public void setThumbnailInfo(final Long thumbnailSolutionId, final String imageUrl,
+        final String imageSource) {
+        this.thumbnailSolutionId = thumbnailSolutionId;
+        this.imageUrl = imageUrl;
+        this.imageSource = imageSource;
+    }
+
     private void enableSolution() {
         if (!hasSolution) {
             hasSolution = true;
@@ -113,4 +120,5 @@ public class QueryProblem {
             (STANDARD_VIEW_COUNT + difficultyLevel * DIFFICULTY_LEVEL_WEIGHT) * solutionCount
                 + optionalWeight;
     }
+
 }

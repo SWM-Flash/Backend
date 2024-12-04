@@ -10,8 +10,12 @@ import lombok.Getter;
 public class SolutionSavedEvent extends Event {
 
     private UUID problemId;
+    private Long solutionId;
+    private String thumbnailImageUrl;
+    private String uploader;
 
-    public static SolutionSavedEvent of(final UUID problemId) {
-        return new SolutionSavedEvent(problemId);
+    public static SolutionSavedEvent of(final UUID problemId, Long solutionId,
+        String thumbnailImageUrl, String uploader) {
+        return new SolutionSavedEvent(problemId, solutionId, thumbnailImageUrl, uploader);
     }
 }

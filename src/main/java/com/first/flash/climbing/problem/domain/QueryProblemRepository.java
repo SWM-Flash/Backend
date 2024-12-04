@@ -25,4 +25,5 @@ public interface QueryProblemRepository {
         final LocalDate settingDate, final boolean isExpired);
 
     void updateSectorNameBySectorIds(final List<Long> sectorIds, final String sectorName);
+
 }
