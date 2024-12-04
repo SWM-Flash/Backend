@@ -34,7 +34,8 @@ public class SolutionSaveService {
 
         PerceivedDifficulty perceivedDifficulty = createRequestDto.perceivedDifficulty();
         Solution solution = Solution.of(member.getNickName(), createRequestDto.review(),
-            member.getInstagramId(), createRequestDto.videoUrl(), problemId, member.getId(),
+            member.getInstagramId(), createRequestDto.thumbnailImageUrl(), createRequestDto.solvedDate(),
+            createRequestDto.videoUrl(), problemId, member.getId(),
             member.getProfileImageUrl(), perceivedDifficulty, member.getHeight(), member.getReach(),
             member.getGender());
         Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(),
@@ -61,7 +62,8 @@ public class SolutionSaveService {
 
         PerceivedDifficulty perceivedDifficulty = requestDto.perceivedDifficulty();
         Solution solution = Solution.of(requestDto.nickName(), requestDto.review(),
-            requestDto.instagramId(), requestDto.videoUrl(), problemId, member.getId(),
+            requestDto.instagramId(), requestDto.thumbnailImageUrl(), requestDto.solvedDate(),
+            requestDto.videoUrl(), problemId, member.getId(),
             requestDto.profileImageUrl(), perceivedDifficulty, member.getHeight(),
             member.getReach(), member.getGender());
 

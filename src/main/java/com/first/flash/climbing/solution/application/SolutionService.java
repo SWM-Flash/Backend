@@ -79,7 +79,8 @@ public class SolutionService {
         PerceivedDifficulty oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
         int difficultyDifference = newPerceivedDifficulty.calculateDifferenceFrom(oldPerceivedDifficulty);
 
-        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), newPerceivedDifficulty);
+        solution.updateContentInfo(requestDto.review(), requestDto.thumbnailImageUrl(),
+            requestDto.videoUrl(), requestDto.solvedDate(), newPerceivedDifficulty);
 
         Events.raise(PerceivedDifficultySetEvent.of(
             solution.getProblemId(),
