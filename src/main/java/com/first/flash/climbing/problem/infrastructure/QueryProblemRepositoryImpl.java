@@ -63,4 +63,10 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
     public void deleteByProblemId(UUID problemId) {
         jpaRepository.deleteById(problemId);
     }
+
+    @Override
+    public List<QueryProblem> findBySectorIdAndHoldIdAndDifficulty(Long sectorId, Long holdId,
+        String difficulty) {
+        return jpaRepository.findBySectorIdAndHoldIdAndDifficultyName(sectorId, holdId, difficulty);
+    }
 }

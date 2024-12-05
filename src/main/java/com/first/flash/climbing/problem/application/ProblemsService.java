@@ -1,6 +1,8 @@
 package com.first.flash.climbing.problem.application;
 
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
+import com.first.flash.climbing.problem.application.dto.ProblemResponseDto;
+import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.Problem;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
@@ -96,4 +98,5 @@ public class ProblemsService {
     public void updateQueryProblemFixedInfo(final List<Long> sectorIds, final String sectorName) {
         queryProblemRepository.updateSectorNameBySectorIds(sectorIds, sectorName);
     }
+
 }
