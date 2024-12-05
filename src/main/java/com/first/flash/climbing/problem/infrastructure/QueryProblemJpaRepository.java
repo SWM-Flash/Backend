@@ -10,4 +10,6 @@ public interface QueryProblemJpaRepository extends JpaRepository<QueryProblem, U
     QueryProblem save(final QueryProblem queryProblem);
 
     Optional<QueryProblem> findById(final UUID id);
+
+    void deleteById(final UUID id);
 }

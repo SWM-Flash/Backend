@@ -26,4 +26,5 @@ public interface QueryProblemRepository {
 
     void updateSectorNameBySectorIds(final List<Long> sectorIds, final String sectorName);
 
+    void deleteByProblemId(final UUID problemId);
 }

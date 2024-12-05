@@ -58,4 +58,9 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
     public void updateSectorNameBySectorIds(final List<Long> sectorIds, final String sectorName) {
         queryProblemQueryDslRepository.updateSectorNameBySectorIds(sectorIds, sectorName);
     }
+
+    @Override
+    public void deleteByProblemId(UUID problemId) {
+        jpaRepository.deleteById(problemId);
+    }
 }

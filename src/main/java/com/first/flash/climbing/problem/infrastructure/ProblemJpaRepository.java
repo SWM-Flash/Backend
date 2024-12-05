@@ -10,4 +10,6 @@ public interface ProblemJpaRepository extends JpaRepository<Problem, UUID> {
     Problem save(final Problem problem);
 
     Optional<Problem> findById(final UUID id);
+
+    void deleteById(final UUID id);
 }

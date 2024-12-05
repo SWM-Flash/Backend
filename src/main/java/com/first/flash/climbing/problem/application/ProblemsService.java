@@ -5,6 +5,7 @@ import com.first.flash.climbing.problem.domain.Problem;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.domain.QueryProblemRepository;
+import com.first.flash.climbing.problem.infrastructure.dto.ThumbnailSolutionDto;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -55,8 +56,20 @@ public class ProblemsService {
     @Transactional
     public void updateProblemDeletedSolutionInfo(final UUID problemId,
         final Integer perceivedDifficulty) {
+        Problem problem = problemReadService.findProblemById(problemId);
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
+
         queryProblem.decrementSolutionCount();
+        if (!queryProblem.getHasSolution()) {
+            problemRepository.deleteByProblemId(problemId);
+            queryProblemRepository.deleteByProblemId(problemId);
+            return;
+        }
+
+        ThumbnailSolutionDto dto = problemRepository.findNextSolution(problemId);
+        problem.setThumbnailInfo(dto.solutionId(), dto.thumbnailImageUrl(), dto.uploader());
+        queryProblem.setThumbnailInfo(dto.solutionId(), dto.thumbnailImageUrl(), dto.uploader());
+
         queryProblem.subtractPerceivedDifficulty(perceivedDifficulty);
     }
 
