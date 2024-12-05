@@ -38,6 +38,10 @@ public class ProblemsService {
         Problem problem = problemReadService.findProblemById(problemId);
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
 
+        if (queryProblem.getHasSolution()) {
+            return;
+        }
+
         problem.setThumbnailInfo(solutionId, thumbnailImageUrl, uploader);
         queryProblem.setThumbnailInfo(solutionId, thumbnailImageUrl, uploader);
     }
