@@ -3,6 +3,7 @@ package com.first.flash.climbing.problem.ui;
 import com.first.flash.climbing.problem.application.ProblemReadService;
 import com.first.flash.climbing.problem.application.ProblemsSaveService;
 import com.first.flash.climbing.problem.application.ProblemsService;
+import com.first.flash.climbing.problem.application.dto.DuplicateProblemsResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemCreateResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemPerceivedDifficultyRequestDto;
@@ -56,7 +57,7 @@ public class ProblemController {
                 @ExampleObject(name = "난이도 없음", value = "{\"error\": \"이름이 핑크인 난이도를 찾을 수 없습니다.\"}")
             }))
     })
-    @PostMapping("/admin/gyms/{gymId}/sectors/{sectorId}/problems")
+    @PostMapping("/gyms/{gymId}/sectors/{sectorId}/problems")
     public ResponseEntity<ProblemCreateResponseDto> saveProblems(
         @PathVariable("gymId") final Long gymId,
         @PathVariable("sectorId") final Long sectorId,
@@ -122,5 +123,21 @@ public class ProblemController {
         @PathVariable final UUID problemId,
         @Valid @RequestBody final ProblemPerceivedDifficultyRequestDto requestDto) {
         return ResponseEntity.ok(problemsService.setPerceivedDifficulty(problemId, requestDto.perceivedDifficulty()));
+    }
+
+    @Operation(summary = "중복된 문제 조회", description = "sectorId, holdColorId, difficulty로 중복된 문제를 조회")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 중복된 문제 조회",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DuplicateProblemsResponseDto.class)))
+    })
+    @GetMapping("/problems/duplicate")
+    public ResponseEntity<DuplicateProblemsResponseDto> findDuplicateProblems(
+        @RequestParam("sectorId") final Long sectorId,
+        @RequestParam("holdColorId") final Long holdId,
+        @RequestParam("difficulty") final String difficulty) {
+
+        DuplicateProblemsResponseDto response = problemReadService.findDuplicateProblems(sectorId, holdId, difficulty);
+
+        return ResponseEntity.ok(response);
     }
 }

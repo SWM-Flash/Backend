@@ -2,6 +2,8 @@ package com.first.flash.climbing.problem.infrastructure;
 
 import com.first.flash.climbing.problem.domain.Problem;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
+import com.first.flash.climbing.problem.infrastructure.dto.ThumbnailSolutionDto;
+import com.first.flash.climbing.solution.domain.Solution;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,5 +30,20 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     @Override
     public void expireProblemsBySectorIds(final List<Long> expiredSectorsIds) {
         queryDslRepository.expireProblemsBySectorIds(expiredSectorsIds);
+    }
+
+    @Override
+    public void deleteByProblemId(final UUID problemId) {
+        jpaRepository.deleteById(problemId);
+    }
+
+    @Override
+    public ThumbnailSolutionDto findNextSolution(final UUID problemId) {
+        return queryDslRepository.findNextSolution(problemId);
+    }
+
+    @Override
+    public List<Problem> findProblemsByThumbnailSolutionId(final Long solutionId) {
+        return jpaRepository.findProblemsByThumbnailSolutionId(solutionId);
     }
 }
