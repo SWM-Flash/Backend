@@ -2,6 +2,7 @@ package com.first.flash.climbing.problem.domain;
 
 import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
+import com.first.flash.climbing.hold.domain.Hold;
 import com.first.flash.climbing.problem.domain.dto.ProblemCreateRequestDto;
 import com.first.flash.climbing.problem.util.UUIDGenerator;
 import com.first.flash.climbing.sector.domain.Sector;
@@ -26,11 +27,12 @@ public class ProblemsCreateService {
         UUID generatedUUID = uuidGenerator.generate();
 
         return Problem.createDefault(generatedUUID, createRequestDto.imageUrl(),
-            difficulty.getName(), difficulty.getLevel(), climbingGym.getId(), sector.getId(), createRequestDto.imageSource());
+            difficulty.getName(), difficulty.getLevel(), climbingGym.getId(), sector.getId(),
+            createRequestDto.imageSource(), createRequestDto.thumbnailSolutionId(), createRequestDto.holdId());
     }
 
     public QueryProblem createQueryProblem(final ClimbingGym climbingGym, final Sector sector,
-        final Problem problem) {
+        final Problem problem, final Hold hold) {
         return QueryProblem.builder()
                            .id(problem.getId())
                            .imageUrl(problem.getImageUrl())
@@ -51,6 +53,10 @@ public class ProblemsCreateService {
                            .sectorName(sector.getSectorName().getName())
                            .settingDate(sector.getSettingDate())
                            .removalDate(sector.getRemovalDate())
+                           .thumbnailSolutionId(problem.getThumbnailSolutionId())
+                           .holdId(hold.getId())
+                           .holdColorName(hold.getColorName())
+                           .holdColorCode(hold.getColorCode())
                            .build();
     }
 }

@@ -4,7 +4,9 @@ import static com.first.flash.climbing.problem.infrastructure.paging.ProblemSort
 import static com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy.VIEWS;
 
 import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
+import com.first.flash.climbing.problem.application.dto.DuplicateProblemsResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
+import com.first.flash.climbing.problem.application.dto.ProblemResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.Problem;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
@@ -64,6 +66,13 @@ public class ProblemReadService {
     public QueryProblem findQueryProblemById(final UUID problemId) {
         return queryProblemRepository.findById(problemId).orElseThrow(
             () -> new QueryProblemNotFoundException(problemId));
+    }
+
+    public DuplicateProblemsResponseDto findDuplicateProblems(final Long sectorId, final Long holdId,
+        final String difficulty) {
+        List<QueryProblem> duplicateProblems = queryProblemRepository.findBySectorIdAndHoldIdAndDifficulty(sectorId, holdId, difficulty);
+
+        return DuplicateProblemsResponseDto.of(duplicateProblems);
     }
 
     private void validateExpiration(final Problem problem, final QueryProblem queryProblem) {

@@ -25,4 +25,10 @@ public interface QueryProblemRepository {
         final LocalDate settingDate, final boolean isExpired);
 
     void updateSectorNameBySectorIds(final List<Long> sectorIds, final String sectorName);
+
+    void deleteByProblemId(final UUID problemId);
+
+    List<QueryProblem> findBySectorIdAndHoldIdAndDifficulty(Long sectorId, Long holdId, String difficulty);
+
+    List<QueryProblem> findProblemsByThumbnailSolutionId(Long solutionId);
 }

@@ -20,8 +20,8 @@ public class ClimbingGymQueryDslRepository {
 
     public List<SectorInfoResponseDto> findSortedSectorNamesByGymId(final Long gymId) {
         return jpaQueryFactory.select(
-                                  Projections.constructor(SectorInfoResponseDto.class, sector.sectorName.name,
-                                      sector.selectedImageUrl))
+                                  Projections.constructor(SectorInfoResponseDto.class, sector.id,
+                                      sector.sectorName.name, sector.selectedImageUrl))
                               .from(sector)
                               .where(sector.gymId.eq(gymId), sector.removalInfo.isExpired.isFalse())
                               .distinct()

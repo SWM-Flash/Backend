@@ -8,6 +8,7 @@ import com.first.flash.climbing.sector.domain.SectorRemovalDateUpdatedEvent;
 import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
+import com.first.flash.climbing.solution.domain.SolutionUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,16 @@ public class ProblemEventHandler {
     @EventListener
     @Transactional
     public void updateProblemSolutionInfo(final SolutionSavedEvent event) {
+        problemsService.changeThumbnailInfo(event.getProblemId(), event.getSolutionId(),
+            event.getThumbnailImageUrl(), event.getUploader());
         problemsService.updateProblemSolutionInfo(event.getProblemId());
+    }
+
+    @EventListener
+    @Transactional
+    public void updateThumbnailInfo(final SolutionUpdatedEvent event) {
+        problemsService.changeAllThumbnailInfo(event.getSolutionId(), event.getThumbnailImageUrl(),
+            event.getUploader());
     }
 
     @EventListener
@@ -71,4 +81,6 @@ public class ProblemEventHandler {
         problemsService.addPerceivedDifficulty(event.getProblemId(),
             event.getPerceivedDifficulty());
     }
+
+
 }

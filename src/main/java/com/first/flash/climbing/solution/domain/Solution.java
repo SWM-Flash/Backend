@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -41,12 +42,14 @@ public class Solution extends BaseEntity {
     private List<SolutionComment> comments = new ArrayList<>();
 
     protected Solution(final String uploader, final String review, final String instagramId,
+        final String thumbnailImageUrl, final LocalDate solvedDate,
         final String videoUrl, final UUID problemId, final UUID uploaderId,
         final String profileImageUrl, final PerceivedDifficulty perceivedDifficulty,
         final Double uploaderHeight,
         final Double uploaderReach, final Gender uploaderGender) {
 
-        this.solutionDetail = SolutionDetail.of(review, videoUrl, perceivedDifficulty);
+        this.solutionDetail = SolutionDetail.of(review, thumbnailImageUrl, videoUrl,
+            solvedDate, perceivedDifficulty);
         this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId, profileImageUrl,
             uploaderHeight, uploaderReach, uploaderGender);
         this.optionalWeight = DEFAULT_OPTIONAL_WEIGHT;
@@ -54,16 +57,20 @@ public class Solution extends BaseEntity {
     }
 
     public static Solution of(final String uploader, final String review, final String instagramId,
+        final String thumbnailImageUrl, final LocalDate solvedDate,
         final String videoUrl, final UUID problemId, final UUID uploaderId,
         final String profileImageUrl, final PerceivedDifficulty perceivedDifficulty,
-        final Double uploaderHeight, final Double uploaderReach, final Gender uploaderGender) {
+        final Double uploaderHeight,
+        final Double uploaderReach, final Gender uploaderGender) {
 
-        return new Solution(uploader, review, instagramId, videoUrl, problemId, uploaderId,
+        return new Solution(uploader, review, instagramId, thumbnailImageUrl, solvedDate, videoUrl,
+            problemId, uploaderId,
             profileImageUrl, perceivedDifficulty, uploaderHeight, uploaderReach, uploaderGender);
     }
 
-    public void updateContentInfo(final String review, final String videoUrl,
-        final PerceivedDifficulty perceivedDifficulty) {
-        this.solutionDetail = SolutionDetail.of(review, videoUrl, perceivedDifficulty);
+    public void updateContentInfo(final String review, final String videoUrl, final String thumbnailImageUrl,
+        final LocalDate solvedDate, final PerceivedDifficulty perceivedDifficulty) {
+        this.solutionDetail = SolutionDetail.of(review, thumbnailImageUrl, videoUrl,
+            solvedDate, perceivedDifficulty);
     }
 }
