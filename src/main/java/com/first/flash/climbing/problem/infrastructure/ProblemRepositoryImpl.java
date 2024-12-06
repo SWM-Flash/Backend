@@ -33,12 +33,17 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     }
 
     @Override
-    public void deleteByProblemId(UUID problemId) {
+    public void deleteByProblemId(final UUID problemId) {
         jpaRepository.deleteById(problemId);
     }
 
     @Override
-    public ThumbnailSolutionDto findNextSolution(UUID problemId) {
+    public ThumbnailSolutionDto findNextSolution(final UUID problemId) {
         return queryDslRepository.findNextSolution(problemId);
+    }
+
+    @Override
+    public List<Problem> findProblemsByThumbnailSolutionId(final Long solutionId) {
+        return jpaRepository.findProblemsByThumbnailSolutionId(solutionId);
     }
 }

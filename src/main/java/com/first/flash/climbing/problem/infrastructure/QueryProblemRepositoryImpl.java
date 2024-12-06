@@ -69,4 +69,9 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
         String difficulty) {
         return jpaRepository.findBySectorIdAndHoldIdAndDifficultyName(sectorId, holdId, difficulty);
     }
+
+    @Override
+    public List<QueryProblem> findProblemsByThumbnailSolutionId(Long solutionId) {
+        return jpaRepository.findProblemsByThumbnailSolutionId(solutionId);
+    }
 }

@@ -14,5 +14,7 @@ public interface QueryProblemJpaRepository extends JpaRepository<QueryProblem, U
 
     void deleteById(final UUID id);
 
-    List<QueryProblem> findBySectorIdAndHoldIdAndDifficultyName(Long sectorId, Long holdId, String difficulty);
+    List<QueryProblem> findBySectorIdAndHoldIdAndDifficultyName(final Long sectorId, final Long holdId, final String difficulty);
+
+    List<QueryProblem> findProblemsByThumbnailSolutionId(final Long solutionId);
 }

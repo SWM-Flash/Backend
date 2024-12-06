@@ -50,6 +50,16 @@ public class ProblemsService {
     }
 
     @Transactional
+    public void changeAllThumbnailInfo(final Long solutionId, final String thumbnailImageUrl, final String uploader) {
+        List<Problem> problems = problemRepository.findProblemsByThumbnailSolutionId(solutionId);
+        List<QueryProblem> queryProblems = queryProblemRepository.findProblemsByThumbnailSolutionId(
+            solutionId);
+
+        problems.forEach(problem -> problem.setThumbnailInfo(solutionId, thumbnailImageUrl, uploader));
+        queryProblems.forEach(queryProblem -> queryProblem.setThumbnailInfo(solutionId, thumbnailImageUrl, uploader));
+    }
+
+    @Transactional
     public void updateProblemSolutionInfo(final UUID problemId) {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.addSolutionCount();

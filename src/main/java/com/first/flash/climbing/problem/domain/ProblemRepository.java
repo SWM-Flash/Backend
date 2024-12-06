@@ -17,4 +17,6 @@ public interface ProblemRepository {
     void deleteByProblemId(final UUID problemId);
 
     ThumbnailSolutionDto findNextSolution(final UUID problemId);
+
+    List<Problem> findProblemsByThumbnailSolutionId(final Long solutionId);
 }

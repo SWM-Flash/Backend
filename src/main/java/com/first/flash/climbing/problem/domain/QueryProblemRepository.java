@@ -29,4 +29,6 @@ public interface QueryProblemRepository {
     void deleteByProblemId(final UUID problemId);
 
     List<QueryProblem> findBySectorIdAndHoldIdAndDifficulty(Long sectorId, Long holdId, String difficulty);
+
+    List<QueryProblem> findProblemsByThumbnailSolutionId(Long solutionId);
 }
