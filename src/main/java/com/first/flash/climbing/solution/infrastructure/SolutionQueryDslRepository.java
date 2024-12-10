@@ -86,6 +86,7 @@ public class SolutionQueryDslRepository {
                                   queryProblem.difficultyName, solutionComment.count(),
                                   solution.solutionDetail.perceivedDifficulty,
                                   solution.solutionDetail.thumbnailImageUrl, queryProblem.holdColorCode,
+                                  solution.solutionDetail.solvedDate,
                                   queryProblem.removalDate, queryProblem.settingDate, solution.createdAt
                               ))
                               .from(solution)
