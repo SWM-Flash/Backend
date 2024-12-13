@@ -6,6 +6,7 @@ import com.first.flash.climbing.problem.application.ProblemsService;
 import com.first.flash.climbing.problem.application.dto.DuplicateProblemsResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemCreateResponseDto;
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
+import com.first.flash.climbing.problem.application.dto.ProblemHoldRequestDto;
 import com.first.flash.climbing.problem.application.dto.ProblemPerceivedDifficultyRequestDto;
 import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
 import com.first.flash.climbing.problem.domain.dto.ProblemCreateRequestDto;
@@ -123,6 +124,26 @@ public class ProblemController {
         @PathVariable final UUID problemId,
         @Valid @RequestBody final ProblemPerceivedDifficultyRequestDto requestDto) {
         return ResponseEntity.ok(problemsService.setPerceivedDifficulty(problemId, requestDto.perceivedDifficulty()));
+    }
+
+    @Operation(summary = "문제 홀드색 수정", description = "특정 문제의 홀드색 수정")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 문제 정보 수정함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetailResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"perceivedDifficulty\": \"변경할 홀드 id는 필수입니다.\"}")
+            })),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "문제 없음", value = "{\"error\": \"아이디가 0190c558-9063-7050-b4fc-eb421e3236b3인 문제를 찾을 수 없습니다.\"}")
+            }))
+    })
+    @PatchMapping("/admin/problems/{problemId}/hold")
+    public ResponseEntity<ProblemDetailResponseDto> changeHold(
+        @PathVariable final UUID problemId,
+        @Valid @RequestBody final ProblemHoldRequestDto requestDto) {
+        return ResponseEntity.ok(problemsService.updateHold(problemId, requestDto.holdId()));
     }
 
     @Operation(summary = "중복된 문제 조회", description = "sectorId, holdColorId, difficulty로 중복된 문제를 조회")

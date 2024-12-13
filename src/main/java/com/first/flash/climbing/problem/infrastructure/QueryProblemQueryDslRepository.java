@@ -1,9 +1,11 @@
 package com.first.flash.climbing.problem.infrastructure;
 
+import static com.first.flash.climbing.hold.domain.QHold.hold;
 import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem;
 import static com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy.DIFFICULTY;
 import static com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy.VIEWS;
 
+import com.first.flash.climbing.hold.domain.Hold;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.infrastructure.paging.ProblemCursor;
 import com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy;
@@ -61,6 +63,19 @@ public class QueryProblemQueryDslRepository {
                     .set(queryProblem.settingDate, settingDate)
                     .set(queryProblem.isExpired, isExpired)
                     .where(queryProblem.sectorId.eq(sectorId))
+                    .execute();
+    }
+
+    public void updateHoldInfoByHoldId(final UUID id, final Long holdId) {
+        Hold holdData = queryFactory.selectFrom(hold)
+                                    .where(hold.id.eq(holdId))
+                                    .fetchOne();
+
+        queryFactory.update(queryProblem)
+                    .set(queryProblem.holdId, holdId)
+                    .set(queryProblem.holdColorName, holdData.getColorName())
+                    .set(queryProblem.holdColorCode, holdData.getColorCode())
+                    .where(queryProblem.id.eq(id))
                     .execute();
     }
 

@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -36,6 +37,7 @@ public class Problem {
     private Long sectorId;
     private String imageSource;
     private Long thumbnailSolutionId;
+    @Setter
     private Long holdId;
 
     public static Problem createDefault(final UUID id, final String imageUrl,
@@ -70,4 +72,5 @@ public class Problem {
         this.imageUrl = imageUrl;
         this.imageSource = imageSource;
     }
+
 }

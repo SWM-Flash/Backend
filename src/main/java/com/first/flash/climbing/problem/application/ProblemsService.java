@@ -105,6 +105,18 @@ public class ProblemsService {
         return ProblemDetailResponseDto.of(queryProblem);
     }
 
+    @Transactional
+    public ProblemDetailResponseDto updateHold(final UUID problemId,
+        final Long holdId) {
+        Problem problem = problemReadService.findProblemById(problemId);
+
+        problem.setHoldId(holdId);
+        queryProblemRepository.updateHoldInfoByHoldId(problemId, holdId);
+
+        QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
+        return ProblemDetailResponseDto.of(queryProblem);
+    }
+
     public void updateQueryProblemFixedInfo(final List<Long> sectorIds, final String sectorName) {
         queryProblemRepository.updateSectorNameBySectorIds(sectorIds, sectorName);
     }
