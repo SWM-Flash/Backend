@@ -1,6 +1,7 @@
 package com.first.flash.climbing.problem.ui;
 
 import com.first.flash.climbing.problem.application.ProblemReadService;
+import com.first.flash.climbing.problem.application.ProblemsHoldService;
 import com.first.flash.climbing.problem.application.ProblemsSaveService;
 import com.first.flash.climbing.problem.application.ProblemsService;
 import com.first.flash.climbing.problem.application.dto.DuplicateProblemsResponseDto;
@@ -42,6 +43,7 @@ public class ProblemController {
     private final ProblemsSaveService problemsSaveService;
     private final ProblemReadService problemReadService;
     private final ProblemsService problemsService;
+    private final ProblemsHoldService problemsHoldService;
 
     @Operation(summary = "문제 생성", description = "특정 섹터에 문제 생성")
     @ApiResponses(value = {
@@ -143,7 +145,7 @@ public class ProblemController {
     public ResponseEntity<ProblemDetailResponseDto> changeHold(
         @PathVariable final UUID problemId,
         @Valid @RequestBody final ProblemHoldRequestDto requestDto) {
-        return ResponseEntity.ok(problemsService.updateHold(problemId, requestDto.holdId()));
+        return ResponseEntity.ok(problemsHoldService.updateHold(problemId, requestDto.holdId()));
     }
 
     @Operation(summary = "중복된 문제 조회", description = "sectorId, holdColorId, difficulty로 중복된 문제를 조회")

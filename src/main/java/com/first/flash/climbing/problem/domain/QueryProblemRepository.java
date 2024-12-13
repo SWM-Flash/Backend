@@ -26,8 +26,6 @@ public interface QueryProblemRepository {
 
     void updateSectorNameBySectorIds(final List<Long> sectorIds, final String sectorName);
 
-    void updateHoldInfoByHoldId(final UUID id, final Long holdId);
-
     void deleteByProblemId(final UUID problemId);
 
     List<QueryProblem> findBySectorIdAndHoldIdAndDifficulty(Long sectorId, Long holdId, String difficulty);

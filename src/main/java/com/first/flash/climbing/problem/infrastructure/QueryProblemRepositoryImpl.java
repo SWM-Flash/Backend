@@ -60,11 +60,6 @@ public class QueryProblemRepositoryImpl implements QueryProblemRepository {
     }
 
     @Override
-    public void updateHoldInfoByHoldId(UUID id, Long holdId) {
-        queryProblemQueryDslRepository.updateHoldInfoByHoldId(id, holdId);
-    }
-
-    @Override
     public void deleteByProblemId(UUID problemId) {
         jpaRepository.deleteById(problemId);
     }

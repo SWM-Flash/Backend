@@ -66,19 +66,6 @@ public class QueryProblemQueryDslRepository {
                     .execute();
     }
 
-    public void updateHoldInfoByHoldId(final UUID id, final Long holdId) {
-        Hold holdData = queryFactory.selectFrom(hold)
-                                    .where(hold.id.eq(holdId))
-                                    .fetchOne();
-
-        queryFactory.update(queryProblem)
-                    .set(queryProblem.holdId, holdId)
-                    .set(queryProblem.holdColorName, holdData.getColorName())
-                    .set(queryProblem.holdColorCode, holdData.getColorCode())
-                    .where(queryProblem.id.eq(id))
-                    .execute();
-    }
-
     private BooleanExpression inGym(final Long gymId) {
         return queryProblem.gymId.eq(gymId);
     }
