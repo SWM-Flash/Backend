@@ -139,7 +139,7 @@ public class ProblemController {
                 @ExampleObject(name = "문제 없음", value = "{\"error\": \"아이디가 0190c558-9063-7050-b4fc-eb421e3236b3인 문제를 찾을 수 없습니다.\"}")
             }))
     })
-    @PatchMapping("/admin/problems/{problemId}/hold")
+    @PatchMapping("/admin/problems/{problemId}/holds")
     public ResponseEntity<ProblemDetailResponseDto> changeHold(
         @PathVariable final UUID problemId,
         @Valid @RequestBody final ProblemHoldRequestDto requestDto) {
