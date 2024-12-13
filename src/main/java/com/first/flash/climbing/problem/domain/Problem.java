@@ -37,7 +37,6 @@ public class Problem {
     private Long sectorId;
     private String imageSource;
     private Long thumbnailSolutionId;
-    @Setter
     private Long holdId;
 
     public static Problem createDefault(final UUID id, final String imageUrl,
@@ -71,6 +70,10 @@ public class Problem {
         this.thumbnailSolutionId = thumbnailSolutionId;
         this.imageUrl = imageUrl;
         this.imageSource = imageSource;
+    }
+
+    public void setHoldInfo(final Long holdId) {
+        this.holdId = holdId;
     }
 
 }
