@@ -1,9 +1,11 @@
 package com.first.flash.climbing.problem.infrastructure;
 
+import static com.first.flash.climbing.hold.domain.QHold.hold;
 import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem;
 import static com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy.DIFFICULTY;
 import static com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy.VIEWS;
 
+import com.first.flash.climbing.hold.domain.Hold;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.infrastructure.paging.ProblemCursor;
 import com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy;

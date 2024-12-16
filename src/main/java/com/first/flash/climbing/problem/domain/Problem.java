@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -70,4 +71,9 @@ public class Problem {
         this.imageUrl = imageUrl;
         this.imageSource = imageSource;
     }
+
+    public void updateHoldInfo(final Long holdId) {
+        this.holdId = holdId;
+    }
+
 }
