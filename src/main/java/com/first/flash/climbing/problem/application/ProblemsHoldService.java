@@ -26,8 +26,8 @@ public class ProblemsHoldService {
         Problem problem = problemReadService.findProblemById(problemId);
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
 
-        problem.setHoldInfo(hold.getId());
-        queryProblem.setHoldInfo(hold.getId(), hold.getColorName(), hold.getColorCode());
+        problem.updateHoldInfo(hold.getId());
+        queryProblem.updateHoldInfo(hold.getId(), hold.getColorName(), hold.getColorCode());
 
         return ProblemDetailResponseDto.of(queryProblem);
     }

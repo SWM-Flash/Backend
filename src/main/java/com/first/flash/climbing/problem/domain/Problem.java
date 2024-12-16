@@ -72,7 +72,7 @@ public class Problem {
         this.imageSource = imageSource;
     }
 
-    public void setHoldInfo(final Long holdId) {
+    public void updateHoldInfo(final Long holdId) {
         this.holdId = holdId;
     }
 
