@@ -105,6 +105,12 @@ public class QueryProblem {
         this.imageSource = imageSource;
     }
 
+    public void updateHoldInfo(final Long holdId, final String holdColorName, final String holdColorCode) {
+        this.holdId = holdId;
+        this.holdColorName = holdColorName;
+        this.holdColorCode = holdColorCode;
+    }
+
     private void enableSolution() {
         if (!hasSolution) {
             hasSolution = true;
