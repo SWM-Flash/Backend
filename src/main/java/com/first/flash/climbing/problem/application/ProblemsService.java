@@ -1,9 +1,13 @@
 package com.first.flash.climbing.problem.application;
 
 import com.first.flash.climbing.problem.application.dto.ProblemDetailResponseDto;
+import com.first.flash.climbing.problem.application.dto.ProblemResponseDto;
+import com.first.flash.climbing.problem.application.dto.ProblemsResponseDto;
+import com.first.flash.climbing.problem.domain.Problem;
 import com.first.flash.climbing.problem.domain.ProblemRepository;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.domain.QueryProblemRepository;
+import com.first.flash.climbing.problem.infrastructure.dto.ThumbnailSolutionDto;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -21,14 +25,38 @@ public class ProblemsService {
     private final ProblemReadService problemReadService;
 
     @Transactional
-    public void changeRemovalDate(final Long sectorId, final LocalDate removalDate) {
-        queryProblemRepository.updateRemovalDateBySectorId(sectorId, removalDate);
+    public void changeRemovalDate(final Long sectorId, final LocalDate removalDate, final boolean isExpired) {
+        queryProblemRepository.updateRemovalDateBySectorId(sectorId, removalDate, isExpired);
     }
 
     @Transactional
     public void expireProblems(final List<Long> expiredSectorsIds) {
         queryProblemRepository.expireProblemsBySectorIds(expiredSectorsIds);
         problemRepository.expireProblemsBySectorIds(expiredSectorsIds);
+    }
+    
+    @Transactional
+    public void changeThumbnailInfo(final UUID problemId, final Long solutionId, 
+        final String thumbnailImageUrl, final String uploader) {
+        Problem problem = problemReadService.findProblemById(problemId);
+        QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
+
+        if (queryProblem.getHasSolution()) {
+            return;
+        }
+
+        problem.setThumbnailInfo(solutionId, thumbnailImageUrl, uploader);
+        queryProblem.setThumbnailInfo(solutionId, thumbnailImageUrl, uploader);
+    }
+
+    @Transactional
+    public void changeAllThumbnailInfo(final Long solutionId, final String thumbnailImageUrl, final String uploader) {
+        List<Problem> problems = problemRepository.findProblemsByThumbnailSolutionId(solutionId);
+        List<QueryProblem> queryProblems = queryProblemRepository.findProblemsByThumbnailSolutionId(
+            solutionId);
+
+        problems.forEach(problem -> problem.setThumbnailInfo(solutionId, thumbnailImageUrl, uploader));
+        queryProblems.forEach(queryProblem -> queryProblem.setThumbnailInfo(solutionId, thumbnailImageUrl, uploader));
     }
 
     @Transactional
@@ -38,16 +66,29 @@ public class ProblemsService {
     }
 
     @Transactional
-    public void updateProblemDeletedSolutionInfo(final UUID problemId, final Integer perceivedDifficulty) {
+    public void updateProblemDeletedSolutionInfo(final UUID problemId,
+        final Integer perceivedDifficulty) {
+        Problem problem = problemReadService.findProblemById(problemId);
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
+
         queryProblem.decrementSolutionCount();
+        if (!queryProblem.getHasSolution()) {
+            problemRepository.deleteByProblemId(problemId);
+            queryProblemRepository.deleteByProblemId(problemId);
+            return;
+        }
+
+        ThumbnailSolutionDto dto = problemRepository.findNextSolution(problemId);
+        problem.setThumbnailInfo(dto.solutionId(), dto.thumbnailImageUrl(), dto.uploader());
+        queryProblem.setThumbnailInfo(dto.solutionId(), dto.thumbnailImageUrl(), dto.uploader());
+
         queryProblem.subtractPerceivedDifficulty(perceivedDifficulty);
     }
 
     @Transactional
     public void updateQueryProblemInfo(final Long sectorId, final String sectorName,
-        final LocalDate settingDate) {
-        queryProblemRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate);
+        final LocalDate settingDate, final boolean isExpired) {
+        queryProblemRepository.updateQueryProblemInfo(sectorId, sectorName, settingDate, isExpired);
     }
 
     @Transactional
@@ -57,9 +98,15 @@ public class ProblemsService {
     }
 
     @Transactional
-    public ProblemDetailResponseDto setPerceivedDifficulty(final UUID problemId, final Integer perceivedDifficulty) {
+    public ProblemDetailResponseDto setPerceivedDifficulty(final UUID problemId,
+        final Integer perceivedDifficulty) {
         QueryProblem queryProblem = problemReadService.findQueryProblemById(problemId);
         queryProblem.setPerceivedDifficulty(perceivedDifficulty);
         return ProblemDetailResponseDto.of(queryProblem);
     }
+
+    public void updateQueryProblemFixedInfo(final List<Long> sectorIds, final String sectorName) {
+        queryProblemRepository.updateSectorNameBySectorIds(sectorIds, sectorName);
+    }
+
 }

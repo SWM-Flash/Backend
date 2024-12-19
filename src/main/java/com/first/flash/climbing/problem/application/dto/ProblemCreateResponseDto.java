@@ -8,7 +8,8 @@ import lombok.Builder;
 @Builder
 public record ProblemCreateResponseDto(UUID id, String imageUrl, Integer views, Boolean isExpired,
                                        DifficultyInfo difficultyInfo, Long optionalWeight,
-                                       Long gymId, Long sectorId, String imageSource
+                                       Long gymId, Long sectorId, String imageSource,
+                                       Long thumbnailSolutionId, Long holdId
 ) {
 
     public static ProblemCreateResponseDto toDto(final Problem problem) {
@@ -22,6 +23,8 @@ public record ProblemCreateResponseDto(UUID id, String imageUrl, Integer views, 
                                        .gymId(problem.getGymId())
                                        .sectorId(problem.getSectorId())
                                        .imageSource(problem.getImageSource())
+                                       .thumbnailSolutionId(problem.getThumbnailSolutionId())
+                                       .holdId(problem.getHoldId())
                                        .build();
     }
 }

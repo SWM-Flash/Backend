@@ -12,6 +12,7 @@ import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
+import com.first.flash.climbing.solution.domain.SolutionUpdatedEvent;
 import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
@@ -79,8 +80,11 @@ public class SolutionService {
         PerceivedDifficulty oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
         int difficultyDifference = newPerceivedDifficulty.calculateDifferenceFrom(oldPerceivedDifficulty);
 
-        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(), newPerceivedDifficulty);
+        solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(),
+            requestDto.thumbnailImageUrl(), requestDto.solvedDate(), newPerceivedDifficulty);
 
+        Events.raise(SolutionUpdatedEvent.of(solution.getId(), requestDto.thumbnailImageUrl(),
+            solution.getUploaderDetail().getUploader()));
         Events.raise(PerceivedDifficultySetEvent.of(
             solution.getProblemId(),
             difficultyDifference

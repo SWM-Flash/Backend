@@ -1,6 +1,7 @@
 package com.first.flash.climbing.problem.infrastructure;
 
 import com.first.flash.climbing.problem.domain.QueryProblem;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,10 @@ public interface QueryProblemJpaRepository extends JpaRepository<QueryProblem, U
     QueryProblem save(final QueryProblem queryProblem);
 
     Optional<QueryProblem> findById(final UUID id);
+
+    void deleteById(final UUID id);
+
+    List<QueryProblem> findBySectorIdAndHoldIdAndDifficultyName(final Long sectorId, final Long holdId, final String difficulty);
+
+    List<QueryProblem> findProblemsByThumbnailSolutionId(final Long solutionId);
 }

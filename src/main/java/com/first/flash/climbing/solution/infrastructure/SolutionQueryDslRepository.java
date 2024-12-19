@@ -48,8 +48,8 @@ public class SolutionQueryDslRepository {
         final List<String> difficulty) {
         return jpaQueryFactory.select(Projections.constructor(MySolutionDto.class,
                                   solution.id, queryProblem.gymName, queryProblem.sectorName,
-                                  queryProblem.difficultyName, queryProblem.imageUrl, solutionComment.count(),
-                                  solution.createdAt
+                                  queryProblem.difficultyName, solution.solutionDetail.thumbnailImageUrl,
+                                  solutionComment.count(), solution.solutionDetail.solvedDate, solution.updatedAt
                               ))
                               .from(solution)
                               .innerJoin(queryProblem)
@@ -85,6 +85,8 @@ public class SolutionQueryDslRepository {
                                   queryProblem.sectorName, solution.solutionDetail.review,
                                   queryProblem.difficultyName, solutionComment.count(),
                                   solution.solutionDetail.perceivedDifficulty,
+                                  solution.solutionDetail.thumbnailImageUrl, queryProblem.holdColorCode,
+                                  solution.solutionDetail.solvedDate,
                                   queryProblem.removalDate, queryProblem.settingDate, solution.createdAt
                               ))
                               .from(solution)

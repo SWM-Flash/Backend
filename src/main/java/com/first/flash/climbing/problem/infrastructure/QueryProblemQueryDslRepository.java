@@ -1,9 +1,11 @@
 package com.first.flash.climbing.problem.infrastructure;
 
+import static com.first.flash.climbing.hold.domain.QHold.hold;
 import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem;
 import static com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy.DIFFICULTY;
 import static com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy.VIEWS;
 
+import com.first.flash.climbing.hold.domain.Hold;
 import com.first.flash.climbing.problem.domain.QueryProblem;
 import com.first.flash.climbing.problem.infrastructure.paging.ProblemCursor;
 import com.first.flash.climbing.problem.infrastructure.paging.ProblemSortBy;
@@ -23,21 +25,25 @@ public class QueryProblemQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<QueryProblem> findAll(final ProblemCursor prevProblemCursor, final ProblemSortBy problemSortBy, final int size,
+    public List<QueryProblem> findAll(final ProblemCursor prevProblemCursor,
+        final ProblemSortBy problemSortBy, final int size,
         final Long gymId, final List<String> difficulty, final List<String> sector,
         final Boolean hasSolution, final Boolean isHoney) {
         return queryFactory
             .selectFrom(queryProblem)
-            .where(notExpired(), cursorCondition(prevProblemCursor), inGym(gymId), inSectors(sector),
+            .where(notExpired(), cursorCondition(prevProblemCursor), inGym(gymId),
+                inSectors(sector),
                 inDifficulties(difficulty), hasSolution(hasSolution), isHoneyCondition(isHoney))
             .orderBy(sortItem(problemSortBy), queryProblem.id.desc())
             .limit(size)
             .fetch();
     }
 
-    public void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate) {
+    public void updateRemovalDateBySectorId(final Long sectorId, final LocalDate removalDate,
+        final boolean isExpired) {
         queryFactory.update(queryProblem)
                     .set(queryProblem.removalDate, removalDate)
+                    .set(queryProblem.isExpired, isExpired)
                     .set(queryProblem.isFakeRemovalDate, false)
                     .where(queryProblem.sectorId.eq(sectorId))
                     .execute();
@@ -51,10 +57,11 @@ public class QueryProblemQueryDslRepository {
     }
 
     public void updateQueryProblemInfo(final Long sectorId, final String sectorName,
-        final LocalDate settingDate) {
+        final LocalDate settingDate, final boolean isExpired) {
         queryFactory.update(queryProblem)
                     .set(queryProblem.sectorName, sectorName)
                     .set(queryProblem.settingDate, settingDate)
+                    .set(queryProblem.isExpired, isExpired)
                     .where(queryProblem.sectorId.eq(sectorId))
                     .execute();
     }
@@ -132,5 +139,12 @@ public class QueryProblemQueryDslRepository {
             return null;
         }
         return queryProblem.hasSolution.eq(hasSolution);
+    }
+
+    public void updateSectorNameBySectorIds(final List<Long> sectorIds, final String sectorName) {
+        queryFactory.update(queryProblem)
+                    .set(queryProblem.sectorName, sectorName)
+                    .where(queryProblem.sectorId.in(sectorIds))
+                    .execute();
     }
 }
