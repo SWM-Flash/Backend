@@ -49,7 +49,7 @@ public class ClimbingGymService {
     public ClimbingGymDetailResponseDto findClimbingGymDetail(final Long id) {
         ClimbingGym climbingGym = findClimbingGymById(id);
         List<SectorInfoResponseDto> sectorNames = findSectorNamesById(id);
-        List<String> difficultyNames = getDifficultyNames(climbingGym);
+        List<String> difficultyNames = climbingGym.getDifficultyNames();
         return new ClimbingGymDetailResponseDto(climbingGym.getGymName(),
             climbingGym.getMapImageUrl(), climbingGym.getCalendarImageUrl(),
             difficultyNames, sectorNames);
@@ -57,11 +57,5 @@ public class ClimbingGymService {
 
     private List<SectorInfoResponseDto> findSectorNamesById(final Long id) {
         return climbingGymRepository.findGymSectorNamesById(id);
-    }
-
-    private List<String> getDifficultyNames(final ClimbingGym climbingGym) {
-        return climbingGym.getDifficulties().stream()
-                          .map(Difficulty::getName)
-                          .toList();
     }
 }

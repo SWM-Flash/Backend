@@ -52,4 +52,10 @@ public class ClimbingGym {
                            .findAny()
                            .orElseThrow(() -> new DifficultyNotFoundException(difficultyName));
     }
+
+    public List<String> getDifficultyNames() {
+        return difficulties.stream()
+                           .map(Difficulty::getName)
+                           .toList();
+    }
 }
