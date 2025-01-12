@@ -2,15 +2,12 @@ package com.first.flash.climbing.gym.domian;
 
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.DifficultyNotFoundException;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OrderColumn;
+import jakarta.persistence.Transient;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,21 +28,22 @@ public class ClimbingGym {
     private String thumbnailUrl;
     private String mapImageUrl;
     private String calendarImageUrl;
+    private Long gymInfoId;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "DIFFICULTY",
-        joinColumns = @JoinColumn(name = "GYM_NUMBER")
-    )
-    @OrderColumn(name = "DIFFICULTY_INDEX")
-    private List<Difficulty> difficulties;
+    @Transient
+    private List<Difficulty> difficulties = new ArrayList<>();
 
     public ClimbingGym(final String gymName, final String thumbnailUrl, final String mapImageUrl,
-        final String calendarImageUrl, final List<Difficulty> difficulties) {
+        final String calendarImageUrl, final Long gymInfoId) {
         this.gymName = gymName;
         this.thumbnailUrl = thumbnailUrl;
         this.mapImageUrl = mapImageUrl;
-        this.difficulties = difficulties;
         this.calendarImageUrl = calendarImageUrl;
+        this.gymInfoId = gymInfoId;
+    }
+
+    public void updateDifficulties(final List<Difficulty> difficulties) {
+        this.difficulties = difficulties;
     }
 
     public Difficulty getDifficultyByName(final String difficultyName) {
@@ -53,5 +51,11 @@ public class ClimbingGym {
                            .filter(difficulty -> difficulty.hasSameName(difficultyName))
                            .findAny()
                            .orElseThrow(() -> new DifficultyNotFoundException(difficultyName));
+    }
+
+    public List<String> getDifficultyNames() {
+        return difficulties.stream()
+                           .map(Difficulty::getName)
+                           .toList();
     }
 }
