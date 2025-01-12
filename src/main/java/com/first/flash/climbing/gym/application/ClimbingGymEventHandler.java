@@ -15,6 +15,6 @@ public class ClimbingGymEventHandler {
     @EventListener
     @Transactional
     public void confirmGymId(final ClimbingGymIdConfirmRequestedEvent event) {
-        gymService.findClimbingGymById(event.getGymId());
+        gymService.findClimbingGymWithDifficultiesById(event.getGymId());
     }
 }

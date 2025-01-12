@@ -4,10 +4,10 @@ import com.first.flash.climbing.favorite.application.MemberFavoriteGymService;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymDetailResponseDto;
+import com.first.flash.climbing.gym.domian.ClimbingGymInfo;
 import com.first.flash.climbing.gym.infrastructure.dto.ClimbingGymResponseDto;
 import com.first.flash.climbing.gym.domian.ClimbingGym;
 import com.first.flash.climbing.gym.domian.ClimbingGymRepository;
-import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
 import com.first.flash.climbing.gym.infrastructure.dto.SectorInfoResponseDto;
 import com.first.flash.global.util.AuthUtil;
@@ -35,9 +35,15 @@ public class ClimbingGymService {
         return ClimbingGymCreateResponseDto.toDto(climbingGymRepository.save(climbingGym));
     }
 
-    public ClimbingGym findClimbingGymById(final Long id) {
-        return climbingGymRepository.findById(id)
-                                    .orElseThrow(() -> new ClimbingGymNotFoundException(id));
+    public ClimbingGym findClimbingGymWithDifficultiesById(final Long id) {
+        ClimbingGym climbingGym = climbingGymRepository.findById(id)
+                                                       .orElseThrow(
+                                                           () -> new ClimbingGymNotFoundException(
+                                                               id));
+        Long infoId = climbingGym.getGymInfoId();
+        ClimbingGymInfo gymInfo = climbingGymInfoService.findById(infoId);
+        climbingGym.updateDifficulties(gymInfo.getDifficulties());
+        return climbingGym;
     }
 
     public List<ClimbingGymResponseDto> findAllClimbingGyms() {
@@ -47,7 +53,7 @@ public class ClimbingGymService {
     }
 
     public ClimbingGymDetailResponseDto findClimbingGymDetail(final Long id) {
-        ClimbingGym climbingGym = findClimbingGymById(id);
+        ClimbingGym climbingGym = findClimbingGymWithDifficultiesById(id);
         List<SectorInfoResponseDto> sectorNames = findSectorNamesById(id);
         List<String> difficultyNames = climbingGym.getDifficultyNames();
         return new ClimbingGymDetailResponseDto(climbingGym.getGymName(),
