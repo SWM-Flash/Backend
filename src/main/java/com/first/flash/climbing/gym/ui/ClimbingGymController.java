@@ -1,13 +1,16 @@
 package com.first.flash.climbing.gym.ui;
 
+import com.first.flash.climbing.gym.application.ClimbingGymInfoService;
 import com.first.flash.climbing.gym.application.ClimbingGymService;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateRequestDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymCreateResponseDto;
 import com.first.flash.climbing.gym.application.dto.ClimbingGymDetailResponseDto;
-import com.first.flash.climbing.gym.infrastructure.dto.ClimbingGymResponseDto;
+import com.first.flash.climbing.gym.application.dto.ClimbingGymInfoCreateRequestDto;
+import com.first.flash.climbing.gym.application.dto.ClimbingGymInfoResponseDto;
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyLevelException;
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyNameException;
+import com.first.flash.climbing.gym.infrastructure.dto.ClimbingGymResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,25 +38,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClimbingGymController {
 
     private final ClimbingGymService climbingGymService;
+    private final ClimbingGymInfoService climbingGymInfoService;
 
-    @Operation(summary = "모든 클라이밍장 조회", description = "모든 클라이밍장을 리스트로 반환")
+    @Operation(summary = "모든 클라이밍장 지점 조회", description = "모든 클라이밍장을 리스트로 반환")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "클라이밍장 리스트 조회 성공함",
-            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ClimbingGymResponseDto.class)),
-                examples = @ExampleObject(value = """
-                        [
-                            {
-                                "id": 1,
-                                "gymName": "더클라임 논현",
-                                "thumbnailUrl": "example_map_image1.jpeg"
-                            },
-                            {
-                                "id": 2,
-                                "gymName": "더클라임 양재",
-                                "thumbnailUrl": "example_map_image2.jpeg"
-                            }
-                        ]
-                    """))),
+            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ClimbingGymResponseDto.class)))),
     })
     @GetMapping("/gyms")
     public List<ClimbingGymResponseDto> getGyms() {
@@ -61,10 +51,21 @@ public class ClimbingGymController {
                                  .toList();
     }
 
-    @Operation(summary = "클라이밍장 생성", description = "새로운 클라이밍장 생성")
+    @Operation(summary = "모든 클라이밍장 지점 조회", description = "모든 클라이밍장을 리스트로 반환")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "클라이밍장 리스트 조회 성공함",
+            content = @Content(mediaType = "application/json"))
+    })
+    @GetMapping("/gymInfos")
+    public List<ClimbingGymInfoResponseDto> getGymInfos() {
+        return climbingGymInfoService.findAllClimbingGymInfos().stream()
+                                     .toList();
+    }
+
+    @Operation(summary = "클라이밍장 고정 정보 생성", description = "새로운 클라이밍장 생성")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "성공적으로 클라이밍장을 생성함",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ClimbingGymCreateResponseDto.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ClimbingGymInfoResponseDto.class))),
         @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
             content = @Content(mediaType = "application/json", examples = {
                 @ExampleObject(name = "요청값 누락", value = "{\"gymName\": \"클라이밍장 이름은 필수입니다.\"}"),
@@ -72,28 +73,30 @@ public class ClimbingGymController {
                 @ExampleObject(name = "난이도 레벨 중복", value = "{\"error\": \"난이도 레벨이 중복되었습니다: 2\"}"),
             })),
     })
-    @PostMapping("/admin/gyms")
-    public ResponseEntity<ClimbingGymCreateResponseDto> createGym(
-        @Valid @RequestBody final ClimbingGymCreateRequestDto gymCreateRequestDto) {
+    @PostMapping("/admin/gymInfos")
+    public ResponseEntity<ClimbingGymInfoResponseDto> createGymInfo(@Valid @RequestBody final
+    ClimbingGymInfoCreateRequestDto gymInfoCreateRequestDto) {
 
-        validateDifficulties(gymCreateRequestDto.difficulties());
-
+        validateDifficulties(gymInfoCreateRequestDto.difficulties());
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(climbingGymService.save(gymCreateRequestDto));
+                             .body(climbingGymInfoService.save(gymInfoCreateRequestDto));
     }
 
-    private void validateDifficulties(final List<Difficulty> difficulties) {
-        Set<String> names = new HashSet<>();
-        Set<Integer> levels = new HashSet<>();
-
-        for (Difficulty difficulty : difficulties) {
-            if (!names.add(difficulty.getName())) {
-                throw new DuplicateDifficultyNameException(difficulty.getName());
-            }
-            if (!levels.add(difficulty.getLevel())) {
-                throw new DuplicateDifficultyLevelException(difficulty.getLevel());
-            }
-        }
+    @Operation(summary = "클라이밍장 지점 생성", description = "새로운 클라이밍장 지점 생성")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "성공적으로 클라이밍장을 생성함",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ClimbingGymCreateResponseDto.class))),
+        @ApiResponse(responseCode = "400", description = "유효하지 않은 요청 형식",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "요청값 누락", value = "{\"gymName\": \"클라이밍장 이름은 필수입니다.\"}")
+            })),
+    })
+    @PostMapping("/admin/gymInfos/{id}/gyms")
+    public ResponseEntity<ClimbingGymCreateResponseDto> createGym(
+        @PathVariable final Long id,
+        @Valid @RequestBody final ClimbingGymCreateRequestDto gymCreateRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(climbingGymService.save(id, gymCreateRequestDto));
     }
 
     @Operation(summary = "클라이밍장 정보 조회", description = "특정 클라이밍장의 정보 조회")
@@ -109,5 +112,19 @@ public class ClimbingGymController {
     public ResponseEntity<ClimbingGymDetailResponseDto> getGymDetails(
         @PathVariable final Long gymId) {
         return ResponseEntity.ok(climbingGymService.findClimbingGymDetail(gymId));
+    }
+
+    private void validateDifficulties(final List<Difficulty> difficulties) {
+        Set<String> names = new HashSet<>();
+        Set<Integer> levels = new HashSet<>();
+
+        for (Difficulty difficulty : difficulties) {
+            if (!names.add(difficulty.getName())) {
+                throw new DuplicateDifficultyNameException(difficulty.getName());
+            }
+            if (!levels.add(difficulty.getLevel())) {
+                throw new DuplicateDifficultyLevelException(difficulty.getLevel());
+            }
+        }
     }
 }

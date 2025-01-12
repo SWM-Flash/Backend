@@ -32,7 +32,7 @@ public class ProblemsSaveService {
     @Transactional
     public ProblemCreateResponseDto saveProblems(final Long gymId, final Long sectorId,
         final ProblemCreateRequestDto createRequestDto) {
-        ClimbingGym climbingGym = climbingGymService.findClimbingGymById(gymId);
+        ClimbingGym climbingGym = climbingGymService.findClimbingGymWithDifficultiesById(gymId);
         Sector sector = sectorService.findById(sectorId);
         Hold hold = holdService.findById(createRequestDto.holdId());
         Problem problem = problemsCreateService.createProblem(climbingGym, sector,
