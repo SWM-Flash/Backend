@@ -28,16 +28,18 @@ public class ClimbingGym {
     private String thumbnailUrl;
     private String mapImageUrl;
     private String calendarImageUrl;
+    private Long gymInfoId;
 
     @Transient
     private List<Difficulty> difficulties = new ArrayList<>();
 
     public ClimbingGym(final String gymName, final String thumbnailUrl, final String mapImageUrl,
-        final String calendarImageUrl) {
+        final String calendarImageUrl, final Long gymInfoId) {
         this.gymName = gymName;
         this.thumbnailUrl = thumbnailUrl;
         this.mapImageUrl = mapImageUrl;
         this.calendarImageUrl = calendarImageUrl;
+        this.gymInfoId = gymInfoId;
     }
 
     public void updateDifficulties(final List<Difficulty> difficulties) {
