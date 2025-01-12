@@ -1,5 +1,6 @@
 package com.first.flash.climbing.gym.exception;
 
+import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymInfoNotFoundException;
 import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymNotFoundException;
 import com.first.flash.climbing.gym.exception.exceptions.DifficultyNotFoundException;
 import com.first.flash.climbing.gym.exception.exceptions.DuplicateDifficultyLevelException;
@@ -60,6 +61,12 @@ public class ClimbingGymExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleDuplicateDifficultyNameException(
         final DuplicateDifficultyNameException exception) {
         return getResponseWithStatus(HttpStatus.BAD_REQUEST, exception);
+    }
+
+    @ExceptionHandler(ClimbingGymInfoNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleClimbingGymInfoNotFoundException(
+        final ClimbingGymInfoNotFoundException exception) {
+        return getResponseWithStatus(HttpStatus.NOT_FOUND, exception);
     }
 
     private ResponseEntity<ErrorResponseDto> getResponseWithStatus(final HttpStatus httpStatus,
