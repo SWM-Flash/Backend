@@ -2,15 +2,12 @@ package com.first.flash.climbing.gym.domian;
 
 import com.first.flash.climbing.gym.domian.vo.Difficulty;
 import com.first.flash.climbing.gym.exception.exceptions.DifficultyNotFoundException;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OrderColumn;
+import jakarta.persistence.Transient;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,20 +29,19 @@ public class ClimbingGym {
     private String mapImageUrl;
     private String calendarImageUrl;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "DIFFICULTY",
-        joinColumns = @JoinColumn(name = "GYM_NUMBER")
-    )
-    @OrderColumn(name = "DIFFICULTY_INDEX")
-    private List<Difficulty> difficulties;
+    @Transient
+    private List<Difficulty> difficulties = new ArrayList<>();
 
     public ClimbingGym(final String gymName, final String thumbnailUrl, final String mapImageUrl,
-        final String calendarImageUrl, final List<Difficulty> difficulties) {
+        final String calendarImageUrl) {
         this.gymName = gymName;
         this.thumbnailUrl = thumbnailUrl;
         this.mapImageUrl = mapImageUrl;
-        this.difficulties = difficulties;
         this.calendarImageUrl = calendarImageUrl;
+    }
+
+    public void updateDifficulties(final List<Difficulty> difficulties) {
+        this.difficulties = difficulties;
     }
 
     public Difficulty getDifficultyByName(final String difficultyName) {
