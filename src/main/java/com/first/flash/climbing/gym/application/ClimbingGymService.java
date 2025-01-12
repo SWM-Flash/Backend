@@ -24,11 +24,15 @@ public class ClimbingGymService {
 
     private final ClimbingGymRepository climbingGymRepository;
     private final MemberFavoriteGymService memberFavoriteGymService;
+    private final ClimbingGymInfoService climbingGymInfoService;
 
     @Transactional
-    public ClimbingGymCreateResponseDto save(final ClimbingGymCreateRequestDto createRequestDto) {
-        ClimbingGym newGym = createRequestDto.toEntity();
-        return ClimbingGymCreateResponseDto.toDto(climbingGymRepository.save(newGym));
+    public ClimbingGymCreateResponseDto save(final Long gymInfoId,
+        final ClimbingGymCreateRequestDto request) {
+        ClimbingGym climbingGym = new ClimbingGym(request.gymName(), request.thumbnailUrl(),
+            request.mapImageUrl(),
+            request.calendarImageUrl(), gymInfoId);
+        return ClimbingGymCreateResponseDto.toDto(climbingGymRepository.save(climbingGym));
     }
 
     public ClimbingGym findClimbingGymById(final Long id) {
