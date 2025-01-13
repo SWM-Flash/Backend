@@ -1,6 +1,7 @@
 package com.first.flash.climbing.achievement.ui;
 
-import com.first.flash.climbing.achievement.application.AchievementService;
+import com.first.flash.climbing.achievement.application.AchievementCommandService;
+import com.first.flash.climbing.achievement.application.AchievementQueryService;
 import com.first.flash.climbing.achievement.application.dto.AchievementCreateRequestDto;
 import com.first.flash.climbing.achievement.application.dto.AchievementResponseDto;
 import com.first.flash.climbing.achievement.application.dto.AchievementsResponseDto;
@@ -25,7 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AchievementController {
 
-    private final AchievementService achievementService;
+    private final AchievementQueryService queryService;
+    private final AchievementCommandService commandService;
 
     @Operation(summary = "내 업적 조회", description = "본인이 생성한 업적 조회")
     @ApiResponses(value = {
@@ -34,7 +36,7 @@ public class AchievementController {
     })
     @GetMapping("/achievements")
     public ResponseEntity<AchievementsResponseDto> getMySolutions() {
-        return ResponseEntity.ok(achievementService.findMyAchievements());
+        return ResponseEntity.ok(queryService.findMyAchievements());
     }
 
     @Operation(summary = "업적 생성", description = "업적 생성")
@@ -50,7 +52,7 @@ public class AchievementController {
     public ResponseEntity<AchievementResponseDto> saveAchievement(
         @Valid @RequestBody AchievementCreateRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(achievementService.save(requestDto));
+                             .body(commandService.save(requestDto));
     }
 
     @Operation(summary = "업적 삭제", description = "업적 삭제")
@@ -69,7 +71,7 @@ public class AchievementController {
     @DeleteMapping("/achievements/{id}")
     public ResponseEntity<Void> deleteAchievement(
         @PathVariable Long id) {
-        achievementService.deleteAchievement(id);
+        commandService.deleteAchievement(id);
         return ResponseEntity.noContent().build();
     }
 }

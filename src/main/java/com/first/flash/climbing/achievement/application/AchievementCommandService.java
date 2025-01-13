@@ -2,14 +2,13 @@ package com.first.flash.climbing.achievement.application;
 
 import com.first.flash.climbing.achievement.application.dto.AchievementCreateRequestDto;
 import com.first.flash.climbing.achievement.application.dto.AchievementResponseDto;
-import com.first.flash.climbing.achievement.application.dto.AchievementsResponseDto;
 import com.first.flash.climbing.achievement.domain.Achievement;
 import com.first.flash.climbing.achievement.domain.AchievementRepository;
 import com.first.flash.climbing.achievement.exception.exceptions.AchievementAccessDeniedException;
 import com.first.flash.climbing.achievement.exception.exceptions.AchievementLimitExceededException;
-import com.first.flash.climbing.achievement.exception.exceptions.AchievementNotFoundException;
 import com.first.flash.climbing.gym.application.ClimbingGymInfoService;
 import com.first.flash.climbing.gym.domian.ClimbingGymInfo;
+import com.first.flash.climbing.solution.domain.SolutionMetaDataFetcher;
 import com.first.flash.global.util.AuthUtil;
 import java.util.List;
 import java.util.UUID;
@@ -19,12 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AchievementService {
+public class AchievementCommandService {
 
     private static final int LIMIT_SIZE = 2;
 
+    private final AchievementQueryService queryService;
     private final AchievementRepository achievementRepository;
     private final ClimbingGymInfoService gymInfoService;
+    private final SolutionMetaDataFetcher solutionMetaDataFetcher;
 
     @Transactional
     public AchievementResponseDto save(final AchievementCreateRequestDto requestDto) {
@@ -36,7 +37,7 @@ public class AchievementService {
         }
 
         ClimbingGymInfo gymInfo = gymInfoService.findById(requestDto.gymInfoId());
-        long solutionCount = achievementRepository.findSolutionCountByGymInfoIdDifficulty(
+        long solutionCount = solutionMetaDataFetcher.getSolutionCountByGymInfoDifficultyName(
             requestDto.gymInfoId(),
             requestDto.difficultyName(), memberId);
 
@@ -47,28 +48,13 @@ public class AchievementService {
         return AchievementResponseDto.toDto(newAchievement);
     }
 
-    public AchievementsResponseDto findMyAchievements() {
-        UUID memberId = AuthUtil.getId();
-        List<Achievement> achievements = achievementRepository.findByMemberId(memberId);
-        List<AchievementResponseDto> achievementsResponse = achievements.stream()
-                                                                        .map(
-                                                                            AchievementResponseDto::toDto)
-                                                                        .toList();
-        return AchievementsResponseDto.toDto(achievementsResponse);
-    }
-
     @Transactional
     public void deleteAchievement(final Long id) {
-        Achievement achievement = findById(id);
+        Achievement achievement = queryService.findById(id);
         if (!isValidMember(achievement.getMemberId())) {
             throw new AchievementAccessDeniedException();
         }
         achievementRepository.deleteById(id);
-    }
-
-    public Achievement findById(final Long id) {
-        return achievementRepository.findById(id)
-                                    .orElseThrow(() -> new AchievementNotFoundException(id));
     }
 
     private boolean isValidMember(final UUID memberId) {
