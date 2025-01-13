@@ -23,7 +23,7 @@ public class AchievementService {
     private final AchievementRepository achievementRepository;
     private final ClimbingGymInfoService gymInfoService;
 
-    public void save(final AchievementCreateRequestDto requestDto) {
+    public AchievementResponseDto save(final AchievementCreateRequestDto requestDto) {
         UUID memberId = AuthUtil.getId();
         List<Achievement> achievements = achievementRepository.findByMemberId(memberId);
 
@@ -40,6 +40,7 @@ public class AchievementService {
             gymInfo.getGymInfoName(),
             requestDto.difficultyName(), gymInfo.getId(), memberId);
         achievementRepository.save(newAchievement);
+        return AchievementResponseDto.toDto(newAchievement);
     }
 
     public AchievementsResponseDto findMyAchievements() {
