@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class AchievementService {
     private final AchievementRepository achievementRepository;
     private final ClimbingGymInfoService gymInfoService;
 
+    @Transactional
     public AchievementResponseDto save(final AchievementCreateRequestDto requestDto) {
         UUID memberId = AuthUtil.getId();
         List<Achievement> achievements = achievementRepository.findByMemberId(memberId);
@@ -55,6 +57,7 @@ public class AchievementService {
         return AchievementsResponseDto.toDto(achievementsResponse);
     }
 
+    @Transactional
     public void deleteAchievement(final Long id) {
         Achievement achievement = findById(id);
         if (!isValidMember(achievement.getMemberId())) {
