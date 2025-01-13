@@ -16,18 +16,16 @@ import lombok.ToString;
 @ToString
 public class Achievement extends BaseEntity {
 
-    private static final int INITIAL_COUNT = 0;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer solveCount;
+    private Long solveCount;
     private String difficultyName;
     private String gymName;
     private Long gymInfoId;
     private UUID memberId;
 
-    protected Achievement(final Integer solveCount, final String gymName,
+    protected Achievement(final Long solveCount, final String gymName,
         final String difficultyName, final Long gymInfoId, final UUID memberId) {
         this.solveCount = solveCount;
         this.gymName = gymName;
@@ -36,12 +34,9 @@ public class Achievement extends BaseEntity {
         this.memberId = memberId;
     }
 
-    public static Achievement createDefault(final String gymName, final String difficultyName,
+    public static Achievement createDefault(final Long solveCount, final String gymName,
+        final String difficultyName,
         final Long gymInfoId, final UUID memberId) {
-        return new Achievement(INITIAL_COUNT, gymName, difficultyName, gymInfoId, memberId);
-    }
-
-    public void addSolveCount() {
-        solveCount++;
+        return new Achievement(solveCount, gymName, difficultyName, gymInfoId, memberId);
     }
 }
