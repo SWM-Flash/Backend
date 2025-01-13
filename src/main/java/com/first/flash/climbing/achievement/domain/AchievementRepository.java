@@ -11,4 +11,7 @@ public interface AchievementRepository {
     Optional<Achievement> findById(final Long id);
 
     List<Achievement> findByMemberId(final UUID memberId);
+
+    long findSolutionCountByGymInfoIdDifficulty(final Long gymInfoId, final String difficultyName,
+        final UUID memberId);
 }
