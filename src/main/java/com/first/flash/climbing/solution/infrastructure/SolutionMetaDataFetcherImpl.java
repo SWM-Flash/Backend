@@ -1,9 +1,12 @@
-package com.first.flash.climbing.achievement.infrastructure;
+package com.first.flash.climbing.solution.infrastructure;
 
 import static com.first.flash.climbing.gym.domian.QClimbingGym.climbingGym;
 import static com.first.flash.climbing.problem.domain.QQueryProblem.queryProblem;
 import static com.first.flash.climbing.solution.domain.QSolution.solution;
 
+import com.first.flash.climbing.solution.domain.SolutionMetaDataFetcher;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionMetaData;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Objects;
 import java.util.UUID;
@@ -12,13 +15,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class AchievementQueryDslRepository {
+public class SolutionMetaDataFetcherImpl implements SolutionMetaDataFetcher {
 
-    private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
-    public long findSolutionCountByGymNameDifficulty(final Long gymInfoId,
+    @Override
+    public Long getSolutionCountByGymInfoDifficultyName(final Long gymInfoId,
         final String difficultyName, final UUID memberId) {
-        Long count = queryFactory
+        Long count = jpaQueryFactory
             .select(solution.id.count())
             .from(solution)
             .join(queryProblem).on(solution.problemId.eq(queryProblem.id))
@@ -31,9 +35,23 @@ public class AchievementQueryDslRepository {
             .fetchOne();
 
         if (Objects.isNull(count)) {
-            return 0;
+            return (long) 0;
         } else {
             return count;
         }
+    }
+
+    @Override
+    public SolutionMetaData getSolutionMetaData(final Long id) {
+        return jpaQueryFactory
+            .select(Projections.constructor(SolutionMetaData.class,
+                climbingGym.gymInfoId,
+                queryProblem.difficultyName
+            ))
+            .from(solution)
+            .join(queryProblem).on(solution.problemId.eq(queryProblem.id))
+            .join(climbingGym).on(queryProblem.gymId.eq(climbingGym.id))
+            .where(solution.id.eq(id))
+            .fetchOne();
     }
 }
