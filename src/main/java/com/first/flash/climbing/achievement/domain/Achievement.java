@@ -22,17 +22,23 @@ public class Achievement extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer solveCount;
+    private String difficultyName;
+    private String gymName;
     private Long gymInfoId;
     private UUID memberId;
 
-    protected Achievement(final Integer solveCount, final Long gymInfoId, final UUID memberId) {
+    protected Achievement(final Integer solveCount, final String gymName,
+        final String difficultyName, final Long gymInfoId, final UUID memberId) {
         this.solveCount = solveCount;
+        this.gymName = gymName;
+        this.difficultyName = difficultyName;
         this.gymInfoId = gymInfoId;
         this.memberId = memberId;
     }
 
-    public static Achievement createDefault(final Long gymInfoId, final UUID memberId) {
-        return new Achievement(INITIAL_COUNT, gymInfoId, memberId);
+    public static Achievement createDefault(final String gymName, final String difficultyName,
+        final Long gymInfoId, final UUID memberId) {
+        return new Achievement(INITIAL_COUNT, gymName, difficultyName, gymInfoId, memberId);
     }
 
     public void addSolveCount() {
