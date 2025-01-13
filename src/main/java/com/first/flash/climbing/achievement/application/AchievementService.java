@@ -5,7 +5,9 @@ import com.first.flash.climbing.achievement.application.dto.AchievementResponseD
 import com.first.flash.climbing.achievement.application.dto.AchievementsResponseDto;
 import com.first.flash.climbing.achievement.domain.Achievement;
 import com.first.flash.climbing.achievement.domain.AchievementRepository;
+import com.first.flash.climbing.achievement.exception.exceptions.AchievementAccessDeniedException;
 import com.first.flash.climbing.achievement.exception.exceptions.AchievementLimitExceededException;
+import com.first.flash.climbing.achievement.exception.exceptions.AchievementNotFoundException;
 import com.first.flash.climbing.gym.application.ClimbingGymInfoService;
 import com.first.flash.climbing.gym.domian.ClimbingGymInfo;
 import com.first.flash.global.util.AuthUtil;
@@ -51,5 +53,22 @@ public class AchievementService {
                                                                             AchievementResponseDto::toDto)
                                                                         .toList();
         return AchievementsResponseDto.toDto(achievementsResponse);
+    }
+
+    public void deleteAchievement(final Long id) {
+        Achievement achievement = findById(id);
+        if (!isValidMember(achievement.getMemberId())) {
+            throw new AchievementAccessDeniedException();
+        }
+        achievementRepository.deleteById(id);
+    }
+
+    public Achievement findById(final Long id) {
+        return achievementRepository.findById(id)
+                                    .orElseThrow(() -> new AchievementNotFoundException(id));
+    }
+
+    private boolean isValidMember(final UUID memberId) {
+        return AuthUtil.isSameId(memberId);
     }
 }
