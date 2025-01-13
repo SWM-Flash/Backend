@@ -14,4 +14,6 @@ public interface AchievementRepository {
 
     long findSolutionCountByGymInfoIdDifficulty(final Long gymInfoId, final String difficultyName,
         final UUID memberId);
+
+    void deleteById(final Long id);
 }

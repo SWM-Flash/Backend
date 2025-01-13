@@ -36,4 +36,9 @@ public class AchievementRepositoryImpl implements AchievementRepository {
         return queryDslRepository.findSolutionCountByGymNameDifficulty(gymInfoId, difficultyName,
             memberId);
     }
+
+    @Override
+    public void deleteById(final Long id) {
+        jpaRepository.deleteById(id);
+    }
 }
