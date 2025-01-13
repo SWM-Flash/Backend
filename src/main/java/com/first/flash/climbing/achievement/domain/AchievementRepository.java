@@ -12,8 +12,5 @@ public interface AchievementRepository {
 
     List<Achievement> findByMemberId(final UUID memberId);
 
-    long findSolutionCountByGymInfoIdDifficulty(final Long gymInfoId, final String difficultyName,
-        final UUID memberId);
-
     void deleteById(final Long id);
 }

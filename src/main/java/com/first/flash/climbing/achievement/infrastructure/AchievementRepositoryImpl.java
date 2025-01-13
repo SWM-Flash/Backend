@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 public class AchievementRepositoryImpl implements AchievementRepository {
 
     private final AchievementJpaRepository jpaRepository;
-    private final AchievementQueryDslRepository queryDslRepository;
 
     @Override
     public Achievement save(final Achievement achievement) {
@@ -28,13 +27,6 @@ public class AchievementRepositoryImpl implements AchievementRepository {
     @Override
     public List<Achievement> findByMemberId(final UUID memberId) {
         return jpaRepository.findByMemberId(memberId);
-    }
-
-    @Override
-    public long findSolutionCountByGymInfoIdDifficulty(final Long gymInfoId,
-        final String difficultyName, final UUID memberId) {
-        return queryDslRepository.findSolutionCountByGymNameDifficulty(gymInfoId, difficultyName,
-            memberId);
     }
 
     @Override
