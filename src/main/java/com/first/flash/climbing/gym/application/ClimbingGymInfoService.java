@@ -8,6 +8,7 @@ import com.first.flash.climbing.gym.exception.exceptions.ClimbingGymInfoNotFound
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class ClimbingGymInfoService {
                                             () -> new ClimbingGymInfoNotFoundException(id));
     }
 
+    @Transactional
     public ClimbingGymInfoResponseDto save(
         final ClimbingGymInfoCreateRequestDto gymInfoCreateRequestDto) {
         ClimbingGymInfo climbingGymInfo = gymInfoCreateRequestDto.toEntity();
