@@ -3,6 +3,7 @@ package com.first.flash.climbing.solution.application;
 import com.first.flash.account.member.application.BlockService;
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
 import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
+import com.first.flash.climbing.solution.application.dto.MySolutionsRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
@@ -22,7 +23,6 @@ import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,8 +41,11 @@ public class SolutionService {
                                  .orElseThrow(() -> new SolutionNotFoundException(id));
     }
 
-    public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
-        return solutionRepository.findDetailSolutionById(solutionId);
+    public List<DetailSolutionDto> findDetailSolutionById(
+        final MySolutionsRequestDto mySolutionsRequestDto) {
+        UUID uploaderId = AuthUtil.getId();
+        return solutionRepository.findDetailSolutionGroupById(uploaderId,
+            mySolutionsRequestDto.gymId(), mySolutionsRequestDto.solvedDate());
     }
 
     public SolutionsResponseDto findAllSolutionsByProblemId(final UUID problemId) {
