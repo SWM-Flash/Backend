@@ -2,6 +2,7 @@ package com.first.flash.climbing.solution.ui;
 
 import com.first.flash.climbing.solution.application.SolutionSaveService;
 import com.first.flash.climbing.solution.application.SolutionService;
+import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
@@ -17,7 +18,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -52,11 +52,13 @@ public class SolutionController {
     public ResponseEntity<SolutionsPageResponseDto> getMySolutions(
         @RequestParam(name = "cursor", required = false) final String cursor,
         @RequestParam(defaultValue = DEFAULT_SIZE, required = false) final int size,
-        @RequestParam(required = false) final Long gymId,
-        @RequestParam(required = false) final List<String> difficulty
+        @RequestParam(required = false) final Long gymInfoId,
+        @RequestParam(required = false) final Integer year,
+        @RequestParam(required = false) final Integer month
     ) {
-        SolutionsPageResponseDto response = solutionService.findMySolutions(cursor, size, gymId,
-            difficulty);
+        MySolutionFilter mySolutionFilter = new MySolutionFilter(gymInfoId, year, month);
+        SolutionsPageResponseDto response = solutionService.findMySolutions(mySolutionFilter,
+            cursor, size);
         return ResponseEntity.ok(response);
     }
 
@@ -103,7 +105,8 @@ public class SolutionController {
             }))
     })
     @PostMapping("problems/{problemId}/solutions")
-    public ResponseEntity<SolutionWriteResponseDto> createSolution(@PathVariable final UUID problemId,
+    public ResponseEntity<SolutionWriteResponseDto> createSolution(
+        @PathVariable final UUID problemId,
         @Valid @RequestBody final SolutionCreateRequestDto solutionCreateRequestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)

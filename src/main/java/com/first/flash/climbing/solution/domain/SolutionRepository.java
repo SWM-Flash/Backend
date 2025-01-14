@@ -1,8 +1,9 @@
 package com.first.flash.climbing.solution.domain;
 
 import com.first.flash.account.member.domain.Gender;
+import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
+import com.first.flash.climbing.solution.application.dto.UserSolutionGroupDto;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
-import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import java.util.List;
@@ -28,6 +29,7 @@ public interface SolutionRepository {
 
     void deleteByUploaderId(final UUID memberId);
 
-    List<MySolutionDto> findMySolutions(final UUID myId, final SolutionCursor prevSolutionCursor,
-        final int size, final Long gymId, final List<String> difficulty);
+    List<UserSolutionGroupDto> findMySolutions(final UUID myId,
+        final MySolutionFilter mySolutionFilter, final SolutionCursor prevSolutionCursor,
+        final int size);
 }

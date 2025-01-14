@@ -1,12 +1,13 @@
 package com.first.flash.climbing.solution.application;
 
 import com.first.flash.account.member.application.BlockService;
-import com.first.flash.climbing.gym.domian.ClimbingGymIdConfirmRequestedEvent;
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
+import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
+import com.first.flash.climbing.solution.application.dto.UserSolutionGroupDto;
 import com.first.flash.climbing.solution.domain.PerceivedDifficulty;
 import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.Solution;
@@ -17,7 +18,6 @@ import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
-import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
@@ -55,15 +55,13 @@ public class SolutionService {
         return SolutionsResponseDto.of(solutions);
     }
 
-    public SolutionsPageResponseDto findMySolutions(final String cursor, final int size,
-        final Long gymId, final List<String> difficulty) {
+    public SolutionsPageResponseDto findMySolutions(final MySolutionFilter mySolutionFilter,
+        final String cursor, final int size) {
         UUID myId = AuthUtil.getId();
-        if (!Objects.isNull(gymId)) {
-            Events.raise(ClimbingGymIdConfirmRequestedEvent.of(gymId));
-        }
         SolutionCursor prevSolutionCursor = SolutionCursor.decode(cursor);
-        List<MySolutionDto> solutions = solutionRepository.findMySolutions(myId, prevSolutionCursor,
-            size, gymId, difficulty);
+        List<UserSolutionGroupDto> solutions = solutionRepository.findMySolutions(myId,
+            mySolutionFilter, prevSolutionCursor,
+            size);
         String nextCursor = getNextCursor(size, solutions);
         return SolutionsPageResponseDto.of(solutions, nextCursor);
     }
@@ -77,8 +75,10 @@ public class SolutionService {
         validateUploader(solution);
 
         PerceivedDifficulty newPerceivedDifficulty = requestDto.perceivedDifficulty();
-        PerceivedDifficulty oldPerceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
-        int difficultyDifference = newPerceivedDifficulty.calculateDifferenceFrom(oldPerceivedDifficulty);
+        PerceivedDifficulty oldPerceivedDifficulty = solution.getSolutionDetail()
+                                                             .getPerceivedDifficulty();
+        int difficultyDifference = newPerceivedDifficulty.calculateDifferenceFrom(
+            oldPerceivedDifficulty);
 
         solution.updateContentInfo(requestDto.review(), requestDto.videoUrl(),
             requestDto.thumbnailImageUrl(), requestDto.solvedDate(), newPerceivedDifficulty);
@@ -100,8 +100,10 @@ public class SolutionService {
         validateUploader(solution);
         solutionRepository.deleteById(id);
 
-        PerceivedDifficulty perceivedDifficulty = solution.getSolutionDetail().getPerceivedDifficulty();
-        Events.raise(SolutionDeletedEvent.of(solution.getProblemId(), perceivedDifficulty.getValue()));
+        PerceivedDifficulty perceivedDifficulty = solution.getSolutionDetail()
+                                                          .getPerceivedDifficulty();
+        Events.raise(
+            SolutionDeletedEvent.of(solution.getProblemId(), perceivedDifficulty.getValue()));
     }
 
     @Transactional
@@ -109,16 +111,16 @@ public class SolutionService {
         solutionRepository.deleteByUploaderId(memberId);
     }
 
-    private String getNextCursor(final int size, final List<MySolutionDto> solutions) {
+    private String getNextCursor(final int size, final List<UserSolutionGroupDto> solutions) {
         if (hasNextCursor(size, solutions)) {
             return null;
         }
-        MySolutionDto lastSolution = solutions.get(solutions.size() - 1);
-        return new SolutionCursor(lastSolution.uploadedAt().toString(),
-            lastSolution.solutionId()).encode();
+        UserSolutionGroupDto lastSolution = solutions.get(solutions.size() - 1);
+        return new SolutionCursor(lastSolution.solvedDate().toString(),
+            lastSolution.gymName()).encode();
     }
 
-    private boolean hasNextCursor(final int size, final List<MySolutionDto> solutions) {
+    private boolean hasNextCursor(final int size, final List<UserSolutionGroupDto> solutions) {
         return solutions.size() != size;
     }
 

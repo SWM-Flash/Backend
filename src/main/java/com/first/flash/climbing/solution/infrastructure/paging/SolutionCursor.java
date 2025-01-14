@@ -4,7 +4,7 @@ import com.first.flash.climbing.problem.exception.exceptions.InvalidCursorExcept
 import java.util.Base64;
 import java.util.Objects;
 
-public record SolutionCursor(String cursorValue, Long lastId) {
+public record SolutionCursor(String cursorValue, String gymName) {
 
     private static final String DEFAULT_SEPARATOR = ";";
     private static final int CURSOR_VALUE_INDEX = 0;
@@ -30,8 +30,7 @@ public record SolutionCursor(String cursorValue, Long lastId) {
                 throw new IllegalArgumentException();
             }
 
-            return new SolutionCursor(parts[CURSOR_VALUE_INDEX],
-                Long.parseLong(parts[LAST_ID_INDEX]));
+            return new SolutionCursor(parts[CURSOR_VALUE_INDEX], parts[LAST_ID_INDEX]);
         } catch (RuntimeException exception) {
             throw new InvalidCursorException();
         }
@@ -41,7 +40,7 @@ public record SolutionCursor(String cursorValue, Long lastId) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(cursorValue)
                      .append(DEFAULT_SEPARATOR)
-                     .append(lastId.toString());
+                     .append(gymName);
         return stringBuilder.toString();
     }
 }

@@ -1,10 +1,11 @@
 package com.first.flash.climbing.solution.infrastructure;
 
 import com.first.flash.account.member.domain.Gender;
+import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
+import com.first.flash.climbing.solution.application.dto.UserSolutionGroupDto;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
-import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import java.util.List;
@@ -61,10 +62,10 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public List<MySolutionDto> findMySolutions(final UUID myId,
-        final SolutionCursor prevSolutionCursor,
-        final int size, final Long gymId, final List<String> difficulty) {
-        return solutionQueryDslRepository.findByUploaderId(myId, prevSolutionCursor, size, gymId,
-            difficulty);
+    public List<UserSolutionGroupDto> findMySolutions(final UUID myId,
+        final MySolutionFilter mySolutionFilter, final SolutionCursor prevSolutionCursor,
+        final int size) {
+        return solutionQueryDslRepository.findByUploaderId(myId, mySolutionFilter,
+            prevSolutionCursor, size);
     }
 }
