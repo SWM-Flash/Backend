@@ -9,6 +9,7 @@ import com.first.flash.climbing.achievement.exception.exceptions.AchievementLimi
 import com.first.flash.climbing.gym.application.ClimbingGymInfoService;
 import com.first.flash.climbing.gym.domian.ClimbingGymInfo;
 import com.first.flash.climbing.solution.domain.SolutionMetaDataFetcher;
+import com.first.flash.climbing.solution.infrastructure.dto.SolutionMetaData;
 import com.first.flash.global.util.AuthUtil;
 import java.util.List;
 import java.util.UUID;
@@ -46,6 +47,21 @@ public class AchievementCommandService {
             requestDto.difficultyName(), gymInfo.getId(), memberId);
         achievementRepository.save(newAchievement);
         return AchievementResponseDto.toDto(newAchievement);
+    }
+
+    @Transactional
+    public void updateSolveCount(final Long solutionId) {
+        SolutionMetaData solutionMetaData = solutionMetaDataFetcher.getSolutionMetaData(solutionId);
+        UUID memberId = AuthUtil.getId();
+
+        Achievement achievement = queryService.findByGymInfoIdDifficultyName(
+            solutionMetaData.gymInfoId(),
+            solutionMetaData.difficultyName(), memberId);
+        long solutionCount = solutionMetaDataFetcher.getSolutionCountByGymInfoDifficultyName(
+            solutionMetaData.gymInfoId(),
+            solutionMetaData.difficultyName(), memberId);
+
+        achievement.updateSolutionCount(solutionCount);
     }
 
     @Transactional
