@@ -2,6 +2,8 @@ package com.first.flash.climbing.solution.ui;
 
 import com.first.flash.climbing.solution.application.SolutionSaveService;
 import com.first.flash.climbing.solution.application.SolutionService;
+import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
+import com.first.flash.climbing.solution.application.dto.MySolutionsRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
@@ -10,6 +12,7 @@ import com.first.flash.climbing.solution.application.dto.UnregisteredMemberSolut
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -52,23 +55,25 @@ public class SolutionController {
     public ResponseEntity<SolutionsPageResponseDto> getMySolutions(
         @RequestParam(name = "cursor", required = false) final String cursor,
         @RequestParam(defaultValue = DEFAULT_SIZE, required = false) final int size,
-        @RequestParam(required = false) final Long gymId,
-        @RequestParam(required = false) final List<String> difficulty
+        @RequestParam(required = false) final Long gymInfoId,
+        @RequestParam(required = false) final Integer year,
+        @RequestParam(required = false) final Integer month
     ) {
-        SolutionsPageResponseDto response = solutionService.findMySolutions(cursor, size, gymId,
-            difficulty);
+        MySolutionFilter mySolutionFilter = new MySolutionFilter(gymInfoId, year, month);
+        SolutionsPageResponseDto response = solutionService.findMySolutions(mySolutionFilter,
+            cursor, size);
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "해설 디테일 조회", description = "해설 id로 상세 정보 조회")
+    @Operation(summary = "해설 묶음 조회", description = "클라이밍장 id, 업로드 날짜로 해설 묶음 조회")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공적으로 해설 디테일을 조회함",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DetailSolutionDto.class)))
+            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = DetailSolutionDto.class))))
     })
-    @GetMapping("solutions/{solutionId}")
-    public ResponseEntity<DetailSolutionDto> getDetailSolution(
-        @PathVariable final Long solutionId) {
-        DetailSolutionDto response = solutionService.findDetailSolutionById(solutionId);
+    @GetMapping("solutions/details")
+    public ResponseEntity<List<DetailSolutionDto>> getDetailSolution(
+        @RequestBody final MySolutionsRequestDto solutionId) {
+        List<DetailSolutionDto> response = solutionService.findDetailSolutionById(solutionId);
         return ResponseEntity.ok(response);
     }
 
@@ -103,7 +108,8 @@ public class SolutionController {
             }))
     })
     @PostMapping("problems/{problemId}/solutions")
-    public ResponseEntity<SolutionWriteResponseDto> createSolution(@PathVariable final UUID problemId,
+    public ResponseEntity<SolutionWriteResponseDto> createSolution(
+        @PathVariable final UUID problemId,
         @Valid @RequestBody final SolutionCreateRequestDto solutionCreateRequestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)

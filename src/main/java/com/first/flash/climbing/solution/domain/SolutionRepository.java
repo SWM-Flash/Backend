@@ -1,10 +1,12 @@
 package com.first.flash.climbing.solution.domain;
 
 import com.first.flash.account.member.domain.Gender;
+import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
+import com.first.flash.climbing.solution.infrastructure.dto.MemberSolutionGroupDto;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
-import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,10 +26,11 @@ public interface SolutionRepository {
         final String profileImageUrl, final Double uploaderHeight,
         final Double uploaderReach, final Gender uploaderGender);
 
-    DetailSolutionDto findDetailSolutionById(final Long solutionId);
+    List<DetailSolutionDto> findDetailSolutionGroupById(final UUID uploaderId, final Long gymId, final LocalDate solvedDate);
 
     void deleteByUploaderId(final UUID memberId);
 
-    List<MySolutionDto> findMySolutions(final UUID myId, final SolutionCursor prevSolutionCursor,
-        final int size, final Long gymId, final List<String> difficulty);
+    List<MemberSolutionGroupDto> findMySolutions(final UUID myId,
+        final MySolutionFilter mySolutionFilter, final SolutionCursor prevSolutionCursor,
+        final int size);
 }
