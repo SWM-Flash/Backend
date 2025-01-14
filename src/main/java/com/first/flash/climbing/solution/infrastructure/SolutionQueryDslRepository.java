@@ -7,9 +7,9 @@ import static com.first.flash.climbing.solution.domain.QSolution.solution;
 import static com.first.flash.climbing.solution.domain.QSolutionComment.solutionComment;
 
 import com.first.flash.account.member.domain.Gender;
-import com.first.flash.climbing.solution.application.dto.DifficultyDto;
+import com.first.flash.climbing.solution.infrastructure.dto.DifficultyDto;
 import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
-import com.first.flash.climbing.solution.application.dto.UserSolutionGroupDto;
+import com.first.flash.climbing.solution.infrastructure.dto.MemberSolutionGroupDto;
 import com.first.flash.climbing.solution.domain.QSolution;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
@@ -50,7 +50,7 @@ public class SolutionQueryDslRepository {
                               .fetch();
     }
 
-    public List<UserSolutionGroupDto> findByUploaderId(final UUID uploaderId,
+    public List<MemberSolutionGroupDto> findByUploaderId(final UUID uploaderId,
         final MySolutionFilter mySolutionFilter, final SolutionCursor prevCursor, final int size) {
         List<Tuple> groupedData = jpaQueryFactory
             .select(
@@ -75,7 +75,7 @@ public class SolutionQueryDslRepository {
         return getDtoFromGroupedData(groupedData, uploaderId);
     }
 
-    private List<UserSolutionGroupDto> getDtoFromGroupedData(final List<Tuple> groupedData,
+    private List<MemberSolutionGroupDto> getDtoFromGroupedData(final List<Tuple> groupedData,
         final UUID uploaderId) {
         return groupedData.stream().map(group -> {
             Long gymId = group.get(climbingGym.id);
@@ -116,7 +116,7 @@ public class SolutionQueryDslRepository {
                                                                      solution.solutionDetail.thumbnailImageUrl))
                                                                  .orElse(null);
 
-            return new UserSolutionGroupDto(
+            return new MemberSolutionGroupDto(
                 gymId,
                 gymName,
                 difficulties,

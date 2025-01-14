@@ -2,7 +2,7 @@ package com.first.flash.climbing.solution.infrastructure;
 
 import com.first.flash.account.member.domain.Gender;
 import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
-import com.first.flash.climbing.solution.application.dto.UserSolutionGroupDto;
+import com.first.flash.climbing.solution.infrastructure.dto.MemberSolutionGroupDto;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
@@ -63,7 +63,7 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public List<UserSolutionGroupDto> findMySolutions(final UUID myId,
+    public List<MemberSolutionGroupDto> findMySolutions(final UUID myId,
         final MySolutionFilter mySolutionFilter, final SolutionCursor prevSolutionCursor,
         final int size) {
         return solutionQueryDslRepository.findByUploaderId(myId, mySolutionFilter,

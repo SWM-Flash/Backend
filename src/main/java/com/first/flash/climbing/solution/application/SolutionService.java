@@ -8,7 +8,7 @@ import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDt
 import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
-import com.first.flash.climbing.solution.application.dto.UserSolutionGroupDto;
+import com.first.flash.climbing.solution.infrastructure.dto.MemberSolutionGroupDto;
 import com.first.flash.climbing.solution.domain.PerceivedDifficulty;
 import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.Solution;
@@ -62,7 +62,7 @@ public class SolutionService {
         final String cursor, final int size) {
         UUID myId = AuthUtil.getId();
         SolutionCursor prevSolutionCursor = SolutionCursor.decode(cursor);
-        List<UserSolutionGroupDto> solutions = solutionRepository.findMySolutions(myId,
+        List<MemberSolutionGroupDto> solutions = solutionRepository.findMySolutions(myId,
             mySolutionFilter, prevSolutionCursor,
             size);
         String nextCursor = getNextCursor(size, solutions);
@@ -114,16 +114,16 @@ public class SolutionService {
         solutionRepository.deleteByUploaderId(memberId);
     }
 
-    private String getNextCursor(final int size, final List<UserSolutionGroupDto> solutions) {
+    private String getNextCursor(final int size, final List<MemberSolutionGroupDto> solutions) {
         if (hasNextCursor(size, solutions)) {
             return null;
         }
-        UserSolutionGroupDto lastSolution = solutions.get(solutions.size() - 1);
+        MemberSolutionGroupDto lastSolution = solutions.get(solutions.size() - 1);
         return new SolutionCursor(lastSolution.solvedDate().toString(),
             lastSolution.gymName()).encode();
     }
 
-    private boolean hasNextCursor(final int size, final List<UserSolutionGroupDto> solutions) {
+    private boolean hasNextCursor(final int size, final List<MemberSolutionGroupDto> solutions) {
         return solutions.size() != size;
     }
 
