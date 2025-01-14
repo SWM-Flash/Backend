@@ -41,7 +41,7 @@ public class AchievementCommandService {
             requestDto.gymInfoId(),
             requestDto.difficultyName(), memberId);
 
-        Achievement newAchievement = Achievement.createDefault(solutionCount + 1,
+        Achievement newAchievement = Achievement.createDefault(solutionCount,
             gymInfo.getGymInfoName(),
             requestDto.difficultyName(), gymInfo.getId(), memberId);
         achievementRepository.save(newAchievement);
