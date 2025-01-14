@@ -39,4 +39,8 @@ public class Achievement extends BaseEntity {
         final Long gymInfoId, final UUID memberId) {
         return new Achievement(solveCount, gymName, difficultyName, gymInfoId, memberId);
     }
+
+    public void updateSolutionCount(final long solutionCount) {
+        this.solveCount = solutionCount;
+    }
 }
