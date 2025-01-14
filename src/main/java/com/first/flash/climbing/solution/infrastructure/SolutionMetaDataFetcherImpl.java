@@ -23,7 +23,7 @@ public class SolutionMetaDataFetcherImpl implements SolutionMetaDataFetcher {
     public Long getSolutionCountByGymInfoDifficultyName(final Long gymInfoId,
         final String difficultyName, final UUID memberId) {
         Long count = jpaQueryFactory
-            .select(solution.id.count())
+            .select(queryProblem.id.countDistinct())
             .from(solution)
             .join(queryProblem).on(solution.problemId.eq(queryProblem.id))
             .join(climbingGym).on(queryProblem.gymId.eq(climbingGym.id))
