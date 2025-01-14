@@ -8,6 +8,7 @@ import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,8 +53,8 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
-        return solutionQueryDslRepository.findDetailSolutionById(solutionId);
+    public List<DetailSolutionDto> findDetailSolutionGroupById(final UUID uploaderId, final Long gymId, final LocalDate solvedDate) {
+        return solutionQueryDslRepository.findDetailSolutionGroupById(uploaderId, gymId, solvedDate);
     }
 
     @Override
