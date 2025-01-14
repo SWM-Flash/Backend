@@ -30,6 +30,13 @@ public class AchievementRepositoryImpl implements AchievementRepository {
     }
 
     @Override
+    public Optional<Achievement> findByGymInfoIdDifficultyName(final Long gymInfoId,
+        final String difficultyName, final UUID memberId) {
+        return jpaRepository.findByGymInfoIdAndDifficultyNameAndMemberId(gymInfoId, difficultyName,
+            memberId);
+    }
+
+    @Override
     public void deleteById(final Long id) {
         jpaRepository.deleteById(id);
     }

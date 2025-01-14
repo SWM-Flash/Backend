@@ -31,4 +31,11 @@ public class AchievementQueryService {
         return achievementRepository.findById(id)
                                     .orElseThrow(() -> new AchievementNotFoundException(id));
     }
+
+    public Achievement findByGymInfoIdDifficultyName(final Long gymInfoId,
+        final String difficultyName, final UUID memberId) {
+        return achievementRepository.findByGymInfoIdDifficultyName(gymInfoId, difficultyName,
+                                        memberId)
+                                    .orElseThrow(AchievementNotFoundException::new);
+    }
 }

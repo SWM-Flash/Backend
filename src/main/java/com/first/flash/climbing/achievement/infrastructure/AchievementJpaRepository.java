@@ -15,4 +15,7 @@ public interface AchievementJpaRepository extends JpaRepository<Achievement, Lon
     List<Achievement> findByMemberId(final UUID memberId);
 
     void deleteById(final Long id);
+
+    Optional<Achievement> findByGymInfoIdAndDifficultyNameAndMemberId(final Long gymInfoId,
+        final String difficultyName, final UUID memberId);
 }
