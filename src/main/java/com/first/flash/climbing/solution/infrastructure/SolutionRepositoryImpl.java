@@ -1,12 +1,14 @@
 package com.first.flash.climbing.solution.infrastructure;
 
 import com.first.flash.account.member.domain.Gender;
+import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
+import com.first.flash.climbing.solution.infrastructure.dto.MemberSolutionGroupDto;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
-import com.first.flash.climbing.solution.infrastructure.dto.MySolutionDto;
 import com.first.flash.climbing.solution.infrastructure.dto.SolutionRepositoryResponseDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -51,8 +53,8 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public DetailSolutionDto findDetailSolutionById(final Long solutionId) {
-        return solutionQueryDslRepository.findDetailSolutionById(solutionId);
+    public List<DetailSolutionDto> findDetailSolutionGroupById(final UUID uploaderId, final Long gymId, final LocalDate solvedDate) {
+        return solutionQueryDslRepository.findDetailSolutionGroupById(uploaderId, gymId, solvedDate);
     }
 
     @Override
@@ -61,10 +63,10 @@ public class SolutionRepositoryImpl implements SolutionRepository {
     }
 
     @Override
-    public List<MySolutionDto> findMySolutions(final UUID myId,
-        final SolutionCursor prevSolutionCursor,
-        final int size, final Long gymId, final List<String> difficulty) {
-        return solutionQueryDslRepository.findByUploaderId(myId, prevSolutionCursor, size, gymId,
-            difficulty);
+    public List<MemberSolutionGroupDto> findMySolutions(final UUID myId,
+        final MySolutionFilter mySolutionFilter, final SolutionCursor prevSolutionCursor,
+        final int size) {
+        return solutionQueryDslRepository.findByUploaderId(myId, mySolutionFilter,
+            prevSolutionCursor, size);
     }
 }

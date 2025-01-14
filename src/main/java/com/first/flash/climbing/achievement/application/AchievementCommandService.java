@@ -12,6 +12,7 @@ import com.first.flash.climbing.solution.domain.SolutionMetaDataFetcher;
 import com.first.flash.climbing.solution.infrastructure.dto.SolutionMetaData;
 import com.first.flash.global.util.AuthUtil;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,9 +55,14 @@ public class AchievementCommandService {
         SolutionMetaData solutionMetaData = solutionMetaDataFetcher.getSolutionMetaData(solutionId);
         UUID memberId = AuthUtil.getId();
 
-        Achievement achievement = queryService.findByGymInfoIdDifficultyName(
+        Optional<Achievement> targetAchievement = achievementRepository.findByGymInfoIdDifficultyName(
             solutionMetaData.gymInfoId(),
             solutionMetaData.difficultyName(), memberId);
+        if (targetAchievement.isEmpty()) {
+            return;
+        }
+
+        Achievement achievement = targetAchievement.get();
         long solutionCount = solutionMetaDataFetcher.getSolutionCountByGymInfoDifficultyName(
             solutionMetaData.gymInfoId(),
             solutionMetaData.difficultyName(), memberId);
