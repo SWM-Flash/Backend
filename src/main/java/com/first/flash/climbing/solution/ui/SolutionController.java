@@ -110,7 +110,7 @@ public class SolutionController {
     @PostMapping("problems/{problemId}/solutions")
     public ResponseEntity<SolutionWriteResponseDto> createSolution(
         @PathVariable final UUID problemId,
-        @Valid @RequestBody final SolutionCreateRequestDto solutionCreateRequestDto) {
+        @Valid @ModelAttribute final SolutionCreateRequestDto solutionCreateRequestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(
