@@ -17,9 +17,9 @@ public class UploadService {
         return new UploadImageResponseDto(imageUrl);
     }
 
-    public String uploadAndTranscodingVideo(final MultipartFile file) {
+    public String uploadAndTranscodingVideo(final MultipartFile file, final Long id) {
         String inputStorageUrl = uploadVideo(file);
-        return transcodingService.transcodeVideo(inputStorageUrl);
+        return transcodingService.transcodeVideo(inputStorageUrl, id);
     }
 
     public String uploadVideo(final MultipartFile videoFile) {
