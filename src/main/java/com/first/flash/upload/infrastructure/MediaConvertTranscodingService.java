@@ -57,7 +57,7 @@ public class MediaConvertTranscodingService implements TranscodingService {
     private String mediaConvertQueueArn;
 
     @Override
-    public String transcodeVideo(final String inputStorageUrl) {
+    public String transcodeVideo(final String inputStorageUrl, final Long id) {
         String outputDestination = "s3://" + videoOutputBucketName + "/videos/";
         OutputGroup hlsOutputGroup = OutputGroup.builder()
                                                 .name("Apple HLS")
@@ -113,6 +113,8 @@ public class MediaConvertTranscodingService implements TranscodingService {
                                                             .role(
                                                                 mediaConvertRoleArn)
                                                             .queue(mediaConvertQueueArn)
+                                                            .userMetadata(
+                                                                Map.of("solutionId", id.toString()))
                                                             .settings(jobSettings)
                                                             .accelerationSettings(
                                                                 AccelerationSettings.builder().mode(
