@@ -103,6 +103,7 @@ public class QueryProblem {
         this.thumbnailSolutionId = thumbnailSolutionId;
         this.imageUrl = imageUrl;
         this.imageSource = imageSource;
+        this.hasSolution = true;
     }
 
     public void updateHoldInfo(final Long holdId, final String holdColorName, final String holdColorCode) {

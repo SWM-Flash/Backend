@@ -37,4 +37,8 @@ public class SolutionDetail {
         final LocalDate solvedDate, final PerceivedDifficulty perceivedDifficulty) {
         return new SolutionDetail(review, thumbnailImageUrl, videoUrl, solvedDate, perceivedDifficulty);
     }
+
+    public void updateVideoUrl(final String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
 }

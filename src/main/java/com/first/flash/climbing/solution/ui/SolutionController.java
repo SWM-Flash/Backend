@@ -4,6 +4,7 @@ import com.first.flash.climbing.solution.application.SolutionSaveService;
 import com.first.flash.climbing.solution.application.SolutionService;
 import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
 import com.first.flash.climbing.solution.application.dto.MySolutionsRequestDto;
+import com.first.flash.climbing.solution.application.dto.SolutionStatusUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
@@ -27,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -110,12 +112,30 @@ public class SolutionController {
     @PostMapping("problems/{problemId}/solutions")
     public ResponseEntity<SolutionWriteResponseDto> createSolution(
         @PathVariable final UUID problemId,
-        @Valid @RequestBody final SolutionCreateRequestDto solutionCreateRequestDto) {
+        @Valid @ModelAttribute final SolutionCreateRequestDto solutionCreateRequestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(
                                  solutionSaveService.saveSolution(problemId,
                                      solutionCreateRequestDto));
+    }
+
+    @Operation(summary = "해설 영상 상태 변경", description = "해설 영상 상태 변경")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공적으로 해설 영상 상태 변경",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SolutionWriteResponseDto.class))),
+        @ApiResponse(responseCode = "404", description = "리소스를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = {
+                @ExampleObject(name = "해설 없음", value = "{\"error\": \"아이디가 1인 해설을 찾을 수 없습니다.\"}")
+            }))
+    })
+    @PatchMapping("admin/solutions/{solutionId}")
+    public ResponseEntity<SolutionWriteResponseDto> updateSolutionStatus(
+        @PathVariable final Long solutionId,
+        @Valid @RequestBody final SolutionStatusUpdateRequestDto solutionStatusUpdateRequestDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(solutionService.updateSolutionStatus(solutionId,
+                                 solutionStatusUpdateRequestDto));
     }
 
     @Operation(summary = "없는 유저의 영상으로 해설 업로드", description = "없는 유저의 영상으로 해설 업로드")

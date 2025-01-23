@@ -66,6 +66,12 @@ dependencies {
 
     // json
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1'
+
+    // aws
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.0.1'
+    implementation platform('software.amazon.awssdk:bom:2.20.81')
+    implementation 'software.amazon.awssdk:s3'
+    implementation 'software.amazon.awssdk:mediaconvert'
 }
 
 tasks.named('test') {
