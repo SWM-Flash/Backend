@@ -4,21 +4,23 @@ import com.first.flash.account.member.application.BlockService;
 import com.first.flash.climbing.problem.domain.ProblemIdConfirmRequestedEvent;
 import com.first.flash.climbing.solution.application.dto.MySolutionFilter;
 import com.first.flash.climbing.solution.application.dto.MySolutionsRequestDto;
+import com.first.flash.climbing.solution.application.dto.SolutionStatusUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionUpdateRequestDto;
 import com.first.flash.climbing.solution.application.dto.SolutionWriteResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsPageResponseDto;
 import com.first.flash.climbing.solution.application.dto.SolutionsResponseDto;
-import com.first.flash.climbing.solution.infrastructure.dto.MemberSolutionGroupDto;
 import com.first.flash.climbing.solution.domain.PerceivedDifficulty;
 import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionDeletedEvent;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
+import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
 import com.first.flash.climbing.solution.domain.SolutionUpdatedEvent;
 import com.first.flash.climbing.solution.domain.dto.SolutionResponseDto;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionAccessDeniedException;
 import com.first.flash.climbing.solution.exception.exceptions.SolutionNotFoundException;
 import com.first.flash.climbing.solution.infrastructure.dto.DetailSolutionDto;
+import com.first.flash.climbing.solution.infrastructure.dto.MemberSolutionGroupDto;
 import com.first.flash.climbing.solution.infrastructure.paging.SolutionCursor;
 import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
@@ -107,6 +109,22 @@ public class SolutionService {
                                                           .getPerceivedDifficulty();
         Events.raise(
             SolutionDeletedEvent.of(solution.getProblemId(), perceivedDifficulty.getValue()));
+    }
+
+    @Transactional
+    public SolutionWriteResponseDto updateSolutionStatus(final Long id,
+        final SolutionStatusUpdateRequestDto requestDto) {
+        Solution solution = findSolutionById(id);
+        solution.updateStatus(requestDto.status());
+        if (solution.hasFailed()) {
+            return SolutionWriteResponseDto.toDto(solution);
+        }
+
+        solution.updateVideoUrl(requestDto.videoUrl());
+        Events.raise(SolutionSavedEvent.of(solution.getProblemId(), solution.getId(),
+            solution.getSolutionDetail().getThumbnailImageUrl(),
+            solution.getUploaderDetail().getInstagramId()));
+        return SolutionWriteResponseDto.toDto(solution);
     }
 
     @Transactional

@@ -2,11 +2,14 @@ package com.first.flash.climbing.solution.domain;
 
 import com.first.flash.account.member.domain.Gender;
 import com.first.flash.climbing.solution.domain.vo.SolutionDetail;
+import com.first.flash.climbing.solution.domain.vo.SolutionVideoStatus;
 import com.first.flash.climbing.solution.domain.vo.UploaderDetail;
 import com.first.flash.global.domain.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,6 +40,8 @@ public class Solution extends BaseEntity {
     private SolutionDetail solutionDetail;
     private UploaderDetail uploaderDetail;
     private Long optionalWeight;
+    @Enumerated(EnumType.STRING)
+    private SolutionVideoStatus videoStatus;
     @OneToMany(mappedBy = "solution", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<SolutionComment> comments = new ArrayList<>();
@@ -46,31 +51,47 @@ public class Solution extends BaseEntity {
         final String videoUrl, final UUID problemId, final UUID uploaderId,
         final String profileImageUrl, final PerceivedDifficulty perceivedDifficulty,
         final Double uploaderHeight,
-        final Double uploaderReach, final Gender uploaderGender) {
+        final Double uploaderReach, final Gender uploaderGender,
+        final SolutionVideoStatus videoStatus) {
 
         this.solutionDetail = SolutionDetail.of(review, thumbnailImageUrl, videoUrl,
             solvedDate, perceivedDifficulty);
         this.uploaderDetail = UploaderDetail.of(uploaderId, uploader, instagramId, profileImageUrl,
             uploaderHeight, uploaderReach, uploaderGender);
         this.optionalWeight = DEFAULT_OPTIONAL_WEIGHT;
+        this.videoStatus = videoStatus;
         this.problemId = problemId;
     }
 
     public static Solution of(final String uploader, final String review, final String instagramId,
         final String thumbnailImageUrl, final LocalDate solvedDate,
-        final String videoUrl, final UUID problemId, final UUID uploaderId,
+        final UUID problemId, final UUID uploaderId,
         final String profileImageUrl, final PerceivedDifficulty perceivedDifficulty,
         final Double uploaderHeight,
         final Double uploaderReach, final Gender uploaderGender) {
 
-        return new Solution(uploader, review, instagramId, thumbnailImageUrl, solvedDate, videoUrl,
+        return new Solution(uploader, review, instagramId, thumbnailImageUrl, solvedDate, null,
             problemId, uploaderId,
-            profileImageUrl, perceivedDifficulty, uploaderHeight, uploaderReach, uploaderGender);
+            profileImageUrl, perceivedDifficulty, uploaderHeight, uploaderReach, uploaderGender,
+            SolutionVideoStatus.PENDING);
     }
 
-    public void updateContentInfo(final String review, final String videoUrl, final String thumbnailImageUrl,
+    public void updateContentInfo(final String review, final String videoUrl,
+        final String thumbnailImageUrl,
         final LocalDate solvedDate, final PerceivedDifficulty perceivedDifficulty) {
         this.solutionDetail = SolutionDetail.of(review, thumbnailImageUrl, videoUrl,
             solvedDate, perceivedDifficulty);
+    }
+
+    public void updateStatus(final SolutionVideoStatus status) {
+        this.videoStatus = status;
+    }
+
+    public boolean hasFailed() {
+        return this.videoStatus.equals(SolutionVideoStatus.FAILED);
+    }
+
+    public void updateVideoUrl(final String videoUrl) {
+        solutionDetail.updateVideoUrl(videoUrl);
     }
 }

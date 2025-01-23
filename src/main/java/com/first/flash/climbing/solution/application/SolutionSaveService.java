@@ -9,10 +9,10 @@ import com.first.flash.climbing.solution.domain.PerceivedDifficulty;
 import com.first.flash.climbing.solution.domain.PerceivedDifficultySetEvent;
 import com.first.flash.climbing.solution.domain.Solution;
 import com.first.flash.climbing.solution.domain.SolutionRepository;
-import com.first.flash.climbing.solution.domain.SolutionSavedEvent;
 import com.first.flash.climbing.solution.domain.dto.SolutionCreateRequestDto;
 import com.first.flash.global.event.Events;
 import com.first.flash.global.util.AuthUtil;
+import com.first.flash.upload.application.UploadService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,27 +25,24 @@ public class SolutionSaveService {
 
     private final MemberService memberService;
     private final SolutionRepository solutionRepository;
+    private final UploadService uploadService;
 
     @Transactional
     public SolutionWriteResponseDto saveSolution(final UUID problemId,
         final SolutionCreateRequestDto createRequestDto) {
         UUID id = AuthUtil.getId();
         Member member = memberService.findById(id);
-
         PerceivedDifficulty perceivedDifficulty = createRequestDto.perceivedDifficulty();
         Solution solution = Solution.of(member.getNickName(), createRequestDto.review(),
-            member.getInstagramId(), createRequestDto.thumbnailImageUrl(), createRequestDto.solvedDate(),
-            createRequestDto.videoUrl(), problemId, member.getId(),
+            member.getInstagramId(), createRequestDto.thumbnailImageUrl(),
+            createRequestDto.solvedDate(), problemId, member.getId(),
             member.getProfileImageUrl(), perceivedDifficulty, member.getHeight(), member.getReach(),
             member.getGender());
         Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(),
             perceivedDifficulty.getValue()));
 
         Solution savedSolution = solutionRepository.save(solution);
-        Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId(), savedSolution.getId(),
-            savedSolution.getSolutionDetail().getThumbnailImageUrl(),
-            savedSolution.getUploaderDetail().getInstagramId()));
-
+        uploadService.uploadAndTranscodingVideo(createRequestDto.solutionVideo(), savedSolution.getId());
         return SolutionWriteResponseDto.toDto(savedSolution);
     }
 
@@ -66,16 +63,11 @@ public class SolutionSaveService {
         PerceivedDifficulty perceivedDifficulty = requestDto.perceivedDifficulty();
         Solution solution = Solution.of(requestDto.nickName(), requestDto.review(),
             requestDto.instagramId(), requestDto.thumbnailImageUrl(), requestDto.solvedDate(),
-            requestDto.videoUrl(), problemId, member.getId(),
-            requestDto.profileImageUrl(), perceivedDifficulty, member.getHeight(),
-            member.getReach(), member.getGender());
+            problemId, member.getId(), requestDto.profileImageUrl(), perceivedDifficulty,
+            member.getHeight(), member.getReach(), member.getGender());
 
         Solution savedSolution = solutionRepository.save(solution);
-        Events.raise(PerceivedDifficultySetEvent.of(solution.getProblemId(),
-            perceivedDifficulty.getValue()));
-        Events.raise(SolutionSavedEvent.of(savedSolution.getProblemId(), savedSolution.getId(),
-            savedSolution.getSolutionDetail().getThumbnailImageUrl(),
-            savedSolution.getUploaderDetail().getInstagramId()));
+        uploadService.uploadAndTranscodingVideo(requestDto.solutionVideo(), savedSolution.getId());
         return SolutionWriteResponseDto.toDto(savedSolution);
     }
 }
